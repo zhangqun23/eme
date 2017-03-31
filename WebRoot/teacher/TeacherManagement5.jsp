@@ -2,8 +2,7 @@
 <%@ taglib uri="/struts-tags" prefix="s"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
 
@@ -16,6 +15,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="css/bootstrap.css" />
 <link rel="stylesheet" href="css/bootstrap-responsive.css" />
+<link rel="stylesheet" href="css/bootstrap-multiselect.css" />
 <link rel="stylesheet" href="css/common.css" />
 <link rel="stylesheet" href="css/teaching_management.css" />
 <script type="text/javascript" src="js/jquery1.12.1.js"></script>
@@ -52,19 +52,19 @@
 				.append($Option9).append($Option10);
 
 	});
-	
-	function postwith(to,p){//让超链接a以post方式提交，避免中文乱码
+
+	function postwith(to, p) {//让超链接a以post方式提交，避免中文乱码
 		var myForm = document.createElement("form");
 		myForm.method = "post";
 		myForm.action = to;
-		
-		for(var k in p){
+
+		for ( var k in p) {
 			var input = document.createElement("input");
 			input.setAttribute("name", k);
 			input.setAttribute("value", p[k]);
 			myForm.appendChild(input);
 		}
-		
+
 		document.body.appendChild(myForm);
 		myForm.submit();
 		document.body.removeChild(myForm);
@@ -89,13 +89,24 @@
 								</div>
 								<div class="div-inf-tbl">
 									<div class="div-result-import">
-									<h5>课程达成评价</h5>
-										<form action="Teacher_Management_5_calculateClazzCursTarget" method="post">
-											<div class="div-select">
+										<h5>课程达成评价</h5>
+										<form action="Teacher_Management_5_calculateClazzCursTarget"
+											method="post" enctype="multipart/form-data" style="height:130px">
+											<!-- <div class="div-select">
 												班级&nbsp;&nbsp;<select id="class" name="clazzName">
 													<s:iterator value="allClazz" var="clazz">
 														<option value="<s:property value="#clazz.claName"/>"><s:property
 																value="#clazz.claName" /></option>
+													</s:iterator>
+												</select>
+											</div>
+											 -->
+											<div class="div-select">
+												班级&nbsp;&nbsp; <select id="multiselect" name="clazz"
+													multiple="multiple">
+													<s:iterator value="allClazz" var="c">
+														<option value="<s:property value="#c.claName"/>"><s:property
+																value="#c.claName" /></option>
 													</s:iterator>
 												</select>
 											</div>
@@ -144,7 +155,8 @@
 													<s:iterator value="#b1s" var="b1l">
 														<td><s:property value="#b1l" /></td>
 													</s:iterator>
-													<td><a href="javascript:postwith('Teacher_PointValue_Detail_getClaCursTargetDetail',{'clazzName':'<s:property value="#b1s[0]"/>'})">详细</a></td>
+													<td><a
+														href="javascript:postwith('Teacher_PointValue_Detail_getClaCursTargetDetail',{'clazzName':'<s:property value="#b1s[0]"/>'})">详细</a></td>
 												</tr>
 											</s:iterator>
 										</tbody>
@@ -182,8 +194,10 @@
 	</div>
 	<%@ include file="/include/footer.jsp"%>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
 	<script>
 		$(function() {
+			$('#multiselect').multiselect();
 			$(".container").css("min-height",
 					$(document).height() - 90 - 88 - 41 + "px");//container的最小高度为“浏览器当前窗口文档的高度-header高度-footer高度”
 		});
