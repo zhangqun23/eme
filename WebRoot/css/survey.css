@@ -1,0 +1,114 @@
+@CHARSET "UTF-8";
+
+.input-l {
+	width: 50%;
+	margin-top: 8px;
+}
+
+.textarea-l {
+	width: 90%;
+	height: 80px;
+	margin-top: 8px;
+}
+
+.top-distance {
+	margin-top: 15px;
+}
+
+.para-indent {
+	font-size: 16px;
+	text-indent: 2em;
+	line-height: 1.5;
+}
+
+.selector-style {
+	margin-top: 10px;
+	margin-left: 35px;
+}
+
+.question-style {
+	margin-left: 10px;
+}
+
+.submit_top {
+	margin-top: 60px;
+}
+
+.right-distance {
+	margin-left: 70%;
+}
+
+.title_center {
+	text-align: center;
+}
+
+.red_line {
+	height: 3px;
+	border: none;
+	border-top: 3px double;
+}
+
+.small_img {
+	width: 15px;
+	height: 15px;
+	margin-left: 10px;
+	cursor: pointer;
+	visibility: hidden;
+}
+
+.show_Pie {
+	width: 20px !important;
+	height: 20px !important;
+}
+
+.align_right {
+	text-align: right;
+}
+.align_left {
+	text-align: left !important;
+}
+
+.left_distance {
+	margin-left: 10px;
+}
+
+.li_style {
+	list-style-type: none;
+}
+
+.hideElement {
+	visibility: hidden;
+}
+
+.disElement{
+	display: none;
+}
+.pieChart_style {
+	width: 500px;
+	height: 300px;
+	display: none;
+	margin-left:25px;
+	margin-top:15px;
+}
+
+.bottom_distance {
+	margin-bottom: 15px;
+}
+
+.select_style {
+	width: 100px !important;
+	height: 40px !important;
+	margin-top: 30px !important;
+}
+
+.selectdiv_style {
+	height: 100px;
+	margin-top: 50px;
+	background-color: #DDDDDD;
+}
+.right_distance{
+	margin-right:0px
+}
+.right_align{
+	text-align:right;
+}
