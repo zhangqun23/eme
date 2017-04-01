@@ -3,6 +3,7 @@ package cn.xidian.service.impl;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -193,11 +194,13 @@ public class TeacherServiceImpl implements TeacherService {
 		String[] clazzArray = null;
 		clazzArray = claName.split(",");
 		List<Clazz> clazzs = new LinkedList<Clazz>();
+		String claId = "";
 		for (int i = 0; i < clazzArray.length; i++) {
-			Clazz clazz = null;
-			clazz = clazzDao.selectByName(clazzArray[i].trim());
+			Clazz clazz = clazzDao.selectByName(clazzArray[i].trim());
+			claId += clazz.getClaId()+",";
 			clazzs.add(clazz);
 		}
+		claId = claId.substring(0,claId.length()-1);
 		//Clazz clazz = clazzDao.selectByName(claName);
 		if (clazzs.size()==0) {
 			throw new ClazzNotExistException("对不起，班级不存在！");
@@ -222,8 +225,11 @@ public class TeacherServiceImpl implements TeacherService {
 		Double classWorkValueTotal = 0.0;
 		Double classExpValueTotal = 0.0;
 		Iterator<Clazz> iter = clazzs.iterator();
-		Integer claId = iter.next().getClaId();
-		Set<Student> students = studentDao.findByClazz(claId);
+		Set<Student> students = new LinkedHashSet<Student>();
+		while(iter.hasNext()){
+			Set<Student> student = studentDao.findByClazz(iter.next().getClaId());
+			students.addAll(student);
+		}
 		//Set<Student> students = studentDao.findByClazz(clazz.getClaId());
 		List<StudentCourse> stuCurs = new LinkedList<StudentCourse>();
 

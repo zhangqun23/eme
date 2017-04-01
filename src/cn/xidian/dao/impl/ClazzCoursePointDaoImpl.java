@@ -62,9 +62,21 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClazzCoursePoint> selectByCursAndClazzId(Integer cursId,
+			String clazId) {
+		List<ClazzCoursePoint> ips = new LinkedList<ClazzCoursePoint>();
+		String sql = "from ClazzCoursePoint cp where cursId = ? and claId in (?) order by clazzCursPointId asc";
+		Query query = currentSession().createQuery(sql).setInteger(0, cursId)
+				.setString(1, clazId);
+		ips.addAll(query.list());
+		return ips;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ClazzCoursePoint> selectByCursAndClazzId(Integer cursId,
 			Integer clazId) {
 		List<ClazzCoursePoint> ips = new LinkedList<ClazzCoursePoint>();
-		String sql = "from ClazzCoursePoint cp where cursId = ? and claId=? order by clazzCursPointId asc";
+		String sql = "from ClazzCoursePoint cp where cursId = ? and claId = ? order by clazzCursPointId asc";
 		Query query = currentSession().createQuery(sql).setInteger(0, cursId)
 				.setInteger(1, clazId);
 		ips.addAll(query.list());
@@ -101,7 +113,7 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 			String claName) {
 		List<ClazzCoursePoint> cplist = new LinkedList<ClazzCoursePoint>();
 		String sql = "from ClazzCoursePoint cp where cp.course.cursName=? "
-				+ "and cp.course.isDelete=1 and cp.clazz.claName=?";
+				+ "and cp.course.isDelete=1 and cp.clazz.claName in (?)";
 		Query query = currentSession().createQuery(sql).setString(0, cursName)
 				.setString(1, claName);
 		cplist.addAll(query.list());

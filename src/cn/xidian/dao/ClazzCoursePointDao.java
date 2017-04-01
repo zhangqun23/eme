@@ -14,6 +14,8 @@ public interface ClazzCoursePointDao {
 	
 	List<ClazzCoursePoint> selectByCursId(Integer cursId);
 	
+	List<ClazzCoursePoint> selectByCursAndClazzId(Integer cursId,String clazId);
+	
 	List<ClazzCoursePoint> selectByCursAndClazzId(Integer cursId,Integer clazId);
 	
 	boolean deleteById(ClazzCoursePoint coursePoint);
