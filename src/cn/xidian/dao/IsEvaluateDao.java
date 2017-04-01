@@ -8,7 +8,7 @@ import cn.xidian.entity.IsEvaluate;
 
 public interface IsEvaluateDao {
 
-	IsEvaluate findByCursAndClazz(Integer cursId, Integer claId);
+	IsEvaluate findByCursAndClazz(Integer cursId, String claId);
 	
 	List<IsEvaluate> selectByCursIdAndGrade(Integer cursId,String grade);
 	

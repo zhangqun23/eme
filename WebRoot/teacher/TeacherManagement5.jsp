@@ -102,11 +102,11 @@
 											</div>
 											 -->
 											<div class="div-select">
-												班级&nbsp;&nbsp; <select id="multiselect" name="clazz"
+												班级&nbsp;&nbsp; <select id="multiselect" name="clazzName"
 													multiple="multiple">
-													<s:iterator value="allClazz" var="c">
-														<option value="<s:property value="#c.claName"/>"><s:property
-																value="#c.claName" /></option>
+													<s:iterator value="allClazz" var="clazz">
+														<option value="<s:property value="#clazz.claName"/>"><s:property
+																value="#clazz.claName" /></option>
 													</s:iterator>
 												</select>
 											</div>
