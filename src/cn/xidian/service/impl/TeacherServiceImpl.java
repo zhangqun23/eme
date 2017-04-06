@@ -3,7 +3,6 @@ package cn.xidian.service.impl;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -191,18 +190,8 @@ public class TeacherServiceImpl implements TeacherService {
 		if (course == null) {
 			throw new CourseNotExistException("对不起，课程不存在！");
 		}
-		String[] clazzArray = null;
-		clazzArray = claName.split(",");
-		List<Clazz> clazzs = new LinkedList<Clazz>();
-		String claId = "";
-		for (int i = 0; i < clazzArray.length; i++) {
-			Clazz clazz = clazzDao.selectByName(clazzArray[i].trim());
-			claId += clazz.getClaId()+",";
-			clazzs.add(clazz);
-		}
-		claId = claId.substring(0,claId.length()-1);
-		//Clazz clazz = clazzDao.selectByName(claName);
-		if (clazzs.size()==0) {
+		Clazz clazz = clazzDao.selectByName(claName);
+		if (clazz == null) {
 			throw new ClazzNotExistException("对不起，班级不存在！");
 		}
 
@@ -224,13 +213,8 @@ public class TeacherServiceImpl implements TeacherService {
 		Double classClazzValueTotal = 0.0;
 		Double classWorkValueTotal = 0.0;
 		Double classExpValueTotal = 0.0;
-		Iterator<Clazz> iter = clazzs.iterator();
-		Set<Student> students = new LinkedHashSet<Student>();
-		while(iter.hasNext()){
-			Set<Student> student = studentDao.findByClazz(iter.next().getClaId());
-			students.addAll(student);
-		}
-		//Set<Student> students = studentDao.findByClazz(clazz.getClaId());
+
+		Set<Student> students = studentDao.findByClazz(clazz.getClaId());
 		List<StudentCourse> stuCurs = new LinkedList<StudentCourse>();
 
 		Iterator<Student> it = students.iterator();
@@ -354,20 +338,17 @@ public class TeacherServiceImpl implements TeacherService {
 			ttEvaluate.setA1(a1);
 			ttEvaluate.setB1(b1);
 			b1s.add(b1);// 把b1存到一个list，一会计算a2、b2拿出来用
+			ttEvaluate.setClazz(clazz);
 			ttEvaluate.setTeachingTarget(tts.get(i));
 			TeachingTargetEvaluate tte = teachingTargetEvaluateDao
-					.selectByClazzIdAndTargetId(claId, tts.get(i)
-							.getTchTargetId());
-			Iterator<Clazz> it1 = clazzs.iterator();
-			for(int x=0;x<clazzs.size();x++){
-				ttEvaluate.setClazz(it1.next());
-				// 存在则更新，不存在则添加
-				if (tte == null) {
-					teachingTargetEvaluateDao.addTchingTargetEvaValue(ttEvaluate);// 写入数据库
-				} else {
-					teachingTargetEvaluateDao
-							.updateTchingTargetEvaValue(ttEvaluate);
-				}
+					.selectByClazzIdAndTargetId(clazz.getClaId(), 
+							tts.get(i).getTchTargetId());
+			// 存在则更新，不存在则添加
+			if (tte == null) {
+				teachingTargetEvaluateDao.addTchingTargetEvaValue(ttEvaluate);// 写入数据库
+			} else {
+				teachingTargetEvaluateDao
+						.updateTchingTargetEvaValue(ttEvaluate);
 			}
 		}
 
@@ -376,7 +357,7 @@ public class TeacherServiceImpl implements TeacherService {
 		/*List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
 				.selectByCursAndClazzId(course.getCursId(), clazz.getClaId());*/
 		List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
-				.selectByCursAndClazzId(course.getCursId(), claId);
+				.selectByCursAndClazzId(course.getCursId(), clazz.getClaId());
 		if (existCursPoints.size() != 0) {
 			for (int i = 0; i < existCursPoints.size(); i++) {
 				clazzCoursePointDao.deleteById(existCursPoints.get(i));
@@ -415,22 +396,19 @@ public class TeacherServiceImpl implements TeacherService {
 			} else {
 				b2[i] = a2[i] / targetTarValue[i];
 			}
-			Iterator<Clazz> itt = clazzs.iterator();
-			for(int x=0;x<clazzs.size();x++){
-				ccp.setTargetTarValue(targetTarValue[i]);
-				ccp.setA2(a2[i]);
-				ccp.setB2(b2[i]);
-				ccp.setClazz(itt.next());
-				ccp.setCourse(course);
-				ccp.setIndPoint(cts.get(i).getIndicatorPoint());
-				clazzCoursePointDao.add(ccp);
-			}
+			ccp.setTargetTarValue(targetTarValue[i]);
+			ccp.setA2(a2[i]);
+			ccp.setB2(b2[i]);
+			ccp.setClazz(clazz);
+			ccp.setCourse(course);
+			ccp.setIndPoint(cts.get(i).getIndicatorPoint());
+			clazzCoursePointDao.add(ccp);
 		}
 
 		// 写入isevaluate表，有则update,无则insert
 		Integer cursId = course.getCursId();
 		//写入claId
-		//Integer claId = clazz.getClaId();
+		Integer claId = clazz.getClaId();
 		Teacher tchrTemp = teacherDao.findBySchNum(tchrSchNum);
 		if (tchrTemp == null) {
 			throw new TeacherNotExistException("工号为" + tchrSchNum + "的老师不存在！");
@@ -441,15 +419,12 @@ public class TeacherServiceImpl implements TeacherService {
 			isevalTemp.setEvaDate(new Date());
 			isevaluateDao.updateIsevaluate(isevalTemp);
 		} else {
-			Iterator<Clazz> itt = clazzs.iterator();
-			for(int x=0;x<clazzs.size();x++){
-				isevalTemp = new IsEvaluate();
-				isevalTemp.setCourse(course);
-				isevalTemp.setClazz(itt.next());
-				isevalTemp.setTeacher(tchrTemp);
-				isevalTemp.setEvaDate(new Date());
-				isevaluateDao.addIsevaluate(isevalTemp);
-			}
+			isevalTemp = new IsEvaluate();
+			isevalTemp.setCourse(course);
+			isevalTemp.setClazz(clazz);
+			isevalTemp.setTeacher(tchrTemp);
+			isevalTemp.setEvaDate(new Date());
+			isevaluateDao.addIsevaluate(isevalTemp);
 		}
 
 		return true;

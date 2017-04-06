@@ -53,11 +53,11 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 	}
 
 	@Override
-	public TeachingTargetEvaluate selectByClazzIdAndTargetId(String clazzId,
+	public TeachingTargetEvaluate selectByClazzIdAndTargetId(Integer clazzId,
 			Integer targetId) {
 		String hql = "from TeachingTargetEvaluate tt where tt.clazz.claId = (?) and tt.teachingTarget.tchTargetId=? order by tchTarEvaId asc";
 		Query query = currentSession().createQuery(hql);
-		query.setString(0, clazzId).setInteger(1, targetId);
+		query.setInteger(0, clazzId).setInteger(1, targetId);
 		TeachingTargetEvaluate tte = (TeachingTargetEvaluate) query
 				.uniqueResult();
 		return tte;

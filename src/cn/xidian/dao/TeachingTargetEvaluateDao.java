@@ -10,7 +10,7 @@ public interface TeachingTargetEvaluateDao {
 
 	boolean updateTchingTargetEvaValue(TeachingTargetEvaluate targetEva);
 
-	TeachingTargetEvaluate selectByClazzIdAndTargetId(String clazzId,
+	TeachingTargetEvaluate selectByClazzIdAndTargetId(Integer clazzId,
 			Integer targetId);
 
 	List<TeachingTargetEvaluate> selectByCursNameAndGrade(String cursName,String grade);
