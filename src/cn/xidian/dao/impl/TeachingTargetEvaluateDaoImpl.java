@@ -84,10 +84,10 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 		List<TeachingTargetEvaluate> ttelist = new LinkedList<TeachingTargetEvaluate>();
 		String sql = "from TeachingTargetEvaluate tt where tt.teachingTarget.tchTargetId in "
 				+ "(select t.tchTargetId from TeachingTarget t where t.course.cursName=? "
-				+ "and t.course.isDelete=1) and tt.clazz.claName in ("+ claName +")";
+				+ "and t.course.isDelete=1) and tt.clazz.claName=?";
 		Query query = currentSession().createQuery(sql);
-		query.setString(0, cursName);
-				//.setString(1, claName);
+		query.setString(0, cursName)
+				.setString(1, claName);
 		ttelist.addAll(query.list());
 		return ttelist;
 	}

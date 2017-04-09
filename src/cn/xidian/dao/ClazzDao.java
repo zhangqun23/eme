@@ -11,5 +11,6 @@ public interface ClazzDao {
 	List<Clazz> findAllCla();
 	
 	List<Clazz> selectByGrade(String clazz);
+
 	
 }
