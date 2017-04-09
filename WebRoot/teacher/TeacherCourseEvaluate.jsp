@@ -39,21 +39,23 @@
 		var d = new Date();
 		var year = d.getFullYear();//获取当前年份
 		
-		var $Option2 = $("<option value='" + (year - 3) + "'>" + (year - 3)
+		var $Option2 = $("<option value='" + (year - 4) + "'>" + (year - 4)
 				+ "</option>");
-		var $Option3 = $("<option value='" + (year - 2) + "'>" + (year - 2)
+		var $Option3 = $("<option value='" + (year - 3) + "'>" + (year - 3)
 				+ "</option>");
-		var $Option4 = $("<option value='" + (year - 1) + "'>" + (year - 1)
+		var $Option4 = $("<option value='" + (year - 2) + "'>" + (year - 2)
 				+ "</option>");
-		var $Option5 = $("<option value='" + (year) + "'>" + (year)
+		var $Option5 = $("<option value='" + (year - 1) + "'>" + (year - 1)
 				+ "</option>");
-		var $Option6 = $("<option value='" + (year + 1) + "'>" + (year + 1)
+		var $Option6 = $("<option value='" + (year) + "'>" + (year)
 				+ "</option>");
-		var $Option7 = $("<option value='" + (year + 2) + "'>" + (year + 2)
+		var $Option7 = $("<option value='" + (year + 1) + "'>" + (year + 1)
 				+ "</option>");
-		var $Option8 = $("<option value='" + (year + 3) + "'>" + (year + 3)
+		var $Option8 = $("<option value='" + (year + 2) + "'>" + (year + 2)
 				+ "</option>");
-		var $Option9 = $("<option value='" + (year + 4) + "'>" + (year + 4)
+		var $Option9 = $("<option value='" + (year + 3) + "'>" + (year + 3)
+				+ "</option>");
+		var $Option10 = $("<option value='" + (year + 4) + "'>" + (year + 4)
 				+ "</option>");
 		$termSelect.append($Option2).append($Option3).append(
 				$Option4).append($Option5).append($Option6).append($Option7)
