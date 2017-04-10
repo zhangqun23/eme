@@ -96,7 +96,7 @@
 											<div class="div-select">
 												类型&nbsp;&nbsp;<select name="calculateType"
 													onChange="changeCaulateType(this)">
-													<option value="0">班级评估</option>
+													<option value="0" selected>班级评估</option>
 													<option value="1">年级评估</option>
 												</select>
 											</div>
@@ -207,10 +207,14 @@
 			var type = obj.value;
 			if (type == "0") {
 				$("#grade").hide();
+				$('#grade').attr("disabled", true);
 				$("#clazzName").show();
+				$('#clazzName').attr("disabled", false);
 			} else {
 				$("#clazzName").hide();
+				$('#clazzName').attr("disabled", true);
 				$("#grade").show();
+				$('#grade').attr("disabled", false);
 			}
 		}
 	</script>
