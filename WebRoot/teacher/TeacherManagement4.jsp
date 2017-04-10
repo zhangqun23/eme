@@ -40,6 +40,7 @@
 			return false;
 		}
 		document.getElementById("fileName").value = filename;
+		console.log("123",calculateType);
 		return true;
 	}
 </script>

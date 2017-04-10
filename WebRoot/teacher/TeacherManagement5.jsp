@@ -109,7 +109,7 @@
 												</select>
 											</div>
 											<div class="div-select" id="grade" style="display: none">
-												年级&nbsp;&nbsp;<select name="grade" class="year">
+												年级&nbsp;&nbsp;<select name="gradeName" class="year">
 												</select>
 											</div>
 											<div class="div-select">

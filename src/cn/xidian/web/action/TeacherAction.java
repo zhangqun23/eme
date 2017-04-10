@@ -84,6 +84,8 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	private Clazz clazz = new Clazz();
 	// 查询达成度
 	private String cursName;
+	private String calculateType;
+	private String gradeName;
 	List<TeachingTarget> targets;
 	List<String> points = new LinkedList<String>();
 	List<List<String>> b1 = new LinkedList<List<String>>();
@@ -302,7 +304,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public String calculateClazzCursTarget() {
 		try {
 			String tchrSchNum = ((User) session.get("tUser")).getSchNum();
-			teacherService.caculateClazzTarget(cursName, clazzName, tchrSchNum);
+			teacherService.caculateClazzTarget(calculateType, gradeName, cursName, clazzName, tchrSchNum);
 			CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
 			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
 			List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
@@ -894,5 +896,22 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
+	public String getCalculateType(){
+		return calculateType;
+	}
+	
+	public void setcalculateType(String calculateType){
+		this.calculateType = calculateType;
+	}
+
+	public String getGradeName() {
+		return gradeName;
+	}
+
+	public void setGradeName(String gradeName) {
+		this.gradeName = gradeName;
+	}
+
 
 }

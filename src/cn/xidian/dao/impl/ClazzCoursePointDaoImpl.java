@@ -64,7 +64,7 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 	public List<ClazzCoursePoint> selectByCursAndClazzId(Integer cursId,
 			String clazId) {
 		List<ClazzCoursePoint> ips = new LinkedList<ClazzCoursePoint>();
-		String sql = "from ClazzCoursePoint cp where cursId = ? and claId in (?) order by clazzCursPointId asc";
+		String sql = "from ClazzCoursePoint cp where cursId = ? and claId = (?) order by clazzCursPointId asc";
 		Query query = currentSession().createQuery(sql).setInteger(0, cursId)
 				.setString(1, clazId);
 		ips.addAll(query.list());
