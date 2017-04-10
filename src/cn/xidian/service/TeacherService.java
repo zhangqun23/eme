@@ -22,6 +22,7 @@ public interface TeacherService {
 	
 	List<Course> selectChargeCoursesByTchrNum(String tchrNum);
 	
-	boolean caculateClazzTarget(String cursNum, String claName,String tchrSchNum);
+	boolean caculateClazzTarget(String caculateClazzTarget, String gradeName, String cursNum, 
+			String claName,String tchrSchNum);
 	
 }

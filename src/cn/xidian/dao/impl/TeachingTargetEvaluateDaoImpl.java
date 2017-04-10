@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
 import cn.xidian.dao.TeachingTargetEvaluateDao;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.TeachingTargetEvaluate;
 
 @Component("teachingTargetEvaluateDaoImpl")
@@ -34,6 +35,11 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 	}
 
 	@Override
+	public boolean addTchingTargetEvaValue(AverTeachingTargetEvaluate targetEva) {
+		currentSession().save(targetEva);
+		return true;
+	}
+	@Override
 	public boolean updateTchingTargetEvaValue(TeachingTargetEvaluate targetEva) {
 		String sql = "update TeachingTargetEvaluate tt set tt.tchtargetMidEvaValue=?, tt.tchtargetFinEvaValue=?, tt.tchtargetWorkEvaValue=?,"
 				+ "tt.tchtargetExpEvaValue=?, tt.tchtargetClassEvaValue=?,tt.a1=?, tt.b1=? "
@@ -47,6 +53,25 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 				.setDouble(5, targetEva.getA1())
 				.setDouble(6, targetEva.getB1())
 				.setInteger(7, targetEva.getClazz().getClaId())
+				.setInteger(8, targetEva.getTeachingTarget().getTchTargetId())
+				.executeUpdate();
+		return true;
+	}
+	
+	@Override
+	public boolean updateTchingTargetEvaValue(AverTeachingTargetEvaluate targetEva) {
+		String sql = "update AverTeachingTargetEvaluate tt set tt.tchtargetMidEvaValue=?, tt.tchtargetFinEvaValue=?, tt.tchtargetWorkEvaValue=?,"
+				+ "tt.tchtargetExpEvaValue=?, tt.tchtargetClassEvaValue=?,tt.a1=?, tt.b1=? "
+				+ "where tt.grade=? and tt.teachingTarget.tchTargetId=?";
+		Query query = currentSession().createQuery(sql);
+		query.setDouble(0, targetEva.getTchtargetMidEvaValue())
+				.setDouble(1, targetEva.getTchtargetFinEvaValue())
+				.setDouble(2, targetEva.getTchtargetWorkEvaValue())
+				.setDouble(3, targetEva.getTchtargetExpEvaValue())
+				.setDouble(4, targetEva.getTchtargetClassEvaValue())
+				.setDouble(5, targetEva.getA1())
+				.setDouble(6, targetEva.getB1())
+				.setString(7, targetEva.getGrade())
 				.setInteger(8, targetEva.getTeachingTarget().getTchTargetId())
 				.executeUpdate();
 		return true;
@@ -90,6 +115,16 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 				.setString(1, claName);
 		ttelist.addAll(query.list());
 		return ttelist;
+	}
+	
+	@Override
+	public AverTeachingTargetEvaluate selectByGradeAndTargetId(String gradeName, Integer targetId) {
+		String hql = "from AverTeachingTargetEvaluate tt where tt.clazz.claId = (?) and tt.teachingTarget.tchTargetId=? order by tchTarEvaId asc";
+		Query query = currentSession().createQuery(hql);
+		query.setString(0, gradeName).setInteger(1, targetId);
+		AverTeachingTargetEvaluate tte = (AverTeachingTargetEvaluate) query
+				.uniqueResult();
+		return tte;
 	}
 
 }

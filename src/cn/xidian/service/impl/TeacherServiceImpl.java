@@ -1,6 +1,7 @@
 package cn.xidian.service.impl;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ import cn.xidian.dao.ClazzDao;
 import cn.xidian.dao.CompositionRulesDao;
 import cn.xidian.dao.ContributeTargetDao;
 import cn.xidian.dao.CourseDao;
+import cn.xidian.dao.CoursePointDao;
 import cn.xidian.dao.IsEvaluateDao;
 import cn.xidian.dao.StudentCourseDao;
 import cn.xidian.dao.StudentDao;
@@ -23,11 +25,13 @@ import cn.xidian.dao.TeacherCourseDao;
 import cn.xidian.dao.TeacherDao;
 import cn.xidian.dao.TeachingTargetDao;
 import cn.xidian.dao.TeachingTargetEvaluateDao;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.Clazz;
 import cn.xidian.entity.ClazzCoursePoint;
 import cn.xidian.entity.CompositionRules;
 import cn.xidian.entity.ContributeTarget;
 import cn.xidian.entity.Course;
+import cn.xidian.entity.CoursePoint;
 import cn.xidian.entity.IsEvaluate;
 import cn.xidian.entity.Student;
 import cn.xidian.entity.StudentCourse;
@@ -42,16 +46,24 @@ import cn.xidian.exception.StudentCourseNotExistsException;
 import cn.xidian.exception.TchingTargetNotExistException;
 import cn.xidian.exception.TeacherNotExistException;
 import cn.xidian.service.TeacherService;
+import cn.xidian.utils.CollectionUtil;
 import cn.xidian.utils.ServiceUtils;
 
 @Component
 public class TeacherServiceImpl implements TeacherService {
-
+	
 	private TeacherCourseDao teacherCourseDao;
 
 	@Resource(name = "teacherCourseDaoImpl")
 	public void setTeacherCourseDao(TeacherCourseDao teacherCourseDao) {
 		this.teacherCourseDao = teacherCourseDao;
+	}
+	
+	private CoursePointDao coursePointDao;
+
+	@Resource(name = "coursePointDaoImpl")
+	public void setCoursePointDao(CoursePointDao coursePointDao) {
+		this.coursePointDao = coursePointDao;
 	}
 
 	private StudentDao studentDao;
@@ -180,8 +192,8 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public boolean caculateClazzTarget(String cursName, String claName,
-			String tchrSchNum) {// 计算某班级某课程达成度
+	public boolean caculateClazzTarget(String caculateClazzTarget, String gradeName, 
+			String cursName, String claName, String tchrSchNum) {// 计算某班级某课程达成度
 		// DecimalFormat df = new DecimalFormat("#.00");//
 		// 用于格式化Double类型数据，保留两位小数
 
@@ -190,11 +202,17 @@ public class TeacherServiceImpl implements TeacherService {
 		if (course == null) {
 			throw new CourseNotExistException("对不起，课程不存在！");
 		}
-		
-		String[] clazzArray = null;
-		clazzArray = claName.split(",");
-		for(int x = 0; x < clazzArray.length; x++){
-			Clazz clazz = clazzDao.selectByName(clazzArray[x]);
+		//判断所选是班级还是年级
+		List<Clazz> clazzList = new ArrayList<Clazz>();
+		if(caculateClazzTarget=="0"){
+			clazzList.add(clazzDao.selectByName(claName));
+			}
+		else{
+			clazzList = clazzDao.selectByGrade(claName);
+		}
+		List<AverTeachingTargetEvaluate> attEvalueList = new ArrayList<AverTeachingTargetEvaluate>();
+		for(int x = 0; x < clazzList.size(); x++){
+			Clazz clazz = clazzList.get(x);
 			if (clazz == null) {
 				throw new ClazzNotExistException("对不起，班级不存在！");
 			}
@@ -277,6 +295,7 @@ public class TeacherServiceImpl implements TeacherService {
 			List<Double> b1s = new LinkedList<Double>();
 			for (int i = 0; i < tts.size(); i++) {
 				TeachingTargetEvaluate ttEvaluate = new TeachingTargetEvaluate();
+				AverTeachingTargetEvaluate attEvaluate = new AverTeachingTargetEvaluate();
 				Double classMidEvaValue = 0.0;// 班级期中成绩评价值
 				Double classFinEvaValue = 0.0;// 班级期末成绩评价值
 				Double classClazzEvaValue = 0.0;// 班级课堂成绩评价值
@@ -354,8 +373,16 @@ public class TeacherServiceImpl implements TeacherService {
 					teachingTargetEvaluateDao
 							.updateTchingTargetEvaValue(ttEvaluate);
 				}
+				attEvaluate.setTchtargetMidEvaValue(classMidEvaValue);
+				attEvaluate.setTchtargetFinEvaValue(classFinEvaValue);
+				attEvaluate.setTchtargetClassEvaValue(classClazzEvaValue);
+				attEvaluate.setTchtargetWorkEvaValue(classWorkEvaValue);
+				attEvaluate.setTchtargetExpEvaValue(classExpEvaValue);
+				attEvaluate.setA1(a1);
+				attEvaluate.setB1(b1);
+				attEvaluate.setTeachingTarget(tts.get(i));
+				attEvalueList.add(attEvaluate);
 			}
-	
 			// 计算a2、b2
 			/* 若已存在，则先删除。。。。。。。。。。。。待改进 */
 			/*List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
@@ -431,7 +458,54 @@ public class TeacherServiceImpl implements TeacherService {
 				isevaluateDao.addIsevaluate(isevalTemp);
 			}
 		}
-
+		Double classMidEvaValue = 0.0;// 班级期中成绩评价值
+		Double classFinEvaValue = 0.0;// 班级期末成绩评价值
+		Double classClazzEvaValue = 0.0;// 班级课堂成绩评价值
+		Double classWorkEvaValue = 0.0;// 班级作业成绩评价值
+		Double classExpEvaValue = 0.0;// 班级实验成绩评价值
+		Integer targetId = 0; //targetId
+		Double a1 = 0.0;
+		Double b1 = 0.0;
+		List<CoursePoint> cps = coursePointDao.selectByCursId(course.getCursId());// 找出该课程对应的所有毕业要求指标点
+		Integer n = attEvalueList.size() / cps.size();// 总共有几个班级
+		CollectionUtil.sort(attEvalueList, targetId.toString(), true);
+		Iterator<AverTeachingTargetEvaluate> iter = attEvalueList.iterator();
+		for(int i=0;i<cps.size();i++){
+			for( int j=0;j<n;j++){
+				AverTeachingTargetEvaluate list = iter.next();
+				classMidEvaValue += list.getTchtargetMidEvaValue();
+				classFinEvaValue += list.getTchtargetFinEvaValue();
+				classClazzEvaValue += list.getTchtargetClassEvaValue();
+				classWorkEvaValue += list.getTchtargetWorkEvaValue();
+				classExpEvaValue += list.getTchtargetExpEvaValue();
+				targetId += list.getTeachingTarget().getTchTargetId();
+				a1 += list.getA1();
+				b1 += list.getB1();
+			}
+			AverTeachingTargetEvaluate attEvaluate = new AverTeachingTargetEvaluate();
+			attEvaluate.setTchtargetMidEvaValue(classMidEvaValue/(attEvalueList.size()));
+			attEvaluate.setTchtargetFinEvaValue(classFinEvaValue/(attEvalueList.size()));
+			attEvaluate.setTchtargetClassEvaValue(classClazzEvaValue/(attEvalueList.size()));
+			attEvaluate.setTchtargetWorkEvaValue(classWorkEvaValue/(attEvalueList.size()));
+			attEvaluate.setTchtargetExpEvaValue(classExpEvaValue/(attEvalueList.size()));
+			attEvaluate.setA1(a1/(attEvalueList.size()));
+			attEvaluate.setB1(b1/(attEvalueList.size()));
+			TeachingTarget tt = new TeachingTarget();
+			tt.setTchTargetId(targetId/(attEvalueList.size()));
+			attEvaluate.setTeachingTarget(tt);
+			attEvaluate.setGrade(gradeName);
+			AverTeachingTargetEvaluate tte = teachingTargetEvaluateDao
+					.selectByGradeAndTargetId(gradeName, targetId/(attEvalueList.size()));
+			if (tte == null) {
+				teachingTargetEvaluateDao.addTchingTargetEvaValue(attEvaluate);// 写入数据库
+			} else {
+				teachingTargetEvaluateDao
+						.updateTchingTargetEvaValue(attEvaluate);
+			}
+		}
+		
+		
+		
 		return true;
 	}
 

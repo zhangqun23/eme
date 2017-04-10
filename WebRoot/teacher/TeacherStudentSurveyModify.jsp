@@ -54,9 +54,12 @@
 									<p class="top-distance para-indent align_right">
 										<select class="top-distance" id="respondent"
 											name="survey.respondent">
-											<option value="1" <s:if test="survey.respondent==1">selected</s:if>>学生</option>
-											<option value="2" <s:if test="survey.respondent==2">selected</s:if>>老师</option>
-						 					<option value="3" <s:if test="survey.respondent==3">selected</s:if>>全部</option>
+											<option value="1"
+												<s:if test="survey.respondent==1">selected</s:if>>学生</option>
+											<option value="2"
+												<s:if test="survey.respondent==2">selected</s:if>>老师</option>
+											<option value="3"
+												<s:if test="survey.respondent==3">selected</s:if>>全部</option>
 										</select><br>
 									</p>
 									<p class="top-distance para-indent align_right">
@@ -197,26 +200,27 @@
 									<input type="hidden" name="survey.surveyId"
 										value="<s:property
 										value="survey.surveyId" />">
-									<span>问卷有效时间：</span>
-									<input
-										type="text" name="survey.startTime" id="startTime"
-										style="width: 110px" value="<s:property
+									<span>问卷有效时间：</span> <input type="text" name="survey.startTime"
+										id="startTime" style="width: 110px"
+										value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.startTime})}"/>"
 										onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true'})) ">至<input
 										type="text" name="survey.endTime" id="endTime"
-										style="width: 110px"  value="<s:property
+										style="width: 110px"
+										value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.endTime})}"/>"
 										onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true'})) ">
-									
+
 									<%--  <input type="date" name="survey.startTime"
 										id="startTime" value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.startTime})}"/>" />至
 									<input type="date" name="survey.endTime" id="endTime" value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.endTime})}"/>"/>  --%>
 								</div>
-								<div class="right_align"><input
-										type="submit" class="btn" name="submit" id="submit"
-										value="保    存" onclick="linksel()" style="margin-left: 30px"></div>
+								<div class="right_align">
+									<input type="submit" class="btn" name="submit" id="submit"
+										value="保    存" onclick="linksel()" style="margin-left: 30px">
+								</div>
 							</form>
 						</div>
 						<hr>
@@ -227,6 +231,8 @@
 									type="button" name="addQues" id="2" value="多  选"
 									class="btn select_style" onclick="addQuestion(this)"><input
 									type="button" name="addQues" id="3" value="文字题"
+									class="btn select_style" onclick="addQuestion(this)"> <input
+									type="button" name="addQues" id="4" value="矩阵选择题"
 									class="btn select_style" onclick="addQuestion(this)">
 							</div>
 						</div>

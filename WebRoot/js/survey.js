@@ -15,6 +15,8 @@ function addQuestion(obj) {
 		qType = "checkbox";
 	} else if (obj.id == 3) {
 		qType = "textarea";
+	} else if (obj.id == 4) {
+		qType = "matrix";
 	}
 	var ques = document.getElementsByClassName("ques").length; // 已有多少个问题
 	var quesNum = ques + 1; // 当前问题的序号
@@ -84,10 +86,41 @@ function addQuestion(obj) {
 				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
 				+ quesNum
 				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ></div><div id='sel"
-				+ quesNum + "'></div><div class='selector" + quesNum
+				+ quesNum
+				+ "'></div><div class='selector"
+				+ quesNum
 				+ " selector-style'><textarea  placeholder='请填写内容'  class='ST"
 				+ quesNum
 				+ " left_distance' style='width:72%;height:100px' readonly></textarea><input type='hidden' id='AST"
+				+ quesNum + "'><input type='hidden' id='QT" + quesNum
+				+ "'></div></div>";
+	}
+	if (obj.id == 4) {
+		var div1 = document.createElement("div");
+		div1.setAttribute("class", "control-group");
+		div1.innerHTML += "<div class='ques' id='ques"
+				+ quesNum
+				+ "'><div onmouseover='showDel(this)' onmouseout='hideDel(this)'><span id='Q"
+				+ quesNum
+				+ "'>Q"
+				+ quesNum
+				+ ":</span><input type='text' id='quesname"
+				+ quesNum
+				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
+				+ quesNum
+				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ></div><div id='sel"
+				+ quesNum
+				+ "'></div><div class='selector"
+				+ quesNum
+				+ " selector-style'><table class='table table-bordered wjTable'><tr><td style='width:100px'>请设计</td><td><input type='text' placeholder='选项'/></td><td><input type='text' placeholder='选项'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项'/></td><td><input type='radio' /></td><td><input type='radio'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项'/></td><td><input type='radio' /></td><td><input type='radio' /></td></tr></table><image id='"
+				+ quesNum
+				+ "' name='"
+				+ obj.id
+				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addSelector(this)' ><image class='image"
+				+ quesNum
+				+ " small_img' name='image"
+				+ quesNum
+				+ "'  src='img/delsel.gif' alt='删除' onclick='delSelector(this)'><input type='hidden' id='AST"
 				+ quesNum + "'><input type='hidden' id='QT" + quesNum
 				+ "'></div></div>";
 	}
@@ -125,9 +158,7 @@ function addSelector(obj) {
 			+ "' name='"
 			+ obj.name
 			+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addSelector(this)' ><image class='image"
-			+ obj.id
-			+ " small_img' name='image"
-			+ obj.id
+			+ obj.id + " small_img' name='image" + obj.id
 			+ "'  src='img/delsel.gif' alt='删除' onclick='delSelector(this)'>";
 	div.appendChild(div1);
 }
@@ -155,7 +186,8 @@ function delQuestion(obj) {
 		$("#ques" + k + "").find("#sel" + k + "").attr("id", "sel" + j + "");// <div>该div包含了所有的选项，修改该div的id,该id的作用是在添加单个选项时找到添加的位置
 		$("#ques" + k + "").find(".selector" + k + "").attr("class",
 				"selector" + j + " selector-style");// <div>单个选项的div，修改该div的class，该class暂无用处
-		$("#ques" + k + "").find(".ST" + k + "").attr("class", "ST" + j + " left_distance");// <input
+		$("#ques" + k + "").find(".ST" + k + "").attr("class",
+				"ST" + j + " left_distance");// <input
 		// type='text'>修改选项的文本的类，该类的作用时在最终组合选项内容时使用
 		$("#ques" + k + "").find("img").attr("id", "" + j + "");// <img>修改图片的id,id的作用是，在点击添加图片时可以获得该题是第几道题
 		$("#ques" + k + "").find(".image" + k + "").attr("name",
@@ -200,7 +232,7 @@ function linksel() {
 		}
 		document.getElementById("AST" + j + "").value = selContent;
 	}
-	
+
 }
 
 function isEmpty() {
@@ -234,6 +266,6 @@ function isEmpty() {
 			return false;
 		}
 	}
-	
+
 	return true;
 }

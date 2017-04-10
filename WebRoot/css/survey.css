@@ -24,6 +24,8 @@
 .selector-style {
 	margin-top: 10px;
 	margin-left: 35px;
+	overflow-x: auto;
+	　　overflow-y: hidden;
 }
 
 .question-style {
@@ -64,6 +66,7 @@
 .align_right {
 	text-align: right;
 }
+
 .align_left {
 	text-align: left !important;
 }
@@ -80,15 +83,16 @@
 	visibility: hidden;
 }
 
-.disElement{
+.disElement {
 	display: none;
 }
+
 .pieChart_style {
 	width: 500px;
 	height: 300px;
 	display: none;
-	margin-left:25px;
-	margin-top:15px;
+	margin-left: 25px;
+	margin-top: 15px;
 }
 
 .bottom_distance {
@@ -106,9 +110,21 @@
 	margin-top: 50px;
 	background-color: #DDDDDD;
 }
-.right_distance{
-	margin-right:0px
+
+.right_distance {
+	margin-right: 0px
 }
-.right_align{
-	text-align:right;
+
+.right_align {
+	text-align: right;
+}
+
+.wjTable td {
+	width: 100px !important;
+	
+}
+
+.wjTable input {
+	width: 100px;
+	margin: 0 auto;
 }
