@@ -208,7 +208,7 @@ public class TeacherServiceImpl implements TeacherService {
 			clazzList.add(clazzDao.selectByName(claName));
 			}
 		else{
-			clazzList = clazzDao.selectByGrade(claName);
+			clazzList = clazzDao.selectByGrade(gradeName);
 		}
 		List<AverTeachingTargetEvaluate> attEvalueList = new ArrayList<AverTeachingTargetEvaluate>();
 		for(int x = 0; x < clazzList.size(); x++){
@@ -458,55 +458,57 @@ public class TeacherServiceImpl implements TeacherService {
 				isevaluateDao.addIsevaluate(isevalTemp);
 			}
 		}
-		Double classMidEvaValue = 0.0;// 班级期中成绩评价值
-		Double classFinEvaValue = 0.0;// 班级期末成绩评价值
-		Double classClazzEvaValue = 0.0;// 班级课堂成绩评价值
-		Double classWorkEvaValue = 0.0;// 班级作业成绩评价值
-		Double classExpEvaValue = 0.0;// 班级实验成绩评价值
-		Integer targetId = 0; //targetId
-		Double a1 = 0.0;
-		Double b1 = 0.0;
-		List<CoursePoint> cps = coursePointDao.selectByCursId(course.getCursId());// 找出该课程对应的所有毕业要求指标点
-		Integer n = attEvalueList.size() / cps.size();// 总共有几个班级
-		CollectionUtil.sort(attEvalueList, targetId.toString(), true);
-		Iterator<AverTeachingTargetEvaluate> iter = attEvalueList.iterator();
-		for(int i=0;i<cps.size();i++){
-			for( int j=0;j<n;j++){
-				AverTeachingTargetEvaluate list = iter.next();
-				classMidEvaValue += list.getTchtargetMidEvaValue();
-				classFinEvaValue += list.getTchtargetFinEvaValue();
-				classClazzEvaValue += list.getTchtargetClassEvaValue();
-				classWorkEvaValue += list.getTchtargetWorkEvaValue();
-				classExpEvaValue += list.getTchtargetExpEvaValue();
-				targetId += list.getTeachingTarget().getTchTargetId();
-				a1 += list.getA1();
-				b1 += list.getB1();
-			}
-			AverTeachingTargetEvaluate attEvaluate = new AverTeachingTargetEvaluate();
-			attEvaluate.setTchtargetMidEvaValue(classMidEvaValue/(attEvalueList.size()));
-			attEvaluate.setTchtargetFinEvaValue(classFinEvaValue/(attEvalueList.size()));
-			attEvaluate.setTchtargetClassEvaValue(classClazzEvaValue/(attEvalueList.size()));
-			attEvaluate.setTchtargetWorkEvaValue(classWorkEvaValue/(attEvalueList.size()));
-			attEvaluate.setTchtargetExpEvaValue(classExpEvaValue/(attEvalueList.size()));
-			attEvaluate.setA1(a1/(attEvalueList.size()));
-			attEvaluate.setB1(b1/(attEvalueList.size()));
-			TeachingTarget tt = new TeachingTarget();
-			tt.setTchTargetId(targetId/(attEvalueList.size()));
-			attEvaluate.setTeachingTarget(tt);
-			attEvaluate.setGrade(gradeName);
-			AverTeachingTargetEvaluate tte = teachingTargetEvaluateDao
-					.selectByGradeAndTargetId(gradeName, targetId/(attEvalueList.size()));
-			if (tte == null) {
-				teachingTargetEvaluateDao.addTchingTargetEvaValue(attEvaluate);// 写入数据库
-			} else {
-				teachingTargetEvaluateDao
-						.updateTchingTargetEvaValue(attEvaluate);
-			}
+		if(caculateClazzTarget == "0"){
+			return true;
 		}
-		
-		
-		
-		return true;
+		else{
+			Double classMidEvaValue = 0.0;// 班级期中成绩评价值
+			Double classFinEvaValue = 0.0;// 班级期末成绩评价值
+			Double classClazzEvaValue = 0.0;// 班级课堂成绩评价值
+			Double classWorkEvaValue = 0.0;// 班级作业成绩评价值
+			Double classExpEvaValue = 0.0;// 班级实验成绩评价值
+			Integer targetId = 0; //targetId
+			Double a1 = 0.0;
+			Double b1 = 0.0;
+			List<CoursePoint> cps = coursePointDao.selectByCursId(course.getCursId());// 找出该课程对应的所有毕业要求指标点
+			Integer n = attEvalueList.size() / cps.size();// 总共有几个班级
+			CollectionUtil.sort(attEvalueList, targetId.toString(), true);
+			Iterator<AverTeachingTargetEvaluate> iter = attEvalueList.iterator();
+			for(int i=0;i<cps.size();i++){
+				for( int j=0;j<n;j++){
+					AverTeachingTargetEvaluate list = iter.next();
+					classMidEvaValue += list.getTchtargetMidEvaValue();
+					classFinEvaValue += list.getTchtargetFinEvaValue();
+					classClazzEvaValue += list.getTchtargetClassEvaValue();
+					classWorkEvaValue += list.getTchtargetWorkEvaValue();
+					classExpEvaValue += list.getTchtargetExpEvaValue();
+					targetId += list.getTeachingTarget().getTchTargetId();
+					a1 += list.getA1();
+					b1 += list.getB1();
+				}
+				AverTeachingTargetEvaluate attEvaluate = new AverTeachingTargetEvaluate();
+				attEvaluate.setTchtargetMidEvaValue(classMidEvaValue/(attEvalueList.size()));
+				attEvaluate.setTchtargetFinEvaValue(classFinEvaValue/(attEvalueList.size()));
+				attEvaluate.setTchtargetClassEvaValue(classClazzEvaValue/(attEvalueList.size()));
+				attEvaluate.setTchtargetWorkEvaValue(classWorkEvaValue/(attEvalueList.size()));
+				attEvaluate.setTchtargetExpEvaValue(classExpEvaValue/(attEvalueList.size()));
+				attEvaluate.setA1(a1/(attEvalueList.size()));
+				attEvaluate.setB1(b1/(attEvalueList.size()));
+				TeachingTarget tt = new TeachingTarget();
+				tt.setTchTargetId(targetId/(attEvalueList.size()));
+				attEvaluate.setTeachingTarget(tt);
+				attEvaluate.setGrade(gradeName);
+				AverTeachingTargetEvaluate tte = teachingTargetEvaluateDao
+						.selectByGradeAndTargetId(gradeName, targetId/(attEvalueList.size()));
+				if (tte == null) {
+					teachingTargetEvaluateDao.addTchingTargetEvaValue(attEvaluate);// 写入数据库
+				} else {
+					teachingTargetEvaluateDao
+							.updateTchingTargetEvaValue(attEvaluate);
+				}
+			}
+			return true;
+		}
 	}
 
 }
