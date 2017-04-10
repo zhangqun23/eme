@@ -207,10 +207,14 @@
 			var type = obj.value;
 			if (type == "0") {
 				$("#grade").hide();
+				$('#grade').attr("disabled", true);
 				$("#clazzName").show();
+				$('#clazzName').attr("disabled", false);
 			} else {
 				$("#clazzName").hide();
+				$('#clazzName').attr("disabled", true);
 				$("#grade").show();
+				$('#grade').attr("disabled", false);
 			}
 		}
 	</script>
