@@ -896,12 +896,12 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	public String getCalculateType(){
+
+	public String getCalculateType() {
 		return calculateType;
 	}
-	
-	public void setcalculateType(String calculateType){
+
+	public void setCalculateType(String calculateType) {
 		this.calculateType = calculateType;
 	}
 
@@ -912,6 +912,8 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public void setGradeName(String gradeName) {
 		this.gradeName = gradeName;
 	}
+	
+	
 
 
 }
