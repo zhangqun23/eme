@@ -87,6 +87,40 @@
 												id="text<s:property value="%{#status.count}" />"
 												value="<s:property value="#sq.questionId" />">
 										</s:if>
+										<s:if test="#sq.type==4">
+											<li class="li_style selector-style">
+												<table class="table table-bordered table-condensed wjTable"
+													id="table<s:property value="%{#status.count}" />">
+													<tr>
+														<td class="tdOne">选项</td>
+														<s:generator val="#sq.selectors" separator="_" id="s" />
+														<s:iterator status="st" value="#request.s" id="selector">
+															<td><s:property value="selector" /></td>
+														</s:iterator>
+													</tr>
+													<s:generator val="#sq.rowSelectors" separator="_" id="t" />
+													<s:iterator status="tt" value="#request.t" id="rowSelector">
+														<tr>
+															<td><s:property value="rowSelector" /></td>
+															<s:generator val="#sq.selectors" separator="_" id="s" />
+															<s:iterator status="st" value="#request.s" id="selector">
+																<td><input type="radio" class="radio"
+																	id="<s:property value="%{#tt.count}" />_<s:property value="%{#st.count}" />"
+																	name="<s:property value="%{#status.count}" />_<s:property value="%{#tt.count}" />" /></td>
+															</s:iterator>
+													</s:iterator>
+													</tr>
+												</table> <input type="hidden" class="selected"
+												id="seled<s:property value="%{#status.count}" />"
+												value="<s:property value="#sq.questionId" />"> <input
+												type="hidden"
+												id="selQuesId<s:property value="%{#status.count}" />"
+												value="<s:property value="#sq.questionId" />"> <input
+												type="hidden"
+												id="quesType<s:property value="%{#status.count}" />"
+												value="<s:property value="#sq.type" />">
+											</li>
+										</s:if>
 									</ul>
 
 								</s:iterator>
