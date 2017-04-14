@@ -14,6 +14,9 @@ import javax.annotation.Resource;
 import org.apache.struts2.interceptor.RequestAware;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import cn.xidian.entity.AverClazzCoursePoint;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.Clazz;
 import cn.xidian.entity.Course;
 import cn.xidian.entity.ClazzCoursePoint;
@@ -307,13 +310,24 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			teacherService.caculateClazzTarget(calculateType, gradeName, cursName, clazzName, tchrSchNum);
 			CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
 			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
-			List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
-					clazzName);
-			claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
-
-			List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
-			claCursB2s = courseTargetDetailService.getB2(ccPoints);
-			course = courseService.findByName(cursName);
+			if(calculateType.equals("0")){
+				List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
+						clazzName);
+				claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
+				
+				List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
+				claCursB2s = courseTargetDetailService.getB2(ccPoints);
+				course = courseService.findByName(cursName);
+			}
+			else{
+				List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService.selectByGradeAndClazz(cursName,
+						gradeName);
+				claCursB1s = courseTargetDetailService.getAB1(targets, atargetValues);
+				
+				List<AverClazzCoursePoint> accPoints = clazzCoursePointService.selectByCursAndGrade(cursName, gradeName);
+				claCursB2s = courseTargetDetailService.getAB2(accPoints);
+				course = courseService.findByName(cursName);
+			}
 		} catch (CourseNotExistException e) {
 			request.put("Message", e.getMessage());
 		} catch (ClazzNotExistException e) {
@@ -896,12 +910,12 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	public String getCalculateType(){
+
+	public String getCalculateType() {
 		return calculateType;
 	}
-	
-	public void setcalculateType(String calculateType){
+
+	public void setCalculateType(String calculateType) {
 		this.calculateType = calculateType;
 	}
 
@@ -912,6 +926,8 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public void setGradeName(String gradeName) {
 		this.gradeName = gradeName;
 	}
+	
+	
 
 
 }

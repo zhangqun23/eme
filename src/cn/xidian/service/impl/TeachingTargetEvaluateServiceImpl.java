@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import cn.xidian.dao.TeachingTargetEvaluateDao;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.TeachingTargetEvaluate;
 import cn.xidian.service.TeachingTargetEvaluateService;
 
@@ -28,6 +29,13 @@ public class TeachingTargetEvaluateServiceImpl implements
 			 String claName) {
 		List<TeachingTargetEvaluate> ttelist = new LinkedList<TeachingTargetEvaluate>();
 		ttelist = teachingTargetEvaluateDao.selectByCursAndClazz(cursName,claName);
+		return ttelist;
+	}
+
+	@Override
+	public List<AverTeachingTargetEvaluate> selectByGradeAndClazz(String cursName, String gradeName) {
+		List<AverTeachingTargetEvaluate> ttelist = new LinkedList<AverTeachingTargetEvaluate>();
+		ttelist = teachingTargetEvaluateDao.selectByGradeAndClazz(cursName,gradeName);
 		return ttelist;
 	}
 
