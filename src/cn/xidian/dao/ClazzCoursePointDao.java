@@ -34,5 +34,7 @@ public interface ClazzCoursePointDao {
 	List<ClazzCoursePoint> findByCursAndClazz(String cursName,String claName);
 	
 	List<AverClazzCoursePoint> findByCursAndGrade(String cursName,String gradeName);
+
+	List<AverClazzCoursePoint> findByCursNameAndGrade(String cursName);
 	
 }
