@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
 import cn.xidian.dao.ClazzCoursePointDao;
+import cn.xidian.entity.AverClazzCoursePoint;
 import cn.xidian.entity.ClazzCoursePoint;
 
 @Component("clazzCoursePointDaoImpl")
@@ -48,6 +49,12 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 		currentSession().save(point);
 		return true;
 	}
+	
+	@Override
+	public boolean add(AverClazzCoursePoint point) {
+		currentSession().save(point);
+		return true;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -73,6 +80,18 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<AverClazzCoursePoint> selectByCursAndGrade(Integer cursId,
+			String grade) {
+		List<AverClazzCoursePoint> ips = new LinkedList<AverClazzCoursePoint>();
+		String sql = "from AverClazzCoursePoint acp where cursId = ? and grade = (?) order by clazzCursPointId asc";
+		Query query = currentSession().createQuery(sql).setInteger(0, cursId)
+				.setString(1, grade);
+		ips.addAll(query.list());
+		return ips;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<ClazzCoursePoint> selectByCursAndClazzId(Integer cursId,
 			Integer clazId) {
 		List<ClazzCoursePoint> ips = new LinkedList<ClazzCoursePoint>();
@@ -85,6 +104,12 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 
 	@Override
 	public boolean deleteById(ClazzCoursePoint coursePoint) {
+		currentSession().delete(coursePoint);
+		return true;
+	}
+	
+	@Override
+	public boolean deleteByAverId(AverClazzCoursePoint coursePoint) {
 		currentSession().delete(coursePoint);
 		return true;
 	}
@@ -116,6 +141,19 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 				+ "and cp.course.isDelete=1 and cp.clazz.claName in (?)";
 		Query query = currentSession().createQuery(sql).setString(0, cursName)
 				.setString(1, claName);
+		cplist.addAll(query.list());
+		return cplist;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AverClazzCoursePoint> findByCursAndGrade(String cursName,
+			String gradeName) {
+		List<AverClazzCoursePoint> cplist = new LinkedList<AverClazzCoursePoint>();
+		String sql = "from AverClazzCoursePoint cp where cp.course.cursName=? "
+				+ "and cp.course.isDelete=1 and cp.grade in (?)";
+		Query query = currentSession().createQuery(sql).setString(0, cursName)
+				.setString(1, gradeName);
 		cplist.addAll(query.list());
 		return cplist;
 	}
