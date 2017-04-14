@@ -117,9 +117,24 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 		return ttelist;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AverTeachingTargetEvaluate> selectByGradeAndClazz(String cursName,
+			 String gradeName) {
+		List<AverTeachingTargetEvaluate> ttelist = new LinkedList<AverTeachingTargetEvaluate>();
+		String sql = "from AverTeachingTargetEvaluate tt where tt.teachingTarget.tchTargetId in "
+				+ "(select t.tchTargetId from TeachingTarget t where t.course.cursName=? "
+				+ "and t.course.isDelete=1) and tt.grade = ?";
+		Query query = currentSession().createQuery(sql);
+		query.setString(0, cursName)
+				.setString(1, gradeName);
+		ttelist.addAll(query.list());
+		return ttelist;
+	}
+	
 	@Override
 	public AverTeachingTargetEvaluate selectByGradeAndTargetId(String gradeName, Integer targetId) {
-		String hql = "from AverTeachingTargetEvaluate tt where tt.clazz.claId = (?) and tt.teachingTarget.tchTargetId=? order by tchTarEvaId asc";
+		String hql = "from AverTeachingTargetEvaluate tt where tt.grade = (?) and tt.teachingTarget.tchTargetId=? order by tchTarEvaId asc";
 		Query query = currentSession().createQuery(hql);
 		query.setString(0, gradeName).setInteger(1, targetId);
 		AverTeachingTargetEvaluate tte = (AverTeachingTargetEvaluate) query

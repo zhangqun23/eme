@@ -23,4 +23,6 @@ public interface TeachingTargetEvaluateDao {
 	boolean addTchingTargetEvaValue(AverTeachingTargetEvaluate targetEva);//储存年级平均
 
 	boolean updateTchingTargetEvaValue(AverTeachingTargetEvaluate targetEva);//更新年级平均
+
+	List<AverTeachingTargetEvaluate> selectByGradeAndClazz(String cursName, String gradeName);
 }
