@@ -10,6 +10,7 @@ import cn.xidian.entity.Survey;
 import cn.xidian.entity.SurveyQuestion;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
+import cn.xidian.entity.SurveySelectorDouble;
 import cn.xidian.entity.Teacher;
 import cn.xidian.entity.TextAnswer;
 
@@ -27,7 +28,8 @@ public interface SurveyService {
 
 	List<SurveyQuestion> selectQuestionBysurveyId(Integer surveyId);
 
-	boolean addSurveyDone(SurveyReplyer surveyReplyer,List<SurveySelector> surveySelectors, List<TextAnswer> textAnswers, Survey survey);
+	boolean addSurveyDone(SurveyReplyer surveyReplyer, List<SurveySelector> surveySelectors,
+			List<TextAnswer> textAnswers, Survey survey);
 
 	boolean addSurveyReplyer(SurveyReplyer surveyReplyer);
 
@@ -51,6 +53,8 @@ public interface SurveyService {
 
 	PageBean<SurveyReplyer> selectSurveyReplyerById(Integer surveyId, Integer page);
 
-	boolean updateSurveyDate(Integer surveyId,String strEndTime);
+	boolean updateSurveyDate(Integer surveyId, String strEndTime);
+
+	List<SurveySelectorDouble> selectSurveySelectorDoubles(Integer surveyId, Integer questionId);
 
 }

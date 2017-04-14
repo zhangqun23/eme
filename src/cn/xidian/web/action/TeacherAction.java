@@ -355,6 +355,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			targets = teachingTargetService.selectByCursName(cursName);
 			Course course = targets.get(0).getCourse();
 			List<TeachingTargetEvaluate> ttValue = courseService.selectByCursNameAndGrade(cursName, grade);
+			List<AverTeachingTargetEvaluate> attValue = courseService.selectByCursNameAndGradeName(cursName, grade);
 			Set<String> clazz = new LinkedHashSet<String>();
 			List<String> clazzs = new LinkedList<String>();
 
@@ -377,9 +378,16 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				}
 				b1.add(B1);// 将B1数据加入b1
 			}
+			List<String> B1 = new LinkedList<String>();
+			B1.add(grade+"级");
+			for(int i = 0; i < attValue.size(); i++){
+				B1.add(df.format(attValue.get(i).getB1()));
+			}
+			b1.add(B1);
 			// 以上获得第一张表的数据
 			// 以下是第二张表
 			List<ClazzCoursePoint> cursPoints = clazzCoursePointService.selectBycursNameAndTerm(cursName);
+			List<AverClazzCoursePoint> acursPoints = clazzCoursePointService.selectBycursNameAndGrade(cursName);
 			List<CoursePoint> point = coursePointService.selectByCursId(course.getCursId());
 			// 获得该门课程对应指标点编号的集合
 			for (int i = 0; i < point.size(); i++) {
@@ -399,7 +407,13 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				}
 				b2.add(B2);// 将B1数据加入b1
 			}
-
+			List<String> B2 = new LinkedList<String>();
+			B2.add(grade+"级");
+				for (int k = 0; k < acursPoints.size(); k++) {
+						B2.add(df.format(acursPoints.get(k).getB2()));
+				}
+			
+			b2.add(B2);
 		} catch (CourseNotExistException e) {
 			request.put("Message", e.getMessage());
 		}
@@ -416,21 +430,40 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public String getClaCursTargetDetail() {
 
 		CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
-		// 获取b1
-		cursName = session.get("cursName").toString();
-
-		List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
-		List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
-				clazzName);
-		claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
-
-		List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
-		claCursB2s = courseTargetDetailService.getB2(ccPoints);
-		course = courseService.findByName(cursName);
-		if (claCursB1s.size() == 0 || claCursB2s.size() == 0) {
-			request.put("Message", "对不起，没有找到相关信息！");
-			return "tchrManagement5";
+		if(clazzName.length()>6){
+			// 获取b1
+			cursName = session.get("cursName").toString();
+		
+			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
+			List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
+					clazzName);
+			claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
+		
+			List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
+			claCursB2s = courseTargetDetailService.getB2(ccPoints);
+			course = courseService.findByName(cursName);
+			if (claCursB1s.size() == 0 || claCursB2s.size() == 0) {
+				request.put("Message", "对不起，没有找到相关信息！");
+				return "tchrManagement5";
+			}
 		}
+		else{
+			clazzName = clazzName.substring(0, 4);
+			cursName = session.get("cursName").toString();
+			
+			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
+			List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService.selectByGradeAndClazz(cursName,
+					clazzName);
+			claCursB1s = courseTargetDetailService.getAB1(targets, atargetValues);
+			List<AverClazzCoursePoint> accPoints = clazzCoursePointService.selectByCursAndGrade(cursName, clazzName);
+			claCursB2s = courseTargetDetailService.getAB2(accPoints);
+			course = courseService.findByName(cursName);
+			if (claCursB1s.size() == 0 || claCursB2s.size() == 0) {
+				request.put("Message", "对不起，没有找到相关信息！");
+				return "tchrManagement5";
+			}
+		}
+		
 		return "teacher";
 	}
 

@@ -112,15 +112,37 @@ function addQuestion(obj) {
 				+ quesNum
 				+ "'></div><div class='selector"
 				+ quesNum
-				+ " selector-style'><table class='table table-bordered wjTable'><tr><td style='width:100px'>请设计</td><td><input type='text' placeholder='选项'/></td><td><input type='text' placeholder='选项'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项'/></td><td><input type='radio' /></td><td><input type='radio'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项'/></td><td><input type='radio' /></td><td><input type='radio' /></td></tr></table><image id='"
+				+ " selector-style'><table class='table table-bordered wjTable' id='table"
+				+ quesNum
+				+ "'><tr><td style='width:100px'>请设计</td><td><input type='text' placeholder='选项' id='bl1' class='STC"
+				+ quesNum
+				+ "'/></td><td><input type='text' placeholder='选项' class='STC"
+				+ quesNum
+				+ "' id='bl2'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项' class='STR"
+				+ quesNum
+				+ "' id='bh1'/></td><td><input type='radio' name='bh1'/></td><td><input type='radio' name='bh1'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项' class='STR"
+				+ quesNum
+				+ "' id='bh2'/></td><td><input type='radio' name='bh2'/></td><td><input type='radio' name='bh2'/></td></tr></table>列：<img id='"
 				+ quesNum
 				+ "' name='"
 				+ obj.id
-				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addSelector(this)' ><image class='image"
+				+ "' class='img_small'  src='img/addsel.png'  alt='添加' onclick='addTableCol(this)' ><img class='image"
 				+ quesNum
-				+ " small_img' name='image"
+				+ " img_small' name='image"
 				+ quesNum
-				+ "'  src='img/delsel.gif' alt='删除' onclick='delSelector(this)'><input type='hidden' id='AST"
+				+ "' id='"
+				+ quesNum
+				+ "' src='img/delsel.gif' alt='删除' onclick='delTableCol(this)'>&nbsp;&nbsp;&nbsp;&nbsp;行：<img id='"
+				+ quesNum
+				+ "' name='"
+				+ obj.id
+				+ "' class='img_small'  src='img/addsel.png'  alt='添加' onclick='addTableRow(this)' ><img class='image"
+				+ quesNum
+				+ " img_small' name='image"
+				+ quesNum
+				+ "' id='"
+				+ quesNum
+				+ "' src='img/delsel.gif' alt='删除' onclick='delTableRow(this)'><input type='hidden' id='AST"
 				+ quesNum + "'><input type='hidden' id='QT" + quesNum
 				+ "'></div></div>";
 	}
@@ -130,7 +152,7 @@ function addQuestion(obj) {
 	var div = document.getElementById("div-content");
 	div.appendChild(section);
 	// 创建问题和前两个选项结束
-	document.getElementById("QT" + quesNum + "").value = obj.id;// 1代表单选，2代表多选，3代表文本问题
+	document.getElementById("QT" + quesNum + "").value = obj.id;// 1代表单选，2代表多选，3代表文本问题4表示表格
 }
 
 // 添加单个选项
@@ -217,20 +239,63 @@ function linksel() {
 		$("#ques" + c + "").find("#QT" + c + "").attr("name",
 				"qs[" + k + "].type");
 	}
+
 	// 将所有选项用连接符链接起来
 	for (var j = 1; j <= ques; j++) {
-		var selectors = document.getElementsByClassName("ST" + j);
-		if (selectors.length != 0) {
-			var selContent = "";
-			for (var i = 0; i < selectors.length; i++) {
-				if (i != selectors.length - 1) {
-					selContent += selectors[i].value + "_";
-				} else {
-					selContent += selectors[i].value;
+		var type = document.getElementById("QT" + j + "").value;
+		if (type != 4) {
+			var selectors = document.getElementsByClassName("ST" + j);
+			if (selectors.length != 0) {
+				var selContent = "";
+				for (var i = 0; i < selectors.length; i++) {
+					if (i != selectors.length - 1) {
+						selContent += selectors[i].value + "_";
+					} else {
+						selContent += selectors[i].value;
+					}
 				}
 			}
+			document.getElementById("AST" + j + "").value = selContent;
+		} else {
+			var selectors = document.getElementsByClassName("STC" + j);
+			if (selectors.length != 0) {
+				var selContent = "";
+				for (var i = 0; i < selectors.length; i++) {
+					if (i != selectors.length - 1) {
+						selContent += selectors[i].value + "_";
+					} else {
+						selContent += selectors[i].value;
+					}
+				}
+			}
+			document.getElementById("AST" + j + "").value = selContent;
+			var selectors = document.getElementsByClassName("STC" + j);// 获取所有选项
+			var selectors1 = document.getElementsByClassName("STR" + j);// 获取所有行项
+			if (selectors.length != 0) {
+				var selContent = "";
+				for (var i = 0; i < selectors.length; i++) {
+					if (i != selectors.length - 1) {
+						selContent += selectors[i].value + "_";
+					} else {
+						selContent += selectors[i].value;
+					}
+				}
+			}
+			if (selectors1.length != 0) {
+				var selContent1 = "";
+				for (var k = 0; k < selectors1.length; k++) {
+					if (k != selectors1.length - 1) {
+						selContent1 += selectors1[k].value + "_";
+					} else {
+						selContent1 += selectors1[k].value;
+					}
+				}
+			}
+			document.getElementById("AST" + j + "").value = selContent;
+			document.getElementById("AST" + j + "").value += "#" + selContent1;
+
 		}
-		document.getElementById("AST" + j + "").value = selContent;
+
 	}
 
 }
@@ -268,4 +333,62 @@ function isEmpty() {
 	}
 
 	return true;
+}
+// zq添加表格的行添加函数
+function addTableRow(obj) {
+	var table = document.getElementById("table" + obj.id);
+	var colums = table.rows[0].cells.length;
+	var rows = table.rows.length;
+	var newrow = table.insertRow();
+	for (var i = 1; i <= colums; i++) {
+		var newcol = newrow.insertCell();
+		if (i == 1) {
+			newcol.innerHTML = "<input type='text' placeholder='行项' class='STR"
+					+ obj.id + "' id='bh" + rows + "'/>";
+		} else {
+			newcol.innerHTML = "<input type='radio' class=''  name='bh" + rows
+					+ "'/>";
+		}
+	}
+}
+// 删除表格行的删除函数
+function delTableRow(obj) {
+	var quesNum = obj.id;
+	var table = document.getElementById("table" + obj.id);
+	if (table.rows.length > 3) {
+		table.deleteRow(table.rows.length - 1);
+	} else {
+		alert("至少有两个选项！");
+	}
+
+}
+// 添加表格列
+function addTableCol(obj) {
+	var table = document.getElementById("table" + obj.id);
+	var colums = table.rows[0].cells.length;
+	var rows = table.rows.length;
+	for (var i = 0; i < rows; i++) {
+		var newcol = table.rows[i].insertCell();
+		if (i == 0) {
+			newcol.innerHTML = "<input type='text' placeholder='选项' class='STC"
+					+ obj.id + "' id='bl" + colums + "'/>";
+		} else {
+			newcol.innerHTML = "<input type='radio' class=''  name='bh" + i
+					+ "'/>";
+		}
+	}
+}
+// 删除表格列
+function delTableCol(obj) {
+	var table = document.getElementById("table" + obj.id);
+	var colums = table.rows[0].cells.length;
+	var rows = table.rows.length;
+	if (colums > 3) {
+		for (var i = 0; i < rows; i++) {
+			var newcol = table.rows[i].deleteCell(colums - 1);
+		}
+	} else {
+		alert("至少保留两个选项！");
+	}
+
 }

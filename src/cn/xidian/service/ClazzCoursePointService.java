@@ -23,4 +23,6 @@ public interface ClazzCoursePointService {
 	List<ClazzCoursePoint> selectByCursAndClazz(String cursName,String claName);
 	
 	List<AverClazzCoursePoint> selectByCursAndGrade(String cursName,String grade);
+
+	List<AverClazzCoursePoint> selectBycursNameAndGrade(String cursName);
 }

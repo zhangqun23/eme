@@ -16,6 +16,7 @@ public class SurveyQuestion {
 	private String selectors;
 	private String remark;
 	private Survey survey;
+	private String rowSelectors;
 
 	@Id
 	@GeneratedValue
@@ -69,7 +70,12 @@ public class SurveyQuestion {
 		this.selectors = selectors;
 	}
 
-	
+	public String getRowSelectors() {
+		return rowSelectors;
+	}
 
+	public void setRowSelectors(String rowSelectors) {
+		this.rowSelectors = rowSelectors;
+	}
 
 }

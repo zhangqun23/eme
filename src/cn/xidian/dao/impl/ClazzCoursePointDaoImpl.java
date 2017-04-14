@@ -123,6 +123,16 @@ public class ClazzCoursePointDaoImpl implements ClazzCoursePointDao {
 		cplist.addAll(query.list());
 		return cplist;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AverClazzCoursePoint> findByCursNameAndGrade(String cursName) {
+		List<AverClazzCoursePoint> cplist = new LinkedList<AverClazzCoursePoint>();
+		String sql = "from AverClazzCoursePoint acp where acp.course.cursName=? and acp.course.isDelete=1";
+		Query query = currentSession().createQuery(sql).setString(0, cursName);
+		cplist.addAll(query.list());
+		return cplist;
+	}
 
 	@Override
 	public boolean deleteByCursId(Integer cursId) {
