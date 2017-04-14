@@ -89,4 +89,6 @@ public interface SurveyDao {
 	SurveySelectorDouble selectSurveySelectorDouble(Integer surveyId, Integer questionId, Integer selectorNum);
 
 	List<SurveySelectorDouble> selectSurveySelectorDoubles(Integer surveyId, Integer questionId);
+
+	List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorDoubleId);
 }

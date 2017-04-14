@@ -34,6 +34,7 @@ import cn.xidian.entity.Survey;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
 import cn.xidian.entity.SurveySelectorDouble;
+import cn.xidian.entity.SurveySelectorRelate;
 import cn.xidian.entity.Teacher;
 import cn.xidian.entity.TextAnswer;
 import cn.xidian.entity.User;
@@ -376,6 +377,16 @@ public class JsonAction extends ActionSupport implements RequestAware {
 	// 获取问卷表格的数据统计表
 	public String selectSurveyTableResult() {
 		ssd = surveyService.selectSurveySelectorDoubles(surveyId, questionId);
+		for (int i = 0; i < ssd.size(); i++) {
+			List<SurveySelectorRelate> ssr = surveyService
+					.selectSurveySelectorRelates(ssd.get(i).getSelectorDoubleId());
+			Object o = new Object();
+			int[] selectorArr = new int[ssr.size()];
+			for (int j = 0; j < ssr.size(); j++) {
+				selectorArr[j] = ssr.get(j).getSumNum();
+			}
+		}
+		System.out.println("zasd" + ssd.size());
 		return "list";
 	}
 

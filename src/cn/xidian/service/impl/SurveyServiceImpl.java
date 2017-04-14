@@ -332,4 +332,11 @@ public class SurveyServiceImpl implements SurveyService {
 		List<SurveySelectorDouble> ssd = surveyDao.selectSurveySelectorDoubles(surveyId, questionId);
 		return ssd;
 	}
+
+	@Override
+	public List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorDoubleId) {
+		// TODO Auto-generated method stub
+		List<SurveySelectorRelate> ssr = surveyDao.selectSurveySelectorRelates(selectorDoubleId);
+		return ssr;
+	}
 }

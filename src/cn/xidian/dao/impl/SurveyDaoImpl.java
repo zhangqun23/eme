@@ -416,12 +416,23 @@ public class SurveyDaoImpl implements SurveyDao {
 	@Override
 	public List<SurveySelectorDouble> selectSurveySelectorDoubles(Integer surveyId, Integer questionId) {
 		// TODO Auto-generated method stub
-		String sql = "from from SurveySelectorDouble where surveyId=? and questionId=?";
+		String sql = "from SurveySelectorDouble where surveyId=? and questionId=? order by selectorDoubleId";
 		Query query = currentSession().createQuery(sql);
 		query.setInteger(0, surveyId);
 		query.setInteger(1, questionId);
 		List<SurveySelectorDouble> ssd = query.list();
 		return ssd;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorDoubleId) {
+		// TODO Auto-generated method stub
+		String sql = "from SurveySelectorRelate where selectorDoubleId=? order by selectorId";
+		Query query = currentSession().createQuery(sql);
+		query.setInteger(0, selectorDoubleId);
+		List<SurveySelectorRelate> ssr = query.list();
+		return ssr;
 	}
 
 }
