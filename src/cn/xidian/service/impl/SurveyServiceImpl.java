@@ -3,10 +3,12 @@ package cn.xidian.service.impl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.stereotype.Component;
 
 import cn.xidian.dao.ClazzDao;
@@ -19,6 +21,8 @@ import cn.xidian.entity.Survey;
 import cn.xidian.entity.SurveyQuestion;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
+import cn.xidian.entity.SurveySelectorDouble;
+import cn.xidian.entity.SurveySelectorRelate;
 import cn.xidian.entity.Teacher;
 import cn.xidian.entity.TextAnswer;
 import cn.xidian.service.SurveyService;
@@ -63,8 +67,16 @@ public class SurveyServiceImpl implements SurveyService {
 			SurveyQuestion sq = new SurveyQuestion();
 			sq = itqs.next();
 			sq.setSurvey(survey);
+			Integer type = sq.getType();
+			if (type == 4) {
+				String selectors = sq.getSelectors();
+				String[] aa = selectors.split("#");
+				sq.setSelectors(aa[0]);
+				sq.setRowSelectors(aa[1]);
+			}
 			surveyDao.addQuestion(sq);
 			String[] chrstr = sq.getSelectors().split("_");
+			List<SurveySelector> ssList = new LinkedList<SurveySelector>();
 			for (int i = 0; i < chrstr.length; i++) {
 				SurveySelector surveySelector = new SurveySelector();
 				surveySelector.setContent(chrstr[i]);
@@ -73,6 +85,28 @@ public class SurveyServiceImpl implements SurveyService {
 				surveySelector.setSurveyQuestion(sq);
 				surveySelector.setSumNum(0);
 				surveyDao.addSelector(surveySelector);
+				ssList.add(surveySelector);
+			}
+			if (type == 4) {
+				String selectors = sq.getRowSelectors();
+				String[] rows = selectors.split("_");
+				for (int j = 0; j < rows.length; j++) {
+					SurveySelectorDouble ssd = new SurveySelectorDouble();
+
+					ssd.setContent(rows[j]);
+					ssd.setSelectorNum(j + 1);
+					ssd.setSurvey(survey);
+					ssd.setSurveyQuestion(sq);
+					ssd.setSumNum(0);
+					surveyDao.addSelectorDouble(ssd);
+					for (int k = 0; k < ssList.size(); k++) {
+						SurveySelectorRelate ssr = new SurveySelectorRelate();
+						ssr.setSumNum(0);
+						ssr.setSurveySelector(ssList.get(k));
+						ssr.setSurveySelectorDouble(ssd);
+						surveyDao.saveSurveySelectorRelate(ssr);
+					}
+				}
 			}
 		}
 		return true;
@@ -111,10 +145,24 @@ public class SurveyServiceImpl implements SurveyService {
 			SurveySelector sq = new SurveySelector();
 			sq = itqs.next();
 			String[] chrstr = sq.getRemark().split("#");
-			for (int i = 1; i < chrstr.length; i++) {
-				surveyDao.updateSelectorNum(survey.getSurveyId(), Integer.parseInt(chrstr[0]),
-						Integer.parseInt(chrstr[i]));
+			SurveyQuestion sQuestion = new SurveyQuestion();
+			sQuestion = surveyDao.selectQuestionById(Integer.parseInt(chrstr[0]));
+			if (sQuestion.getType() == 4) {
+				for (int i = 1; i < chrstr.length; i++) {
+					String[] sel = chrstr[i].split("_");
+					SurveySelector ss = surveyDao.selectSurveySelector(survey.getSurveyId(),
+							Integer.parseInt(chrstr[0]), Integer.parseInt(sel[1]));
+					SurveySelectorDouble ssd = surveyDao.selectSurveySelectorDouble(survey.getSurveyId(),
+							Integer.parseInt(chrstr[0]), Integer.parseInt(sel[0]));
+					surveyDao.updateSelectorRelateNum(ss.getSelectorId(), ssd.getSelectorDoubleId());
+				}
+			} else {
+				for (int i = 1; i < chrstr.length; i++) {
+					surveyDao.updateSelectorNum(survey.getSurveyId(), Integer.parseInt(chrstr[0]),
+							Integer.parseInt(chrstr[i]));
+				}
 			}
+
 		}
 		// 存储文本问题的答案
 		if (textAnswers != null) {
@@ -124,7 +172,6 @@ public class SurveyServiceImpl implements SurveyService {
 				TextAnswer ta = new TextAnswer();
 				SurveyQuestion surveyQuestion = new SurveyQuestion();
 				surveyQuestion = surveyDao.selectQuestionById(Integer.parseInt(str.substring(0, str.indexOf("#"))));
-				System.out.println("文本问题：" + str.substring(str.indexOf("#") + 1, str.length()));
 				ta.setAnswerContent(str.substring(str.indexOf("#") + 1, str.length()));
 				ta.setSurvey(survey);
 				ta.setSurveyQuestion(surveyQuestion);
@@ -277,5 +324,12 @@ public class SurveyServiceImpl implements SurveyService {
 			e.printStackTrace();
 		}
 		return true;
+	}
+
+	@Override
+	public List<SurveySelectorDouble> selectSurveySelectorDoubles(Integer surveyId, Integer questionId) {
+		// TODO Auto-generated method stub
+		List<SurveySelectorDouble> ssd = surveyDao.selectSurveySelectorDoubles(surveyId, questionId);
+		return ssd;
 	}
 }

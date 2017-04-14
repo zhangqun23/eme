@@ -192,6 +192,87 @@
 														</div>
 													</section>
 												</s:if>
+												<s:if test="#sq.type==4">
+													<div class="ques"
+														id="ques<s:property value="%{#status.count}" />">
+
+														<div onmouseover='showDel(this)'
+															onmouseout='hideDel(this)'>
+
+															<span id="Q<s:property value="%{#status.count}" />">Q<s:property
+																	value="%{#status.count}" />:
+															</span><input type='text'
+																id="quesname<s:property value="%{#status.count}" />"
+																value="<s:property
+												value="#sq.content" />"
+																class='input-long question-style' placeholder='问卷题目'>
+															<img id="
+				<s:property value="%{#status.count}" />"
+																class='small_img' src='img/delquest.gif' alt='删除'
+																onclick='delQuestion(this)'>
+														</div>
+
+														<div id="sel<s:property value="%{#status.count}" />"
+															class='selector<s:property value="%{#status.count}" /> selector-style'>
+															<table
+																class="table table-bordered table-condensed wjTable"
+																id="table<s:property value="%{#status.count}" />">
+																<tr>
+																	<td>请设计</td>
+																	<s:generator val="#sq.selectors" separator="_" id="s" />
+																	<s:iterator status="st" value="#request.s"
+																		id="selector">
+																		<td><input type='text'
+																			id='bl<s:property value="%{#st.count}" />'
+																			class='STC<s:property value="%{#status.count}" />'
+																			value="<s:property
+																				value="selector" />" />
+																		</td>
+																	</s:iterator>
+																</tr>
+																<s:generator val="#sq.rowSelectors" separator="_" id="t" />
+																<s:iterator status="tt" value="#request.t"
+																	id="rowSelector">
+																	<tr>
+																		<td><input type='text'
+																			value='<s:property value="rowSelector" />'
+																			class='STR<s:property value="%{#status.count}" />'
+																			id='bh<s:property value="%{#tt.count}" />' /></td>
+																		<s:generator val="#sq.selectors" separator="_" id="s" />
+																		<s:iterator status="st" value="#request.s"
+																			id="selector">
+																			<td><input type="radio"
+																				name='bh<s:property value="%{#tt.count}" />' /></td>
+																		</s:iterator>
+																</s:iterator>
+																</tr>
+															</table>
+															列：<img id='<s:property value="%{#status.count}" />'
+																name='4' class='img_small' src='img/addsel.png' alt='添加'
+																onclick='addTableCol(this)'><img
+																class='image<s:property value="%{#status.count}" /> img_small'
+																name='image<s:property value="%{#status.count}" />'
+																id='<s:property value="%{#status.count}" />'
+																src='img/delsel.gif' alt='删除'
+																onclick='delTableCol(this)'>&nbsp;&nbsp;&nbsp;&nbsp;行：<img
+																id='<s:property value="%{#status.count}" />' name='4'
+																class='img_small' src='img/addsel.png' alt='添加'
+																onclick='addTableRow(this)'><img
+																class='image<s:property value="%{#status.count}" /> img_small'
+																name='image<s:property value="%{#status.count}" />'
+																id='<s:property value="%{#status.count}" />'
+																src='img/delsel.gif' alt='删除'
+																onclick='delTableRow(this)'>
+														</div>
+														<div>
+															<input type='hidden'
+																id="AST<s:property value="%{#status.count}" />"><input
+																type='hidden'
+																id="QT<s:property value="%{#status.count}" />" value="4">
+														</div>
+
+													</div>
+												</s:if>
 											</div>
 										</section>
 									</s:iterator>
