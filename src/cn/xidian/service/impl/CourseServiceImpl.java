@@ -13,6 +13,7 @@ import cn.xidian.dao.CourseDao;
 import cn.xidian.dao.CoursePointDao;
 import cn.xidian.dao.GradeCoursePointDao;
 import cn.xidian.dao.TeachingTargetEvaluateDao;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.Clazz;
 import cn.xidian.entity.ClazzCoursePoint;
 import cn.xidian.entity.Course;
@@ -104,6 +105,13 @@ public class CourseServiceImpl implements CourseService {
 	public List<TeachingTargetEvaluate> selectByCursNameAndGrade(String cursName,String grade) {
 		List<TeachingTargetEvaluate> ttelist = new LinkedList<TeachingTargetEvaluate>();
 		ttelist = teachingTargetEvaluateDao.selectByCursNameAndGrade(cursName,grade);
+		return ttelist;
+	}
+	
+	@Override
+	public List<AverTeachingTargetEvaluate> selectByCursNameAndGradeName(String cursName,String grade) {
+		List<AverTeachingTargetEvaluate> ttelist = new LinkedList<AverTeachingTargetEvaluate>();
+		ttelist = teachingTargetEvaluateDao.selectByCursNameAndGradeName(cursName,grade);
 		return ttelist;
 	}
 

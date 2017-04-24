@@ -51,6 +51,13 @@ public class ClazzCoursePointServiceImpl implements ClazzCoursePointService {
 		pointlist = clazzCoursePointDao.findByCursNameAndTerm(cursName);
 		return pointlist;
 	}
+	
+	@Override
+	public List<AverClazzCoursePoint> selectBycursNameAndGrade(String cursName) {
+		List<AverClazzCoursePoint> pointlist = new LinkedList<AverClazzCoursePoint>();
+		pointlist = clazzCoursePointDao.findByCursNameAndGrade(cursName);
+		return pointlist;
+	}
 
 	@Override
 	public boolean addByCursId(List<IndicatorPoint> points, Integer cursId) {

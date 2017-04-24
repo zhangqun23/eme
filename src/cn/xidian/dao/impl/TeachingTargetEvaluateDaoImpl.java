@@ -101,6 +101,20 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 		ttelist.addAll(query.list());
 		return ttelist;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AverTeachingTargetEvaluate> selectByCursNameAndGradeName(
+			String cursName,String grade) {
+		List<AverTeachingTargetEvaluate> attelist = new LinkedList<AverTeachingTargetEvaluate>();
+		// 测试id为空时不报错，和直接传数组不太一样
+		String sql = "from AverTeachingTargetEvaluate att where att.teachingTarget.tchTargetId in "
+				+ "(select t.tchTargetId from TeachingTarget t where t.course.cursName=? and t.course.isDelete=1) and att.grade=?";
+		Query query = currentSession().createQuery(sql);
+		query.setString(0, cursName).setString(1, grade);
+		attelist.addAll(query.list());
+		return attelist;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

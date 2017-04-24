@@ -3,6 +3,7 @@ package cn.xidian.service;
 
 import java.util.List;
 
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.Course;
 import cn.xidian.entity.TeachingTargetEvaluate;
 
@@ -29,4 +30,6 @@ public interface CourseService {
 	boolean updateByTchr(Course course);
 	
 	boolean updateCourseNote(Course course);
+
+	List<AverTeachingTargetEvaluate> selectByCursNameAndGradeName(String cursName, String grade);
 }
