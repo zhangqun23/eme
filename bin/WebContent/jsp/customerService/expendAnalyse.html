@@ -1,0 +1,69 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">对客服务统计</a></li>
+		<li><a href="">耗品用量分析</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+
+	<div>
+		<div>
+			<form action="" method="post"
+				enctype="multipart/form-data">
+				<ul class="projectListLimit">
+					<li><label>物品类型</label><select class="dfselect layoutStyle"
+						style="width: 140px" ng-model="areLimit.tableType" required
+						name="tableType" id="tableType" ng-change="changePic()">
+							<option value="0">布草分析</option>
+							<option value="1">房间易耗品分析</option>
+							<option value="2">卫生间易耗品分析</option>
+							<option value="3">迷你吧分析</option>
+					</select></li>
+					<li><label>起止日期</label><input type="text" name="startTime"
+						ng-model="areLimit.startTime" required
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""><label>—</label><input type="text"
+						name="endTime" required ng-model="areLimit.endTime"
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""></li>
+						<li><input class="btn layoutStyle" style="width: 60px"
+						type="button" value="查询" ng-click="selectAnalyseByLimits()"></li>
+						<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出图片"
+						onclick="this.form.action='exportExpendPic.do';this.form.submit();setExportFlagCookie();"></li>
+					<li><input id="analyseResult" name="analyseResult" type="text" class="hidden" /></li>
+					<li><input id="linenbar-svg" name="chartSVGStr2" class="hidden" type="text" /></li>	
+					<li><input id="linenpie-svg" name="chartSVGStr1" class="hidden" type="text"  /></li>
+					<li><input id="roombar-svg" name="chartSVGStr3" class="hidden" type="text"  /></li>
+					<li><input id="washbar-svg" name="chartSVGStr4" class="hidden" type="text"  /></li>	
+					<li><input id="minibar-svg" name="chartSVGStr6" class="hidden" type="text"  /></li>	
+					<li><input id="minipie-svg" name="chartSVGStr5" class="hidden" type="text"/></li>
+						
+				</ul>
+
+			</form>
+		</div>
+		<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+		
+	</div>
+	<label ng-show="listRemark" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark1}}</label>
+	<label ng-show="listRemark" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark2}}</label>
+	<label ng-show="listRemark" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark3}}</label>
+	<label ng-show="listRemark" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark4}}</label>
+	<div id="linenpieChart" style="min-width: 400px; width: 500px; height: 500px;margin:0 auto"  ng-show="linenPic"></div>
+	<div id="linenbar1" style="width: 800px;margin: 0 auto" ng-show="linenPic"></div>
+	<div id="roombar1" style="width: 800px; height: 1200px; margin: 0 auto" ng-show="roomPic"></div>
+	<div id="washbar1" style="width: 800px; height: 1200px; margin: 0 auto" ng-show="washPic"></div>
+	<div id="minipieChart" style="min-width: 400px; width: 600px; height: 400px;margin:0 auto" ng-show="miniPic"></div>
+	<div id="minibar1" style="width: 800px;margin: 0 auto" ng-show="miniPic"></div>
+	
+</div>
+	
+	
+	
+						

@@ -1,0 +1,565 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">对客服务统计</a></li>
+		<li><a href="">耗品用量统计</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+
+	<div>
+		<div>
+			<form action="" method="post"
+				enctype="multipart/form-data">
+				<ul class="projectListLimit">
+					<li><label>物品类型</label><select class="dfselect layoutStyle"
+						style="width: 140px" ng-model="reLimit.tableType" required
+						name="tableType" id="tableType" ng-change="changeTable()">
+							<option value="0">布草统计</option>
+							<option value="1">房间易耗品统计</option>
+							<option value="2">卫生间易耗品统计</option>
+							<option value="3">迷你吧统计</option>
+					</select></li>
+					<li><label>起止日期</label><input type="text" name="startTime"
+						ng-model="reLimit.startTime" required
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""><label>—</label><input type="text"
+						name="endTime" required ng-model="reLimit.endTime"
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""></li>
+					<li><lable>选择报表类型</lable><select class="dfselect layoutStyle"
+						style="width: 140px" ng-model="reLimit.formType" name="formType"
+						id="linenFormType" ng-change="getFormNameByNo()" required>
+							<option value="{{f.id}}" ng-repeat="f in formTypes">{{f.type}}</option>
+					</select></li>
+					<li><input type="text" name="formName" class="hidden"
+						ng-model="formName"></li>
+					<li><input class="btn layoutStyle" style="width: 60px"
+						type="button" value="查询" ng-click="selectFormByLimits()"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Word"
+						onclick="this.form.action='exportExpendForm.do';this.form.submit();setExportFlagCookie();"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Excel"
+						onclick="this.form.action='exportExpendExcel.do';this.form.submit();setExportFlagCookie();"></li>
+				</ul>
+
+			</form>
+		</div>
+
+	</div>
+
+	<table class="tablelist tablestyle" ng-show="linenTable">
+		<caption align="top" class="table_title">布草使用量合计</caption>
+		<thead>
+			<tr>
+				<th calss="a"></th>
+				<th class="a">被罩</th>
+				<th class="a">拼尘罩</th>
+				<th class="a">洗衣袋</th>
+				<th class="a">床单</th>
+				<th class="a">面巾</th>
+				<th class="a">浴巾</th>
+				<th class="a">方巾</th>
+				<th class="a">中巾</th>
+				<th class="a">地巾</th>
+				<th class="a">浴袍</th>
+				<th class="a">枕套</th>
+				<th class="a">枕芯</th>
+				<th class="a">毛毯</th>
+				<th class="a">购物袋</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="linen in linenCount">
+				<td>{{linen.orderNum}}</td>
+				<td>{{linen.sum_slba}}</td>
+				<td>{{linen.sum_duto}}</td>
+				<td>{{linen.sum_laba}}</td>
+				<td>{{linen.sum_besh}}</td>
+				<td>{{linen.sum_facl}}</td>
+				<td>{{linen.sum_bato}}</td>
+				<td>{{linen.sum_hato}}</td>
+				<td>{{linen.sum_medo}}</td>
+				<td>{{linen.sum_flto}}</td>
+				<td>{{linen.sum_baro}}</td>
+				<td>{{linen.sum_pill}}</td>
+				<td>{{linen.sum_piin}}</td>
+				<td>{{linen.sum_blan}}</td>
+				<td>{{linen.sum_shop}}</td>
+		</tbody>
+	</table>
+	<label ng-show="listRemark1" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle" ng-show="linenTable">
+		<caption align="top" class="table_bottom">房间布草使用量</caption>
+		<thead>
+			<tr>
+				<th class="width3">序号</th>
+				<th class="width3">房号</th>
+				<th class="width3">被罩</th>
+				<th class="width3">拼尘罩</th>
+				<th class="width3">洗衣袋</th>
+				<th class="width3">床单</th>
+				<th class="width3">面巾</th>
+				<th class="width3">浴巾</th>
+				<th class="width3">方巾</th>
+				<th class="width3">中巾</th>
+				<th class="width3">地巾</th>
+				<th class="width3">浴袍</th>
+				<th class="width3">枕套</th>
+				<th class="width3">枕芯</th>
+				<th class="width3">毛毯</th>
+				<th class="width3">购物袋</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="linen in linenExpendFormList">
+				<td>{{linen.orderNum}}</td>
+				<td>{{linen.room_id}}</td>
+				<td>{{linen.slba_num}}</td>
+				<td>{{linen.duto_num}}</td>
+				<td>{{linen.laba_num}}</td>
+				<td>{{linen.besh_num}}</td>
+				<td>{{linen.facl_num}}</td>
+				<td>{{linen.bato_num}}</td>
+				<td>{{linen.hato_num}}</td>
+				<td>{{linen.medo_num}}</td>
+				<td>{{linen.flto_num}}</td>
+				<td>{{linen.baro_num}}</td>
+				<td>{{linen.pill_num}}</td>
+				<td>{{linen.piin_num}}</td>
+				<td>{{linen.blan_num}}</td>
+				<td>{{linen.shop_num}}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<table class="tablelist tablestyle" ng-show="roomTable" >
+		<caption  align="top" class="table_title">房间易耗品使用量合计</caption>
+		<thead>
+			<tr>
+				<th calss="a"></th>
+				<th class="a">雨伞</th>
+				<th class="a">咖啡</th>
+				<th class="a">白糖</th>
+				<th class="a">伴侣</th>
+				<th class="a">铅笔</th>
+				<th class="a">橡皮</th>
+				<th class="a">即扫牌</th>
+				<th class="a">面巾纸</th>
+				<th class="a">环保卡</th>
+				<th class="a">手提袋</th>
+				<th class="a">袋泡茶</th>
+				<th class="a">送餐牌</th>
+				<th class="a">意见书</th>
+				<th class="a">立顿红茶</th>
+				<th class="a">请勿打扰牌</th>
+				<th class="a">电视节目单</th>
+				<th class="a">信封（普通）</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="room in roomCount">
+				<td>{{room.orderNum}}</td>
+				<td>{{room.sum_umbr}}</td>
+				<td>{{room.sum_coff}}</td>
+				<td>{{room.sum_suge}}</td>
+				<td>{{room.sum_coup}}</td>
+				<td>{{room.sum_penc}}</td>
+				<td>{{room.sum_erse}}</td>
+				<td>{{room.sum_clca}}</td>
+				<td>{{room.sum_fati}}</td>
+				<td>{{room.sum_enca}}</td>
+				<td>{{room.sum_bage}}</td>
+				<td>{{room.sum_teab}}</td>
+				<td>{{room.sum_meca}}</td>
+				<td>{{room.sum_opbo}}</td>
+				<td>{{room.sum_blte}}</td>
+				<td>{{room.sum_dnds}}</td>
+				<td>{{room.sum_tvca}}</td>
+				<td>{{room.sum_orel}}</td>
+		</tbody>
+		<thead>
+			<tr>
+				<th calss="a"></th>
+				<th class="a">便签</th>
+				<th class="a">杯垫</th>
+				<th class="a">火柴</th>
+				<th class="a">地图</th>
+				<th class="a">尺子</th>
+				<th class="a">信纸</th>
+				<th class="a">回形针</th>
+				<th class="a">圆珠笔</th>
+				<th class="a">针线包</th>
+				<th class="a">洗衣单</th>
+				<th class="a">低卡糖</th>
+				<th class="a">擦鞋布</th>
+				<th class="a">防毒面具</th>
+				<th class="a">立顿绿茶</th>
+				<th class="a">拖鞋（儿童）</th>
+				<th class="a">彩色曲别针</th>
+				<th class="a">信封（航空）</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="room in roomCount">
+				<td>{{room.orderNum}}</td>
+				<td>{{room.sum_memo}}</td>
+				<td>{{room.sum_coas}}</td>
+				<td>{{room.sum_matc}}</td>
+				<td>{{room.sum_mapp}}</td>
+				<td>{{room.sum_rule}}</td>
+				<td>{{room.sum_stat}}</td>
+				<td>{{room.sum_clip}}</td>
+				<td>{{room.sum_bape}}</td>
+				<td>{{room.sum_comp}}</td>
+				<td>{{room.sum_lali}}</td>
+				<td>{{room.sum_losu}}</td>
+				<td>{{room.sum_shpa}}</td>
+				<td>{{room.sum_anma}}</td>
+				<td>{{room.sum_grte}}</td>
+				<td>{{room.sum_chsl}}</td>
+				<td>{{room.sum_cocl}}</td>
+				<td>{{room.sum_arel}}</td>
+		</tbody>
+	</table>
+	<label ng-show="listRemark2" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle"  ng-show="roomTable">
+	<caption  align="top" class="table_bottom">房间易耗品使用量</caption>
+			<tr>
+				<th class="a" rowspan="2">序号</th>
+				<th class="a" rowspan="2">房号</th>
+				<th class="a">雨伞</th>
+				<th class="a">咖啡</th>
+		        <th class="a">白糖</th>
+		        <th class="a">伴侣</th>
+		        <th class="a">铅笔</th>
+		        <th class="a">橡皮</th>
+		        <th class="a">即扫牌</th>
+		        <th class="a">面巾纸</th>
+		        <th class="a">环保卡</th>
+		        <th class="a">手提袋</th>
+		        <th class="a">袋泡茶</th>
+		        <th class="a">送餐牌</th>
+		        <th class="a">意见书</th>
+		        <th class="a">立顿红茶</th>
+		        <th class="a">请勿打扰牌</th>
+		        <th class="a">电视节目单</th>
+		        <th class="a">信封(普通)</th>
+			</tr>
+			<tr>
+			    <th class="a">便签</th>
+		        <th class="a">杯垫</th>
+		        <th class="a">火柴</th>
+		        <th class="a">地图</th>
+		        <th class="a">尺子</th>
+		        <th class="a">信纸</th>
+		        <th class="a">回形针</th>
+		        <th class="a">圆珠笔</th>
+		        <th class="a">针线包</th>
+		        <th class="a">洗衣单</th>
+		        <th class="a">低卡糖</th>
+		        <th class="a">擦鞋布</th>
+		        <th class="a">防毒面具</th>
+		        <th class="a">立顿绿茶</th>
+		        <th class="a">拖鞋(儿童)</th>
+		        <th class="a">彩色曲别针</th>
+		        <th class="a">信封(航空)</th>
+		      
+		      </tr>
+		<tbody ng-repeat="room in roomExpendFormList">
+			<tr>
+				<td rowspan="2">{{room.orderNum}}</td>
+				<td rowspan="2">{{room.room_id}}</td>
+				<td>{{room.umbr_num}}</td>
+				<td>{{room.coff_num}}</td>
+				<td>{{room.suge_num}}</td>
+				<td>{{room.coup_num}}</td>
+				<td>{{room.penc_num}}</td>
+				<td>{{room.erse_num}}</td>
+				<td>{{room.clca_num}}</td>
+				<td>{{room.fati_num}}</td>
+				<td>{{room.enca_num}}</td>
+				<td>{{room.bage_num}}</td>
+				<td>{{room.teab_num}}</td>
+				<td>{{room.meca_num}}</td>
+				<td>{{room.opbo_num}}</td>
+				<td>{{room.blte_num}}</td>
+				<td>{{room.dnds_num}}</td>
+				<td>{{room.tvca_num}}</td>
+				<td>{{room.orel_num}}</td>
+			</tr>
+            <tr>
+				<td>{{room.memo_num}}</td>
+				<td>{{room.coas_num}}</td>
+				<td>{{room.matc_num}}</td>
+				<td>{{room.mapp_num}}</td>
+				<td>{{room.rule_num}}</td>
+				<td>{{room.stat_num}}</td>
+				<td>{{room.clip_num}}</td>
+				<td>{{room.bape_num}}</td>
+				<td>{{room.comp_num}}</td>
+				<td>{{room.lali_num}}</td>
+				<td>{{room.losu_num}}</td>
+				<td>{{room.shpa_num}}</td>
+				<td>{{room.anma_num}}</td>
+				<td>{{room.grte_num}}</td>
+				<td>{{room.chsl_num}}</td>
+				<td>{{room.cocl_num}}</td>
+				<td>{{room.arel_num}}</td>
+			</tr>
+
+		</tbody>
+	</table>
+	
+	<table class="tablelist tablestyle"  ng-show="washTable">
+		<caption  align="top" class="table_title">卫生间易耗品使用量合计</caption>
+		<thead>
+			<tr>
+				<th class="a"></th>
+				<th class="a">牙具</th>
+				<th class="a">卷纸</th>
+				<th class="a">洗发液</th>
+				<th class="a">沐浴露</th>
+				<th class="a">护发素</th>
+				<th class="a">润肤露</th>
+				<th class="a">护理包</th>
+				<th class="a">黑垃圾袋</th>
+				<th class="a">抽纸</th>
+				<th class="a">卫生袋</th>
+				<th class="a">浴帽</th>
+				<th class="a">剃须刨</th>
+				<th class="a">梳子</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="wash in washCount">
+				<td>{{wash.orderNum}}</td>
+				<td>{{wash.sum_toth}}</td>
+				<td>{{wash.sum_ropa}}</td>
+				<td>{{wash.sum_rins}}</td>
+				<td>{{wash.sum_bafo}}</td>
+				<td>{{wash.sum_haco}}</td>
+				<td>{{wash.sum_shge}}</td>
+				<td>{{wash.sum_capa}}</td>
+				<td>{{wash.sum_garb}}</td>
+				<td>{{wash.sum_paex}}</td>
+				<td>{{wash.sum_peep}}</td>
+				<td>{{wash.sum_shca}}</td>
+				<td>{{wash.sum_shav}}</td>
+				<td>{{wash.sum_comb}}</td>
+		</tbody>
+		<thead>
+			<tr>
+				<th class="a"></th>
+				<th class="a">擦鞋布</th>
+				<th class="a">手皂</th>
+				<th class="a">指甲锉</th>
+				<th class="a">干花</th>
+				<th class="a">浴盐</th>
+				<th class="a">百洁布</th>
+				<th class="a">橡皮手套</th>
+				<th class="a">洗涤灵</th>
+				<th class="a">洗消净</th>
+				<th class="a">浴室清洁剂</th>
+				<th class="a">洁厕灵</th>
+				<th class="a">浴缸刷</th>
+				<th class="a">恭桶刷</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="wash in washCount">
+				<td>{{wash.orderNum}}</td>
+				<td>{{wash.sum_shcl}}</td>
+				<td>{{wash.sum_soap}}</td>
+				<td>{{wash.sum_nacl}}</td>
+				<td>{{wash.sum_flow}}</td>
+				<td>{{wash.sum_basa}}</td>
+				<td>{{wash.sum_scpa}}</td>
+				<td>{{wash.sum_rugl}}</td>
+				<td>{{wash.sum_dete}}</td>
+				<td>{{wash.sum_thim}}</td>
+				<td>{{wash.sum_bacl}}</td>
+				<td>{{wash.sum_tocl}}</td>
+				<td>{{wash.sum_babr}}</td>
+				<td>{{wash.sum_clbr}}</td>
+		</tbody>
+	</table>
+	<label ng-show="listRemark3" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle" ng-show="washTable">
+	<caption  align="top" class="table_bottom">卫生间易耗品使用量</caption>
+			<tr>
+				<th class="a" rowspan="2">序号</th>
+				<th class="a" rowspan="2">房号</th>
+				<th class="a">牙具</th>
+				<th class="a">卷纸</th>
+		        <th class="a">洗发液</th>
+		        <th class="a">沐浴液</th>
+		        <th class="a">护发素</th>
+		        <th class="a">润肤露</th>
+		        <th class="a">护理包</th>
+		        <th class="a">黑垃圾袋</th>
+		        <th class="a">抽纸</th>
+		        <th class="a">卫生袋</th>
+		        <th class="a">浴帽</th>
+		        <th class="a">剃须刨</th>
+		        <th class="a">梳子</th>
+		     </tr>
+		     <tr>
+		        <th class="a">擦鞋布</th>
+		        <th class="a">手皂</th>
+		        <th class="a">指甲锉</th>
+		        <th class="a">干花</th>
+		        <th class="a">浴盐</th>
+		        <th class="a">百洁布</th>
+		        <th class="a">橡皮手套</th>
+		        <th class="a">洗涤灵</th>
+		        <th class="a">洗消净</th>
+		        <th class="a">浴室清洁剂</th>
+		        <th class="a">洁厕灵</th>
+		        <th class="a">浴缸刷</th>
+		        <th class="a">恭桶刷</th>
+			</tr>
+		<tbody ng-repeat="wash in washExpendFormList">
+			<tr>
+				<td rowspan="2">{{wash.orderNum}}</td>
+				<td rowspan="2">{{wash.room_id}}</td>
+				<td>{{wash.toth_num}}</td>
+				<td>{{wash.ropa_num}}</td>
+				<td>{{wash.rins_num}}</td>
+				<td>{{wash.bafo_num}}</td>
+				<td>{{wash.haco_num}}</td>
+				<td>{{wash.shge_num}}</td>
+				<td>{{wash.capa_num}}</td>
+				<td>{{wash.garb_num}}</td>
+				<td>{{wash.paex_num}}</td>
+				<td>{{wash.peep_num}}</td>
+				<td>{{wash.shca_num}}</td>
+				<td>{{wash.shav_num}}</td>
+				<td>{{wash.comb_num}}</td>
+			</tr>
+			<tr>
+				<td>{{wash.shcl_num}}</td>
+				<td>{{wash.soap_num}}</td>
+				<td>{{wash.nacl_num}}</td>
+				<td>{{wash.flow_num}}</td>
+				<td>{{wash.basa_num}}</td>
+				<td>{{wash.scpa_num}}</td>
+				<td>{{wash.rugl_num}}</td>
+				<td>{{wash.dete_num}}</td>
+				<td>{{wash.thim_num}}</td>
+				<td>{{wash.bacl_num}}</td>
+				<td>{{wash.tocl_num}}</td>
+				<td>{{wash.babr_num}}</td>
+				<td>{{wash.clbr_num}}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<table class="tablelist tablestyle" ng-show="miniTable">
+		<caption  align="top" class="table_title">迷你吧使用量合计</caption>
+		<thead>
+			<tr>
+				<th class="a"></th>
+				<th class="a">红牛</th>
+				<th class="a">可口可乐</th>
+				<th class="a">巴黎水</th>
+				<th class="a">大依云</th>
+				<th class="a">加多宝</th>
+				<th class="a">小依云</th>
+				<th class="a">昆仑山</th>
+				<th class="a">红葡萄酒</th>
+				<th class="a">威士忌</th>
+				<th class="a">伏加特</th>
+				<th class="a">金酒</th>
+				<th class="a">青岛听装</th>
+				<th class="a">雪碧</th>
+				<th class="a">指甲刀</th>
+				<th class="a">卫生巾</th>
+				<th class="a">扑克牌</th>
+				<th class="a">安全套</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="mini in miniCount">
+				<td>{{mini.orderNum}}</td>
+				<td>{{mini.sum_redb}}</td>
+				<td>{{mini.sum_coco}}</td>
+				<td>{{mini.sum_pari}}</td>
+				<td>{{mini.sum_bige}}</td>
+				<td>{{mini.sum_jdba}}</td>
+				<td>{{mini.sum_tine}}</td>
+				<td>{{mini.sum_kunl}}</td>
+				<td>{{mini.sum_wine}}</td>
+				<td>{{mini.sum_bree}}</td>
+				<td>{{mini.sum_vodk}}</td>
+				<td>{{mini.sum_auru}}</td>
+				<td>{{mini.sum_qing}}</td>
+				<td>{{mini.sum_spri}}</td>
+				<td>{{mini.sum_nail}}</td>
+				<td>{{mini.sum_abcs}}</td>
+				<td>{{mini.sum_card}}</td>
+				<td>{{mini.sum_como}}</td>
+		</tbody>
+	</table>
+	<label ng-show="listRemark4" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle" ng-show="miniTable">
+	<caption align="top" class="table_bottom">迷你吧使用量</caption>
+			<tr>
+				<th class="a">序号</th>
+				<th class="a">房号</th>
+				<th class="a">红牛</th>
+				<th class="a">可口可乐</th>
+		        <th class="a">巴黎水</th>
+		        <th class="a">大依云</th>
+		        <th class="a">加多宝</th>
+		        <th class="a">小依云</th>
+		        <th class="a">昆仑山</th>
+		        <th class="a">红葡萄酒</th>
+		        <th class="a">威士忌</th>
+		        <th class="a">伏加特</th>
+		        <th class="a">金酒</th>
+		        <th class="a">青岛听装</th>
+		        <th class="a">雪碧</th>
+		        <th class="a">指甲刀</th>
+		        <th class="a">卫生巾</th>
+		        <th class="a">扑克牌</th>
+		        <th class="a">安全套</th>
+			</tr>
+			
+		<tbody ng-repeat="mini in miniExpendFormList">
+			<tr>
+				<td>{{mini.orderNum}}</td>
+				<td>{{mini.room_id}}</td>
+				<td>{{mini.redb_num}}</td>
+				<td>{{mini.coco_num}}</td>
+				<td>{{mini.pari_num}}</td>
+				<td>{{mini.bige_num}}</td>
+				<td>{{mini.jdba_num}}</td>
+				<td>{{mini.tine_num}}</td>
+				<td>{{mini.kunl_num}}</td>
+				<td>{{mini.wine_num}}</td>
+				<td>{{mini.bree_num}}</td>
+				<td>{{mini.vodk_num}}</td>
+				<td>{{mini.auru_num}}</td>
+				<td>{{mini.qing_num}}</td>
+				<td>{{mini.spri_num}}</td>
+				<td>{{mini.nail_num}}</td>
+				<td>{{mini.abcs_num}}</td>
+				<td>{{mini.card_num}}</td>
+				<td>{{mini.como_num}}</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="tcdPageCode" ng-show="pageShow">页码容器</div>
+
+	<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+
+</div>
+
+

@@ -1,0 +1,51 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">工程部服务统计</a></li>
+		<li><a href="">工程维修项统计分析</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+	<div class="tools" style="">
+		<form action="../projectRepair/exportProRepairAnalyse.do"
+			method="post" enctype="multipart/form-data">
+			<ul class="projectListLimit">
+				<li><label>年份</label><input type="text" name="checkYear"
+					ng-model="pmaLimit.checkYear" class="dfselect dateLayoutStyle"
+					onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+					onChange=""></li>
+				<li><label>季度</label><select class="dfselect layoutStyle"
+					style="width: 73px" ng-model="pmaLimit.quarter" name="quarter"><option
+							value="{{q.id}}" ng-repeat="q in quarters">{{q.type}}</option>
+				</select></li>
+				<li><label>类型</label><select class="dfselect layoutStyle"
+					style="width: 140px" ng-model="pmaLimit.repairType"
+					name="repairType" id="repairType" required><option
+								value="-1">全部</option>
+						<option value="{{r.sortId}}" ng-repeat="r in repairTypes">{{r.sortName}}</option></select></li>
+				<li><input class="btn layoutStyle" style="width: 60px"
+					type="button" value="查询" ng-click="selectProMaintainAnalyse()"></li>
+				<li><input id="chart-svg" name="chartSVGStr" type="text"
+					class="hidden" /></li>
+				<li><input id="analyseResult" name="analyseResult" type="text"
+					class="hidden" /></li>
+				<li><input class="btn layoutStyle" style="width: 60px"
+					type="submit" value="导出"></li>
+			</ul>
+		</form>
+
+	</div>
+	<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+	<div id="pieChart"
+		style="min-width: 400px; width: 1000px; height: 400px"></div>
+	<label ng-show="listRemark"
+		style="color: red; font-size: medium; marginTop: 20px">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+</div>
+
+
+
+
+
+

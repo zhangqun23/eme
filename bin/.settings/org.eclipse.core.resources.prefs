@@ -1,0 +1,21 @@
+eclipse.preferences.version=1
+<<<<<<< HEAD
+encoding//WebRoot/admin/AdminTeacherAdd1.jsp=UTF-8
+encoding//src/cn/xidian/service/impl=UTF-8
+encoding//src/cn/xidian/service/impl/AdminCompositionRulesServiceImpl.java=UTF-8
+encoding//src/cn/xidian/utils=UTF-8
+encoding//src/cn/xidian/web=UTF-8
+=======
+encoding//WebContent/jsp/checkOrRobHome/robEffAnalyseForm.html=UTF-8
+encoding//WebContent/jsp/checkOrRobHome/robEfficiencyForm.html=UTF-8
+encoding//WebContent/jsp/customerService/depWorkloadForm.html=UTF-8
+encoding//WebContent/jsp/customerService/staffWorkloadForm.html=UTF-8
+encoding//WebContent/jsp/customerService/typeForm.html=UTF-8
+encoding//WebContent/jsp/footer.jsp=UTF-8
+encoding//WebContent/jsp/left.jsp=UTF-8
+encoding//WebContent/jsp/projectForm/proMaintainForm.html=UTF-8
+encoding//WebContent/jsp/projectForm/proWorkloadForm.html=UTF-8
+encoding//WebContent/jsp/top.jsp=UTF-8
+encoding//src/com/base/SharedRenderVariableInterceptor.java=UTF-8
+>>>>>>> d9bd7e19df9526498cbbfc04b6c42b54100320a4
+encoding/<project>=UTF-8

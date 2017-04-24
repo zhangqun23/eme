@@ -1,0 +1,83 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">工程部服务统计</a></li>
+		<li><a href="">工程物料管理统计</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+
+	<div>
+		<div>
+			<form action="" method="post" enctype="multipart/form-data">
+				<ul class="projectListLimit">
+
+					<li><label>起止日期</label><input type="text" name="startTime"
+						required ng-model="pmfLimit.startTime"
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""><label>—</label><input type="text"
+						name="endTime" required ng-model="pmfLimit.endTime"
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""></li>
+					<li><label>材料类型</label><select class="dfselect layoutStyle"
+						style="width: 140px" ng-model="pmfLimit.materialType"
+						name="materialType" id="materialType" required><option
+								value="">请选择</option>
+							<option value="{{m.sortId}}" ng-repeat="m in materials">{{m.sortName}}</option></select></li>
+					<li><input class="btn layoutStyle" style="width: 60px"
+						type="button" value="查询" ng-click="selectProMaterialByLimits()"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Word"
+						onclick="this.form.action='../projectMaterial/exportProjectMaterialWordBylimits.do';this.form.submit();setExportFlagCookie();"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Excel"
+						onclick="this.form.action='../projectMaterial/exportProjectMaterialExcelBylimits.do';this.form.submit();setExportFlagCookie();"></li>
+				</ul>
+			</form>
+		</div>
+
+	</div>
+	<label ng-show="listRemark"
+		style="color: red; font-size: medium; marginTop: 20px">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle" id="materialTable">
+		<caption align="top" class="tableTitle">
+			<div class="tableTitle">工程物料管理统计</div>
+			<div>统计时间：{{pmfLimit.startTime}}&nbsp;至
+				&nbsp;{{pmfLimit.endTime}}</div>
+		</caption>
+		<thead>
+			<tr>
+				<th class="width5">序号</th>
+				<th class="width10">材料类型</th>
+				<th class="width10">材料名称</th>
+				<th class="width10">材料型号</th>
+				<th class="width10">用量</th>
+				<th class="width10">计量单位</th>
+				<th class="width10">任务数</th>
+				<th class="width10">平均用量</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="ml in materialList">
+				<td>{{ml.orderNum}}</td>
+				<td>{{ml.material_sort}}</td>
+				<td>{{ml.material_name}}</td>
+				<td>{{ml.material_type}}</td>
+				<td>{{ml.take_amount}}</td>
+				<td>{{ml.mterial_unit}}</td>
+				<td>{{ml.task_num}}</td>
+				<td>{{ml.avg_task_num}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+	<div class="tcdPageCode">页码容器</div>
+</div>
+
+
+

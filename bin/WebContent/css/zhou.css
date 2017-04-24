@@ -1,0 +1,235 @@
+.input_border {
+	border: none;
+	width: 300px !important;
+	height: 100% !important
+}
+
+.text_border {
+	overflow: auto;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	border-style: solid;
+	border-color: #FFFFFF;
+	width: 900px;
+}
+
+.table_title_width {
+	width: 45% !important;
+	min-width: 120px;
+}
+
+.hand {
+	cursor: pointer;
+}
+
+.small_image {
+	width: 15px;
+	height: 15px;
+	margin-left: 15px;
+	margin-top: 8px;
+	visibility: hidden;
+}
+
+.exit_image {
+	width: 18px;
+	height: 18px;
+	margin-right: 10px;
+	margin-top: 12px;
+}
+
+.stage_style {
+	float: left;
+}
+
+.left_length {
+	margin-left: 30px;
+}
+
+.middle_input {
+	width: 350px !important;
+}
+
+.long_input {
+	width: 730px !important;
+}
+
+.top_length {
+	margin-top: 20px;
+}
+
+.line_style {
+	border-bottom: solid 1px #d0dee5;
+	width: 97%;
+}
+
+.width10 {
+	width: 10%;
+}
+
+.width13 {
+	width: 13%;
+}
+
+.width3 {
+	width: 3%;
+}
+
+.width5 {
+	width: 5%;
+}
+
+.width7 {
+	width: 7%;
+}
+
+.width15 {
+	width: 15%;
+}
+
+.width25 {
+	width: 25%;
+}
+
+.width30 {
+	width: 30%;
+}
+
+.width35 {
+	width: 35%;
+}
+
+.text_style {
+	font-size: 15px;
+	color: #f00;
+}
+
+.hideE {
+	display: none;
+}
+
+.showInfo {
+	width: 10px;
+	height: 10px;
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+.left_length5 {
+	margin-left: 5px;
+}
+
+.little {
+	font-size: 10px;
+}
+
+.area_style {
+	width: 300px !important;
+	height: 100px !important;
+}
+
+.text_right {
+	text-align: right
+}
+/* //省市样式 */
+.form-inline .form-group {
+	display: inline-block;
+	margin-bottom: 0;
+	vertical-align: middle
+}
+
+.form-inline .form-control {
+	display: inline-block;
+	width: auto;
+	vertical-align: middle
+}
+
+.form-group {
+	margin-bottom: 15px
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0
+}
+
+.form-control {
+	display: block;
+	width: 100%;
+	height: 28px;
+	padding: 4px 4px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+}
+
+.form-control:focus {
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgba(102, 175, 233, .6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgba(102, 175, 233, .6)
+}
+
+.textWarn {
+	margin-left: 25px;
+	margin-bottom: 10px;
+}
+
+.layoutStyle {
+	width: 90px;
+	height: 30px;
+	margin-left: 5px;
+}
+
+.dateLayoutStyle {
+	width: 90px;
+	height: 30px;
+	margin-left: 5px;
+}
+
+.projectListLimit li {
+	display: inline-block !important;
+	margin-top: 4px;
+	margin-bottom: 15px;
+}
+
+.oneinline {
+	display: inline-block !important;
+}
+
+.tablestyle th {
+	text-align: center;
+}
+
+.tableTitle {
+	margin-bottom: 10px;
+	font-size: 18px;
+}
+
+.listRemark {
+	color: red;
+	font-size: medium;
+	marginTop: 20px;
+}
+
+.div_bottom {
+	margin-bottom: 10px;
+}

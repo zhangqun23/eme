@@ -1,0 +1,81 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">查房/抢房统计分析</a></li>
+		<li><a href="">查房效率统计</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+
+	<div>
+		<div>
+			<form action="" method="post" enctype="multipart/form-data">
+				<ul class="projectListLimit">
+					<li><label>起止年月</label><input type="text" name="startTime"
+						ng-model="ceLimit.startTime" required
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""><label>—</label><input type="text"
+						name="endTime" required ng-model="ceLimit.endTime"
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""></li>
+					<li><input class="btn layoutStyle" style="width: 60px"
+						type="button" value="查询"
+						ng-click="selectCheckEfficiencyByLimits()"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Word"
+						onclick="this.form.action='../checkHouse/exportCheckHouseList.do';this.form.submit();setExportFlagCookie();"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Excel"
+						onclick="this.form.action='../checkHouse/exportCheckHouseExcel.do';this.form.submit();setExportFlagCookie();"></li>
+				</ul>
+
+			</form>
+		</div>
+
+	</div>
+	<label ng-show="listRemark"
+		style="color: red; font-size: medium; marginTop: 20px">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle">
+		<caption align="top" class="tableTitle">
+			<div class="tableTitle">客房部领班查房工作效率统计表</div>
+			<div>统计时间：{{ceLimit.startTime}}&nbsp;至
+				&nbsp;{{ceLimit.endTime}}</div>
+
+		</caption>
+		<thead>
+			<tr>
+				<th class="width5">序号</th>
+				<th class="width5">领班</th>
+				<th class="width5">编号</th>
+				<th class="width5">当班时间（分钟）</th>
+				<th class="width5">查房时间（分钟）</th>
+				<th class="width5">查房总数</th>
+				<th class="width5">平均查房时间（分钟）</th>
+				<th class="width5">效率</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="c in checkEfficiencyList">
+				<td>{{c.orderNum}}</td>
+				<td>{{c.staffName}}</td>
+				<td>{{c.staffNo}}</td>
+				<td>{{c.totalTime}}</td>
+				<td>{{c.checkTime}}</td>
+				<td>{{c.sumRoom}}</td>
+				<td>{{c.checkRoomTime}}</td>
+				<td>{{c.efficiency | numPercent}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+	<!-- <div class="tcdPageCode">页码容器</div> -->
+</div>
+
+
+
+
+

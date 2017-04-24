@@ -1,0 +1,62 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">例行任务统计分析</a></li>
+		<li><a href="">做房效率分析</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+	<div class="tools" style="">
+		<form action="exportUserWorkEfficiencyBylimits.do" method="post"
+			enctype="multipart/form-data">
+			<ul class="projectListLimit">
+				<li><label>年份</label> <input type="text" name="checkYear"
+					ng-model="weafLimit.checkYear" required
+					class="dfselect dateLayoutStyle"
+					onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+					onChange=""></li>
+				<li><label>季度</label><select class="dfselect layoutStyle"
+					style="width: 73px" ng-model="weafLimit.quarter" name="quarter"
+					required><option value="{{q.id}}"
+							ng-repeat="q in quarters">{{q.type}}</option>
+				</select></li>
+				<li><label>员工</label><select class="dfselect layoutStyle"
+					style="width: 110px" ng-model="weafLimit.staffId" name="staffId"
+					id="staffId" ng-change="getStaffNameById()" required>
+						<option value="">请选择</option>
+						<option value="{{s.staff_id}}" ng-repeat="s in staffs">{{s.staff_no}}{{s.staff_name}}</option>
+				</select></li>
+				<li><input type="text" name="staffName" class="hidden"
+					ng-model="staffName"></li>
+				<li><input class="btn layoutStyle" style="width: 60px"
+					type="button" value="查询"
+					ng-click="selectUserWorkEfficiencyByLimits()"></li>
+				<li><input id="chart-svg" name="chartSVGStr" type="text"
+					class="hidden" /></li>
+				<li><input id="chart1-svg" name="chart1SVGStr" type="text"
+					class="hidden" /></li>
+				<li><input id="analyseResult1" name="analyseResult1" type="text"
+					class="hidden" /></li>
+				<li><input id="analyseResult2" name="analyseResult2" type="text"
+					class="hidden" /></li>
+				<li><input class="btn layoutStyle" style="width: 60px"
+					type="submit" value="导出" onclick="setExportFlagCookie()"></li>
+			</ul>
+		</form>
+
+	</div>
+	<div id="lineChart"
+		style="min-width: 400px; width: 1000px; height: 400px;"></div>
+	<label ng-show="listRemark" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark1}}</label>
+	<div id="lineChart1"
+		style="min-width: 400px; width: 1000px; height: 400px; margin-top: 40px"></div>
+	<label ng-show="listRemark" class="listRemark">&nbsp;&nbsp;&nbsp;{{remark2}}</label>
+</div>
+
+
+
+
+
+

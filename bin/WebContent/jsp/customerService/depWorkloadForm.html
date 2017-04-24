@@ -1,0 +1,78 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">对客服务</a></li>
+		<li><a href="">部门总工作量统计</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+
+	<div>
+		<div>
+			<form action="" method="post" enctype="multipart/form-data">
+				<ul class="projectListLimit">
+					<li><label>起止日期</label><input type="text" name="startTime"
+						ng-model="depWorkloadLimit.start_time" required
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""><label>—</label><input type="text"
+						name="endTime" ng-model="depWorkloadLimit.end_time" required
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""></li>
+					<li><input class="btn layoutStyle" style="width: 60px"
+						type="button" value="查询" ng-click="selectDepWorkload()"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Word"
+						onclick="this.form.action='../customerServiceInformation/exportDepWorkload.do';this.form.submit();setExportFlagCookie();"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Excel"
+						onclick="this.form.action='../customerServiceInformation/exportDepWorkloadExcel.do';this.form.submit();setExportFlagCookie();"></li>
+				</ul>
+
+			</form>
+		</div>
+
+	</div>
+	<label ng-show="listRemark"
+		style="color: red; font-size: medium; marginTop: 20px">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist">
+		<caption align="top" class="tableTitle">
+			<div class="tableTitle">部门总工作量统计</div>
+			<div>统计时间：{{depWorkloadLimit.start_time}}&nbsp;至
+				&nbsp;{{depWorkloadLimit.end_time}}</div>
+		</caption>
+		<thead>
+			<tr>
+				<th class="width5">序号</th>
+				<th class="width10">部门</th>
+				<th class="width10">服务数量</th>
+				<th class="width10">超时服务数量</th>
+				<th class="width10">超时率</th>
+				<th class="width10">总用时(分钟)</th>
+				<th class="width10">平均用时(分钟)</th>
+				<th class="width10">总数排名</th>
+				<th class="width10">超时率排名</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="depWorkload in depWorkloadList">
+				<td>{{depWorkload.orderNum}}</td>
+				<td>{{depWorkload.department}}</td>
+				<td>{{depWorkload.serviceLoad}}</td>
+				<td>{{depWorkload.timeOutService}}</td>
+				<td>{{depWorkload.timeOutRate|numPercent}}</td>
+				<td>{{depWorkload.sumWorkTime}}</td>
+				<td>{{depWorkload.averageWorkTime}}</td>
+				<td>{{depWorkload.serviceLoad_rank}}</td>
+				<td>{{depWorkload.timeOutRate_rank}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+</div>
+
+
+

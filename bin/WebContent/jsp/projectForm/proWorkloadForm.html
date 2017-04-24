@@ -1,0 +1,72 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">工程部服务统计</a></li>
+		<li><a href="">员工工作量统计</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+
+	<div>
+		<div>
+			<form action="" method="post" enctype="multipart/form-data">
+				<ul class="projectListLimit">
+
+					<li><label>起止日期</label><input type="text" name="startDate"
+						required ng-model="pwLimit.startTime"
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""><label>—</label><input type="text"
+						name="endDate" required ng-model="pwLimit.endTime"
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""></li>
+					<li><input class="btn layoutStyle" style="width: 60px"
+						type="button" value="查询" ng-click="selectProWorkLoad()"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Word"
+						onclick="this.form.action='../projectWorkLoad/exportProWorkLoadWord.do';this.form.submit();setExportFlagCookie();"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Excel"
+						onclick="this.form.action='../projectWorkLoad/exportProWorkLoadExcel.do';this.form.submit();setExportFlagCookie();"></li>
+				</ul>
+			</form>
+		</div>
+
+	</div>
+	<label ng-show="listRemark"
+		style="color: red; font-size: medium; marginTop: 20px">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle">
+		<caption align="top" class="tableTitle">
+			<div class="tableTitle">工程部员工工作量统计</div>
+			<div>统计时间：{{pwLimit.startTime}}&nbsp;至
+				&nbsp;{{pwLimit.endTime}}</div>
+		</caption>
+		<thead>
+			<tr>
+				<th class="width5">序号</th>
+				<th class="width10">员工姓名</th>
+				<th class="width10">员工编号</th>
+				<th class="width10">工作量</th>
+				<th class="width10">排名</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="workload in workloadList">
+				<td>{{workload.orderNum}}</td>
+				<td>{{workload.staffName}}</td>
+				<td>{{workload.staffNo}}</td>
+				<td>{{workload.workLoad}}</td>
+				<td>{{workload.rank}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+	<div class="tcdPageCode">页码容器</div>
+</div>
+
+
+

@@ -1,0 +1,78 @@
+<div class="place">
+	<span>位置：</span>
+	<ul class="placeul">
+		<li><a href="">首页</a></li>
+		<li><a href="">例行任务统计分析</a></li>
+		<li><a href="">做房效率统计</a></li>
+	</ul>
+</div>
+
+<div class="rightinfo">
+
+	<div>
+		<div>
+			<form action="" method="post" enctype="multipart/form-data">
+				<ul class="projectListLimit">
+					<li><label>起止年月</label><input type="text" name="startTime"
+						ng-model="wefLimit.startTime" required
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""><label>—</label><input type="text"
+						name="endTime" ng-model="wefLimit.endTime" required
+						class="dfselect dateLayoutStyle"
+						onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true',onpicked: function(){$(this).trigger('change')}})) "
+						onChange=""></li>
+					<li><input class="btn layoutStyle" style="width: 60px"
+						type="button" value="查询" ng-click="selectWorkEfficiencyByLimits()"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Word"
+						onclick="this.form.action='exportWorkEfficiencyBylimits.do';this.form.submit();setExportFlagCookie();"></li>
+					<li><input class="btn layoutStyle" style="width: 80px"
+						type="submit" value="导出Excel"
+						onclick="this.form.action='exportWorkEfficiencyExcelBylimits.do';this.form.submit();setExportFlagCookie();"></li>
+				</ul>
+
+			</form>
+		</div>
+	</div>
+	<label ng-show="listRemark"
+		style="color: red; font-size: medium; marginTop: 20px">&nbsp;&nbsp;&nbsp;{{remark}}</label>
+	<table class="tablelist tablestyle">
+		<caption align="top" class="tableTitle">
+			<div class="tableTitle">客房部员工工作效率统计表</div>
+			<div>统计时间：{{wefLimit.startTime}}&nbsp;至
+				&nbsp;{{wefLimit.endTime}}</div>
+		</caption>
+		<thead>
+			<tr>
+				<th class="width3">序号</th>
+				<th class="width5">员工</th>
+				<th class="width5">编号</th>
+				<th class="width7">当班时间（分钟）</th>
+				<th class="width7">做房时间（分钟）</th>
+				<th class="width5">做房效率</th>
+				<th class="width7">工作时间（分钟）</th>
+				<th class="width5">工作效率</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="we in workEfficiencyList">
+				<td>{{we.orderNum}}</td>
+				<td>{{we.staff_name}}</td>
+				<td>{{we.staff_no}}</td>
+				<td>{{we.work_time}}</td>
+				<td>{{we.house_time}}</td>
+				<td>{{we.house_eff |numPercent}}</td>
+				<td>{{we.house_serv_time}}</td>
+				<td>{{we.house_serv_eff |numPercent}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<label class="error-label" ng-show="listIsShow">对不起，未找到相关数据</label>
+	<!-- <div class="tcdPageCode">页码容器</div> -->
+</div>
+
+
+
+
+
