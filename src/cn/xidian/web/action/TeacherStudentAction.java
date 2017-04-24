@@ -162,7 +162,7 @@ public class TeacherStudentAction extends ActionSupport implements RequestAware 
 	public String selectChargeStus() {
 		String tchrSchNum = tUser.getSchNum();
 		teacher = teacherService.selectInfBySchNum(tchrSchNum);
-		setAllClazz(teacherStudentService.findChargeCla(teacher.getTchrId()));
+		allClazz = teacherStudentService.findChargeCla(teacher.getTchrId());
 		List<Student> s = new ArrayList<Student>();
 		for (Clazz element : allClazz) {
 			s.addAll(teacherStudentService.selectChargeStus(element.getClaId()));
@@ -179,7 +179,7 @@ public class TeacherStudentAction extends ActionSupport implements RequestAware 
 		Set<Student> stus = teacherStudentService.selectStuLimits(limits, allClazz);
 		List<Student> list = new LinkedList<Student>(stus);
 		students = list;
-		
+
 		if (students.size() == 0) {
 			this.addActionError("对不起，未找到相关信息！");
 		}
@@ -240,7 +240,7 @@ public class TeacherStudentAction extends ActionSupport implements RequestAware 
 		item = studentItemService.selectItemInfo(itemid);
 		String realpath = "";
 		realpath = ServletActionContext.getServletContext().getRealPath("export\\ITEM.doc");
-	
+
 		try {
 			InputStream is = new FileInputStream(realpath);
 			HWPFDocument doc = new HWPFDocument(is);
@@ -259,7 +259,7 @@ public class TeacherStudentAction extends ActionSupport implements RequestAware 
 			range.replaceText("${shenheyijian}", item.getNote());
 			String filepath = ServletActionContext.getServletContext().getRealPath("exportword\\321.doc");
 			OutputStream os = new FileOutputStream(filepath);
-			
+
 			// 把doc输出到输出流中
 			doc.write(os);
 			is.close();
@@ -437,7 +437,7 @@ public class TeacherStudentAction extends ActionSupport implements RequestAware 
 		}
 		suPageBean = surveyService.selectAllSurveys(teacher, page);
 		allClazz = clazzService.findAllCla();
-	
+
 		try {
 			if (message != null) {
 				message = new String(message.getBytes("ISO-8859-1"), "UTF-8");
