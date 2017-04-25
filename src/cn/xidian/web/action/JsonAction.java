@@ -33,6 +33,7 @@ import cn.xidian.entity.StudentItem;
 import cn.xidian.entity.Survey;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
+import cn.xidian.entity.SurveySelectorDouble;
 import cn.xidian.entity.Teacher;
 import cn.xidian.entity.TextAnswer;
 import cn.xidian.entity.User;
@@ -97,7 +98,7 @@ public class JsonAction extends ActionSupport implements RequestAware {
 	private PageBean<SurveyReplyer> srPageBean;// 查看问卷参与者的列表
 	private String strEndTime;
 	private Survey survey;
-
+	private List<SurveySelectorDouble> ssd;
 	Map<String, Object> session = ActionContext.getContext().getSession();
 	User tUser = (User) session.get("tUser");
 
@@ -369,6 +370,12 @@ public class JsonAction extends ActionSupport implements RequestAware {
 	public String updateSurveyDate() {
 
 		surveyService.updateSurveyDate(surveyId, strEndTime);
+		return "list";
+	}
+
+	// 获取问卷表格的数据统计表
+	public String selectSurveyTableResult() {
+		ssd = surveyService.selectSurveySelectorDoubles(surveyId, questionId);
 		return "list";
 	}
 
@@ -685,6 +692,14 @@ public class JsonAction extends ActionSupport implements RequestAware {
 
 	public void setSurvey(Survey survey) {
 		this.survey = survey;
+	}
+
+	public List<SurveySelectorDouble> getSsd() {
+		return ssd;
+	}
+
+	public void setSsd(List<SurveySelectorDouble> ssd) {
+		this.ssd = ssd;
 	}
 
 }

@@ -160,5 +160,6 @@
 					$(document).height() - 90 - 88 - 41 + "px");//container的最小高度为“浏览器当前窗口文档的高度-header高度-footer高度”
 		});
 	</script>
+	
 </body>
 </html>

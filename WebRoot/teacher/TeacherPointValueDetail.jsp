@@ -271,6 +271,12 @@
 			$(".container").css("min-height",
 					$(document).height() - 90 - 88 - 41 + "px");//container的最小高度为“浏览器当前窗口文档的高度-header高度-footer高度”
 		});
+		var msg = "${requestScope.Message}";
+		if (msg != "") {
+		alert(msg);
+		history.go(-1);
+		}
+		<%request.removeAttribute("Message");%>
 	</script>
 </body>
 </html>

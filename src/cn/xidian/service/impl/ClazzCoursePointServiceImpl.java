@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import cn.xidian.dao.CourseDao;
 import cn.xidian.dao.ClazzCoursePointDao;
 import cn.xidian.entity.Course;
+import cn.xidian.entity.AverClazzCoursePoint;
 import cn.xidian.entity.ClazzCoursePoint;
 import cn.xidian.entity.IndicatorPoint;
 import cn.xidian.exception.CourseNotExistException;
@@ -48,6 +49,13 @@ public class ClazzCoursePointServiceImpl implements ClazzCoursePointService {
 	public List<ClazzCoursePoint> selectBycursNameAndTerm(String cursName) {
 		List<ClazzCoursePoint> pointlist = new LinkedList<ClazzCoursePoint>();
 		pointlist = clazzCoursePointDao.findByCursNameAndTerm(cursName);
+		return pointlist;
+	}
+	
+	@Override
+	public List<AverClazzCoursePoint> selectBycursNameAndGrade(String cursName) {
+		List<AverClazzCoursePoint> pointlist = new LinkedList<AverClazzCoursePoint>();
+		pointlist = clazzCoursePointDao.findByCursNameAndGrade(cursName);
 		return pointlist;
 	}
 
@@ -89,6 +97,14 @@ public class ClazzCoursePointServiceImpl implements ClazzCoursePointService {
 		List<ClazzCoursePoint> pointlist = new LinkedList<ClazzCoursePoint>();
 		pointlist = clazzCoursePointDao.findByCursAndClazz(cursName, 
 				claName);
+		return pointlist;
+	}
+	
+	@Override
+	public List<AverClazzCoursePoint> selectByCursAndGrade(String cursName,String gradeName) {
+		List<AverClazzCoursePoint> pointlist = new LinkedList<AverClazzCoursePoint>();
+		pointlist = clazzCoursePointDao.findByCursAndGrade(cursName, 
+				gradeName);
 		return pointlist;
 	}
 }

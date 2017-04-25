@@ -80,6 +80,9 @@
 									class="btn select_style" onclick="addQuestion(this)"><input
 									type="button" name="addQues" id="3" value="文字题"
 									class="btn select_style" onclick="addQuestion(this)">
+									<input
+									type="button" name="addQues" id="4" value="矩阵选择题"
+									class="btn select_style" onclick="addQuestion(this)">
 							</div>
 						</div>
 					</div>

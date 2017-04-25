@@ -26,7 +26,7 @@
 	}
 <%request.removeAttribute("Message");%>
 	$(function() {
-		var $termSelect = $("#year");
+		var $termSelect = $(".year");
 		var d = new Date();
 		var year = d.getFullYear();//获取当前年份
 		var $Option2 = $("<option value='" + (year - 4) + "'>" + (year - 4)
@@ -91,23 +91,25 @@
 									<div class="div-result-import">
 										<h5>课程达成评价</h5>
 										<form action="Teacher_Management_5_calculateClazzCursTarget"
-											method="post" enctype="multipart/form-data" style="height:130px">
-											<!-- <div class="div-select">
-												班级&nbsp;&nbsp;<select id="class" name="clazzName">
+											method="post" enctype="multipart/form-data"
+											style="height: 130px">
+											<div class="div-select">
+												类型&nbsp;&nbsp;<select name="calculateType"
+													onChange="changeCaulateType(this)">
+													<option value="0" selected>班级评估</option>
+													<option value="1">年级评估</option>
+												</select>
+											</div>
+											<div class="div-select" id="clazzName">
+												班级&nbsp;&nbsp; <select name="clazzName">
 													<s:iterator value="allClazz" var="clazz">
 														<option value="<s:property value="#clazz.claName"/>"><s:property
 																value="#clazz.claName" /></option>
 													</s:iterator>
 												</select>
 											</div>
-											 -->
-											<div class="div-select">
-												班级&nbsp;&nbsp; <select id="multiselect" name="clazz"
-													multiple="multiple">
-													<s:iterator value="allClazz" var="c">
-														<option value="<s:property value="#c.claName"/>"><s:property
-																value="#c.claName" /></option>
-													</s:iterator>
+											<div class="div-select" id="grade" style="display: none">
+												年级&nbsp;&nbsp;<select name="gradeName" class="year">
 												</select>
 											</div>
 											<div class="div-select">
@@ -123,7 +125,7 @@
 										<h5>课程达成度查询</h5>
 										<form action="Teacher_Management_5_findB1B2" method="post">
 											<div class="div-select-short">
-												年级&nbsp;&nbsp;<select id="year" name="grade">
+												年级&nbsp;&nbsp;<select id="year" name="grade" class="year">
 												</select>
 											</div>
 											<div class="div-select">
@@ -201,6 +203,20 @@
 			$(".container").css("min-height",
 					$(document).height() - 90 - 88 - 41 + "px");//container的最小高度为“浏览器当前窗口文档的高度-header高度-footer高度”
 		});
+		function changeCaulateType(obj) {
+			var type = obj.value;
+			if (type == "0") {
+				$("#grade").hide();
+				$('#grade').attr("disabled", true);
+				$("#clazzName").show();
+				$('#clazzName').attr("disabled", false);
+			} else {
+				$("#clazzName").hide();
+				$('#clazzName').attr("disabled", true);
+				$("#grade").show();
+				$('#grade').attr("disabled", false);
+			}
+		}
 	</script>
 </body>
 </html>

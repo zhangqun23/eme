@@ -17,6 +17,8 @@ import cn.xidian.entity.Survey;
 import cn.xidian.entity.SurveyQuestion;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
+import cn.xidian.entity.SurveySelectorDouble;
+import cn.xidian.entity.SurveySelectorRelate;
 import cn.xidian.entity.Teacher;
 import cn.xidian.entity.TextAnswer;
 
@@ -194,7 +196,7 @@ public class SurveyDaoImpl implements SurveyDao {
 	@Override
 	public List<GradeClazzSurvey> selectStuSurveys(Integer role, Integer claId, String grade) {
 		// TODO Auto-generated method stub
-		String sql = "from GradeClazzSurvey gcs where   claId=? and gcs.survey.state=? order by gcs.survey.surveyId desc";
+		String sql = "from GradeClazzSurvey gcs where   claId=? and gcs.survey.state=? and delState=1 order by gcs.survey.surveyId desc";
 		Query query = currentSession().createQuery(sql);
 		query.setInteger(0, claId);
 		query.setInteger(1, 1);
@@ -208,7 +210,7 @@ public class SurveyDaoImpl implements SurveyDao {
 			String grade) {
 		// TODO Auto-generated method stub
 
-		String sql = "from GradeClazzSurvey gcs where claId=? and gcs.survey.state=?  order by gcs.survey.surveyId desc";
+		String sql = "from GradeClazzSurvey gcs where claId=? and gcs.survey.state=? and delState=1 order by gcs.survey.surveyId desc";
 		Query query = currentSession().createQuery(sql).setFirstResult(begin).setMaxResults(limit);
 		query.setInteger(0, claId);
 		query.setInteger(1, 1);
@@ -359,6 +361,67 @@ public class SurveyDaoImpl implements SurveyDao {
 		query.setInteger(1, surveyId);
 		query.executeUpdate();
 		return true;
+	}
+
+	@Override
+	public boolean addSelectorDouble(SurveySelectorDouble surveySelectorDouble) {
+		// TODO Auto-generated method stub
+		currentSession().save(surveySelectorDouble);
+		return true;
+	}
+
+	@Override
+	public boolean saveSurveySelectorRelate(SurveySelectorRelate surveySelectorRelate) {
+		// TODO Auto-generated method stub
+		currentSession().save(surveySelectorRelate);
+		return true;
+	}
+
+	@Override
+	public boolean updateSelectorRelateNum(Integer selectorId, Integer selectorDoubleId) {
+		// TODO Auto-generated method stub
+		String sql = "update SurveySelectorRelate  set sumNum=sumNum+1 where selectorId=? and selectorDoubleId=? ";
+		Query query = currentSession().createQuery(sql);
+		query.setInteger(0, selectorId);
+		query.setInteger(1, selectorDoubleId);
+		query.executeUpdate();
+		return true;
+	}
+
+	@Override
+	public SurveySelector selectSurveySelector(Integer surveyId, Integer questionId, Integer selectorNum) {
+		// TODO Auto-generated method stub
+		String sql = "from SurveySelector where surveyId=? and questionId=? and selectorNum=?";
+		Query query = currentSession().createQuery(sql);
+		query.setInteger(0, surveyId);
+		query.setInteger(1, questionId);
+		query.setInteger(2, selectorNum);
+		SurveySelector ss = (SurveySelector) query.uniqueResult();
+		return ss;
+	}
+
+	@Override
+	public SurveySelectorDouble selectSurveySelectorDouble(Integer surveyId, Integer questionId, Integer selectorNum) {
+		// TODO Auto-generated method stub
+		String sql = "from SurveySelectorDouble where surveyId=? and questionId=? and selectorNum=?";
+		Query query = currentSession().createQuery(sql);
+		query.setInteger(0, surveyId);
+		query.setInteger(1, questionId);
+		query.setInteger(2, selectorNum);
+		SurveySelectorDouble ssd = (SurveySelectorDouble) query.uniqueResult();
+		return ssd;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SurveySelectorDouble> selectSurveySelectorDoubles(Integer surveyId, Integer questionId) {
+		// TODO Auto-generated method stub
+		String sql = "from from SurveySelectorDouble where surveyId=? and questionId=?";
+		Query query = currentSession().createQuery(sql);
+		query.setInteger(0, surveyId);
+		query.setInteger(1, questionId);
+		List<SurveySelectorDouble> ssd = query.list();
+		return ssd;
 	}
 
 }

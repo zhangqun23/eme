@@ -104,6 +104,19 @@
 												onclick="hidePie(this)"
 												name="<s:property value="#sq.questionId" />" />
 										</s:if>
+										<s:if test="#sq.type==4">
+											<img class="small_img show_Pie" src="img/showPie.png"
+												onclick="showTableChart(this,4)"
+												name="<s:property value="#sq.questionId" />"
+												id="img<s:property value="#sq.questionId" />" />
+											<img class="small_img show_Pie" src="img/showPie.png"
+												onclick="showPie(this)" style="display: none"
+												name="<s:property value="#sq.questionId" />"
+												id="image<s:property value="#sq.questionId" />" />
+											<img class="small_img" src="img/delsel.gif"
+												onclick="hidePie(this)"
+												name="<s:property value="#sq.questionId" />" />
+										</s:if>
 
 									</div>
 									<ul class="question-style">
@@ -163,6 +176,36 @@
 												</div>
 											</div>
 										</s:if>
+										<s:if test="#sq.type==4">
+											<li class="li_style selector-style">
+												<table class="table table-bordered table-condensed wjTable"
+													id="table<s:property value="%{#status.count}" />">
+													<tr>
+														<td class="tdOne">选项</td>
+														<s:generator val="#sq.selectors" separator="_" id="s" />
+														<s:iterator status="st" value="#request.s" id="selector">
+															<td><s:property value="selector" /></td>
+														</s:iterator>
+													</tr>
+													<s:generator val="#sq.rowSelectors" separator="_" id="t" />
+													<s:iterator status="tt" value="#request.t" id="rowSelector">
+														<tr>
+															<td><s:property value="rowSelector" /></td>
+															<s:generator val="#sq.selectors" separator="_" id="s" />
+															<s:iterator status="st" value="#request.s" id="selector">
+																<td><input type="radio" class="radio"
+																	id="<s:property value="%{#tt.count}" />_<s:property value="%{#st.count}" />"
+																	name="<s:property value="%{#status.count}" />_<s:property value="%{#tt.count}" />" /></td>
+															</s:iterator>
+													</s:iterator>
+													</tr>
+												</table>
+												<div id="jqChart<s:property value="#sq.questionId"/>"
+													class="pieChart_style"></div> <input
+												id="svgChart<s:property value="#sq.questionId"/>"
+												class="hidden" />
+											</li>
+										</s:if>
 									</ul>
 
 								</div>
@@ -180,10 +223,10 @@
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 	<script src="https://code.highcharts.com/highcharts.js"
 		type="text/javascript" charset="utf-8"></script>
+	<script lang="javascript" type="text/javascript" src="js/chart.js"></script>
+	<script type="text/javascript" src="js/surveyResult.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"
 		type="text/javascript" charset="utf-8"></script>
-	<script type="text/javascript" src="js/surveyResult.js"></script>
-	<script lang="javascript" type="text/javascript" src="js/chart.js"></script>
 
 
 

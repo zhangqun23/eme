@@ -155,3 +155,31 @@ function downPage(obj) {
 		showTextChart(obj.name, page + 1);
 	}
 }
+
+// 图表题查询统计结果
+function showTableChart(obj, num) {
+	var surveyId = $("#surveyId").val();
+	$("#jqChart" + obj.name + "").css("display", "block");
+	$.getJSON("Json_selectSurveyTableResult", {
+		surveyId : surveyId,
+		questionId : obj.name
+	}, function(data) {
+
+		if (num == 4) {
+			var arr = [];
+			$.each(data.surveySelectors, function(i, value) {
+				var selector = [];
+				selector[0] = ""
+						+ String.fromCharCode(64 + parseInt(value.selectorNum))
+						+ "";
+				selector[1] = value.sumNum;
+				arr[i] = selector;
+			});
+			pieChartForm("#jqChart" + obj.name + "", "", " ", arr);
+			$("#svgChart" + obj.name + "").val(
+					$("#jqChart" + obj.name + "").highcharts().getSVG());
+		}
+	});
+	$("#img" + obj.name + "").css("display", "none");
+	$("#image" + obj.name + "").css("display", "inline");
+}

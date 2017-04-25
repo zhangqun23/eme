@@ -29,7 +29,7 @@ public class IsEvaluateDaoImpl implements IsEvaluateDao {
 	@Override
 	public IsEvaluate findByCursAndClazz(Integer cursId, Integer claId) {
 		IsEvaluate isevaluate = new IsEvaluate();
-		String sql = "from IsEvaluate i where i.course.cursId=? and i.clazz.claId=?";
+		String sql = "from IsEvaluate i where i.course.cursId=? and i.clazz.claId = ?";
 		Query query = currentSession().createQuery(sql);
 		query.setInteger(0, cursId).setInteger(1, claId);
 		isevaluate = (IsEvaluate) query.uniqueResult();

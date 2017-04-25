@@ -1,7 +1,9 @@
 package cn.xidian.service.impl;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +25,8 @@ import cn.xidian.dao.TeacherCourseDao;
 import cn.xidian.dao.TeacherDao;
 import cn.xidian.dao.TeachingTargetDao;
 import cn.xidian.dao.TeachingTargetEvaluateDao;
+import cn.xidian.entity.AverClazzCoursePoint;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.Clazz;
 import cn.xidian.entity.ClazzCoursePoint;
 import cn.xidian.entity.CompositionRules;
@@ -46,7 +50,7 @@ import cn.xidian.utils.ServiceUtils;
 
 @Component
 public class TeacherServiceImpl implements TeacherService {
-
+	
 	private TeacherCourseDao teacherCourseDao;
 
 	@Resource(name = "teacherCourseDaoImpl")
@@ -180,8 +184,8 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public boolean caculateClazzTarget(String cursName, String claName,
-			String tchrSchNum) {// 计算某班级某课程达成度
+	public boolean caculateClazzTarget(String caculateClazzTarget, String gradeName, 
+			String cursName, String claName, String tchrSchNum) {// 计算某班级某课程达成度
 		// DecimalFormat df = new DecimalFormat("#.00");//
 		// 用于格式化Double类型数据，保留两位小数
 
@@ -190,19 +194,63 @@ public class TeacherServiceImpl implements TeacherService {
 		if (course == null) {
 			throw new CourseNotExistException("对不起，课程不存在！");
 		}
-		String[] clazzArray = null;
-		clazzArray = claName.split(",");
-		List<Clazz> clazzs = new LinkedList<Clazz>();
-		for (int i = 0; i < clazzArray.length; i++) {
-			Clazz clazz = null;
-			clazz = clazzDao.selectByName(clazzArray[i].trim());
-			clazzs.add(clazz);
-		}
-		//Clazz clazz = clazzDao.selectByName(claName);
-		if (clazzs.size()==0) {
-			throw new ClazzNotExistException("对不起，班级不存在！");
-		}
+		//判断所选是班级还是年级
+		List<Clazz> clazzList = new ArrayList<Clazz>();
+		List<StudentCourse> stuCurs = new LinkedList<StudentCourse>();
+		Set<Student> students = new HashSet<Student>();
 
+		if(caculateClazzTarget.equals("0")){
+			clazzList.add(clazzDao.selectByName(claName));
+			for(int x = 0; x < clazzList.size(); x++){
+				Clazz clazz = clazzList.get(x);
+				if (clazz == null) {
+					throw new ClazzNotExistException("对不起，班级不存在！");
+				}
+			students = studentDao.findByClazz(clazzList.get(x).getClaId());
+	
+			Iterator<Student> it = students.iterator();
+			while (it.hasNext()) {
+				StudentCourse sc = new StudentCourse();
+				Integer stuId = it.next().getStuId();
+				sc = studentCourseDao.selectByCursIdAndStuId(course.getCursId(),
+						stuId);
+				if (sc != null) {
+					stuCurs.add(sc);
+				}
+			}
+			if(stuCurs.size()==0){
+				throw new StudentCourseNotExistsException("请先上传成绩！");
+			}
+		}
+		}	
+		else{
+			clazzList = clazzDao.selectByGrade(gradeName);
+			for(int i=0;i<clazzList.size();i++){
+				Set<Student> student = studentDao.findByClazz(clazzList.get(i).getClaId());
+				students.addAll(student);
+				Clazz clazz = clazzList.get(i);
+				if (clazz == null) {
+					throw new ClazzNotExistException("对不起，班级不存在！");
+					
+				}
+			}
+			//students = studentDao.findByClazz(clazzList.get(0).getClaId());
+			Iterator<Student> it = students.iterator();
+			while (it.hasNext()) {
+				StudentCourse sc = new StudentCourse();
+				Integer stuId = it.next().getStuId();
+				sc = studentCourseDao.selectByCursIdAndStuId(course.getCursId(),
+						stuId);
+				if (sc != null) {
+					stuCurs.add(sc);
+				}
+			}
+			if(stuCurs.size()==0){
+				throw new StudentCourseNotExistsException("请先上传成绩！");
+			}
+			
+		}
+		
 		// 找到该课程的评分规则
 		CompositionRules rules = compositionRulesDao.selectByCourse(course
 				.getCursNum());
@@ -221,26 +269,6 @@ public class TeacherServiceImpl implements TeacherService {
 		Double classClazzValueTotal = 0.0;
 		Double classWorkValueTotal = 0.0;
 		Double classExpValueTotal = 0.0;
-		Iterator<Clazz> iter = clazzs.iterator();
-		Integer claId = iter.next().getClaId();
-		Set<Student> students = studentDao.findByClazz(claId);
-		//Set<Student> students = studentDao.findByClazz(clazz.getClaId());
-		List<StudentCourse> stuCurs = new LinkedList<StudentCourse>();
-
-		Iterator<Student> it = students.iterator();
-		while (it.hasNext()) {
-			StudentCourse sc = new StudentCourse();
-			Integer stuId = it.next().getStuId();
-			sc = studentCourseDao.selectByCursIdAndStuId(course.getCursId(),
-					stuId);
-			if (sc != null) {
-				stuCurs.add(sc);
-			}
-		}
-		
-		if(stuCurs.size()==0){
-			throw new StudentCourseNotExistsException("请先上传成绩！");
-		}
 
 		// 计算班级总综合成绩
 		for (int i = 0; i < stuCurs.size(); i++) {
@@ -254,14 +282,11 @@ public class TeacherServiceImpl implements TeacherService {
 		// 班级各分项值为各分项的平均值乘以所占百分比
 		Double classMidValue = classMidValueTotal / stuCurs.size() * midEvaPer;// 班级期中成绩
 		Double classFinValue = classFinValueTotal / stuCurs.size() * finEvaPer;// 班级期末成绩
-		Double classClazzValue = classClazzValueTotal / stuCurs.size()
-				* classEvaPer;// 班级课堂成绩
-		Double classWorkValue = classWorkValueTotal / stuCurs.size()
-				* workEvaPer;// 班级作业成绩
+		Double classClazzValue = classClazzValueTotal / stuCurs.size() * classEvaPer;// 班级课堂成绩
+		Double classWorkValue = classWorkValueTotal / stuCurs.size() * workEvaPer;// 班级作业成绩
 		Double classExpValue = classExpValueTotal / stuCurs.size() * expEvaPer;// 班级实验成绩
 
-		List<TeachingTarget> tts = teachingTargetDao.selectByCursId(course
-				.getCursId());
+		List<TeachingTarget> tts = teachingTargetDao.selectByCursId(course.getCursId());
 		if (tts.size() == 0) {
 			throw new TchingTargetNotExistException("未找到课程目标，请检查课程信息！");
 		}
@@ -283,6 +308,7 @@ public class TeacherServiceImpl implements TeacherService {
 		List<Double> b1s = new LinkedList<Double>();
 		for (int i = 0; i < tts.size(); i++) {
 			TeachingTargetEvaluate ttEvaluate = new TeachingTargetEvaluate();
+			AverTeachingTargetEvaluate attEvaluate = new AverTeachingTargetEvaluate();
 			Double classMidEvaValue = 0.0;// 班级期中成绩评价值
 			Double classFinEvaValue = 0.0;// 班级期末成绩评价值
 			Double classClazzEvaValue = 0.0;// 班级课堂成绩评价值
@@ -299,7 +325,6 @@ public class TeacherServiceImpl implements TeacherService {
 						* tts.get(i).getTchtargetMidTargetValue()
 						/ classMidTargetValue;
 			}
-			ttEvaluate.setTchtargetMidEvaValue(classMidEvaValue);
 			if (classFinTargetValue == 0.0) {
 				classFinEvaValue = 0.0;
 			} else {
@@ -307,7 +332,6 @@ public class TeacherServiceImpl implements TeacherService {
 						* tts.get(i).getTchtargetFinTargetValue()
 						/ classFinTargetValue;
 			}
-			ttEvaluate.setTchtargetFinEvaValue(classFinEvaValue);
 			if (classClazzTargetValue == 0.0) {
 				classClazzEvaValue = 0.0;
 			} else {
@@ -315,7 +339,6 @@ public class TeacherServiceImpl implements TeacherService {
 						* tts.get(i).getTchtargetClassTargetValue()
 						/ classClazzTargetValue;
 			}
-			ttEvaluate.setTchtargetClassEvaValue(classClazzEvaValue);
 			if (classWorkTargetValue == 0.0) {
 				classWorkEvaValue = 0.0;
 			} else {
@@ -323,7 +346,6 @@ public class TeacherServiceImpl implements TeacherService {
 						* tts.get(i).getTchtargetHomeworkTargetValue()
 						/ classWorkTargetValue;
 			}
-			ttEvaluate.setTchtargetWorkEvaValue(classWorkEvaValue);
 			if (classExpTargetValue == 0.0) {
 				classExpEvaValue = 0.0;
 			} else {
@@ -331,7 +353,6 @@ public class TeacherServiceImpl implements TeacherService {
 						* tts.get(i).getTchtargetExpTargetValue()
 						/ classExpTargetValue;
 			}
-			ttEvaluate.setTchtargetExpEvaValue(classExpEvaValue);
 
 			a1 = classMidEvaValue + classFinEvaValue + classClazzEvaValue
 					+ classWorkEvaValue + classExpEvaValue;
@@ -345,16 +366,20 @@ public class TeacherServiceImpl implements TeacherService {
 			} else {
 				b1 = a1 / denominator;
 			}
-			ttEvaluate.setA1(a1);
-			ttEvaluate.setB1(b1);
-			b1s.add(b1);// 把b1存到一个list，一会计算a2、b2拿出来用
-			ttEvaluate.setTeachingTarget(tts.get(i));
-			TeachingTargetEvaluate tte = teachingTargetEvaluateDao
-					.selectByClazzIdAndTargetId(claId, tts.get(i)
-							.getTchTargetId());
-			Iterator<Clazz> it1 = clazzs.iterator();
-			for(int x=0;x<clazzs.size();x++){
-				ttEvaluate.setClazz(it1.next());
+			if(caculateClazzTarget.equals("0")){
+				ttEvaluate.setTchtargetMidEvaValue(classMidEvaValue);
+				ttEvaluate.setTchtargetFinEvaValue(classFinEvaValue);
+				ttEvaluate.setTchtargetClassEvaValue(classClazzEvaValue);
+				ttEvaluate.setTchtargetWorkEvaValue(classWorkEvaValue);
+				ttEvaluate.setTchtargetExpEvaValue(classExpEvaValue);
+				ttEvaluate.setA1(a1);
+				ttEvaluate.setB1(b1);
+				b1s.add(b1);// 把b1存到一个list，一会计算a2、b2拿出来用
+				ttEvaluate.setClazz(clazzList.get(0));
+				ttEvaluate.setTeachingTarget(tts.get(i));
+				TeachingTargetEvaluate tte = teachingTargetEvaluateDao
+						.selectByClazzIdAndTargetId(clazzList.get(0).getClaId(), 
+								tts.get(i).getTchTargetId());
 				// 存在则更新，不存在则添加
 				if (tte == null) {
 					teachingTargetEvaluateDao.addTchingTargetEvaValue(ttEvaluate);// 写入数据库
@@ -362,91 +387,161 @@ public class TeacherServiceImpl implements TeacherService {
 					teachingTargetEvaluateDao
 							.updateTchingTargetEvaValue(ttEvaluate);
 				}
-			}
-		}
+				// 计算a2、b2
+				/* 若已存在，则先删除。。。。。。。。。。。。待改进 */
+				/*List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
+						.selectByCursAndClazzId(course.getCursId(), clazz.getClaId());*/
+				List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
+						.selectByCursAndClazzId(course.getCursId(), clazzList.get(0).getClaId());
+				if (existCursPoints.size() != 0) {
+					for (int x = 0; x < existCursPoints.size(); x++) {
+						clazzCoursePointDao.deleteById(existCursPoints.get(x));
+					}
+				}
 
-		// 计算a2、b2
-		/* 若已存在，则先删除。。。。。。。。。。。。待改进 */
-		/*List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
-				.selectByCursAndClazzId(course.getCursId(), clazz.getClaId());*/
-		List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
-				.selectByCursAndClazzId(course.getCursId(), claId);
-		if (existCursPoints.size() != 0) {
-			for (int i = 0; i < existCursPoints.size(); i++) {
-				clazzCoursePointDao.deleteById(existCursPoints.get(i));
 			}
+			else{
+				attEvaluate.setTchtargetMidEvaValue(classMidEvaValue);
+				attEvaluate.setTchtargetFinEvaValue(classFinEvaValue);
+				attEvaluate.setTchtargetClassEvaValue(classClazzEvaValue);
+				attEvaluate.setTchtargetWorkEvaValue(classWorkEvaValue);
+				attEvaluate.setTchtargetExpEvaValue(classExpEvaValue);
+				attEvaluate.setA1(a1);
+				attEvaluate.setB1(b1);
+				b1s.add(b1);// 把b1存到一个list，一会计算a2、b2拿出来用
+				attEvaluate.setGrade(gradeName);
+				attEvaluate.setTeachingTarget(tts.get(i));
+				AverTeachingTargetEvaluate tte = teachingTargetEvaluateDao
+						.selectByGradeAndTargetId(gradeName, tts.get(i).getTchTargetId());
+				// 存在则更新，不存在则添加
+				if (tte == null) {
+					teachingTargetEvaluateDao.addTchingTargetEvaValue(attEvaluate);// 写入数据库
+				} else {
+					teachingTargetEvaluateDao
+							.updateTchingTargetEvaValue(attEvaluate);
+				}
+				// 计算a2、b2
+				/* 若已存在，则先删除。。。。。。。。。。。。待改进 */
+				/*List<ClazzCoursePoint> existCursPoints = clazzCoursePointDao
+						.selectByCursAndClazzId(course.getCursId(), clazz.getClaId());*/
+				List<AverClazzCoursePoint> existCursPoints = clazzCoursePointDao
+						.selectByCursAndGrade(course.getCursId(), gradeName);
+				if (existCursPoints.size() != 0) {
+					for (int x = 0; x < existCursPoints.size(); x++) {
+						clazzCoursePointDao.deleteByAverId(existCursPoints.get(x));
+					}
+				}
+				
 		}
-
-		// 然后计算并写入
-		List<ContributeTarget> cts = contributeTargetDao.selectByTarget(tts
-				.get(0).getTchTargetId());
-		int n = cts.size();
-		if (n == 0) {
-			throw new CursRulesNotExistException("评分规则不完整，请检查课程信息！");
 		}
-		Double[] a2 = new Double[n];
-		Double[] b2 = new Double[n];
-		Double[] targetTarValue = new Double[n];
-		for (int i = 0; i < n; i++) {
-			a2[i] = 0.0;
-			b2[i] = 0.0;
-			targetTarValue[i] = 0.0;
-		}
-		List<ContributeTarget> ct = new LinkedList<ContributeTarget>();
-		for (int j = 0; j < tts.size(); j++) {
-			ct = contributeTargetDao
-					.selectByTarget(tts.get(j).getTchTargetId());
-			for (int i = 0; i < ct.size(); i++) {
-				Double ai = ct.get(i).getConTarValue() * b1s.get(j);
-				targetTarValue[i] += ct.get(i).getConTarValue();
-				a2[i] += ai;
+		if(caculateClazzTarget.equals("0")){
+			// 然后计算并写入
+			List<ContributeTarget> cts = contributeTargetDao.selectByTarget(tts
+					.get(0).getTchTargetId());
+			int n = cts.size();
+			if (n == 0) {
+				throw new CursRulesNotExistException("评分规则不完整，请检查课程信息！");
 			}
-		}
-		for (int i = 0; i < n; i++) {
-			ClazzCoursePoint ccp = new ClazzCoursePoint();
-			if (targetTarValue[i] == 0) {
-				b2[i] = 0.0;
-			} else {
-				b2[i] = a2[i] / targetTarValue[i];
+			Double[] a2 = new Double[n];
+			Double[] b2 = new Double[n];
+			Double[] targetTarValue = new Double[n];
+			for (int x = 0; x < n; x++) {
+				a2[x] = 0.0;
+				b2[x] = 0.0;
+				targetTarValue[x] = 0.0;
 			}
-			Iterator<Clazz> itt = clazzs.iterator();
-			for(int x=0;x<clazzs.size();x++){
-				ccp.setTargetTarValue(targetTarValue[i]);
-				ccp.setA2(a2[i]);
-				ccp.setB2(b2[i]);
-				ccp.setClazz(itt.next());
+			List<ContributeTarget> ct = new LinkedList<ContributeTarget>();
+			for (int j = 0; j < tts.size(); j++) {
+				ct = contributeTargetDao
+						.selectByTarget(tts.get(j).getTchTargetId());
+				for (int x = 0; x < ct.size(); x++) {
+					Double ai = ct.get(x).getConTarValue() * b1s.get(j);
+					targetTarValue[x] += ct.get(x).getConTarValue();
+					a2[x] += ai;
+				}
+			}
+			for (int x = 0; x < n; x++) {
+				ClazzCoursePoint ccp = new ClazzCoursePoint();
+				if (targetTarValue[x] == 0) {
+					b2[x] = 0.0;
+				} else {
+					b2[x] = a2[x] / targetTarValue[x];
+				}
+				ccp.setTargetTarValue(targetTarValue[x]);
+				ccp.setA2(a2[x]);
+				ccp.setB2(b2[x]);
+				ccp.setClazz(clazzList.get(0));
 				ccp.setCourse(course);
-				ccp.setIndPoint(cts.get(i).getIndicatorPoint());
+				ccp.setIndPoint(cts.get(x).getIndicatorPoint());
 				clazzCoursePointDao.add(ccp);
 			}
-		}
-
-		// 写入isevaluate表，有则update,无则insert
-		Integer cursId = course.getCursId();
-		//写入claId
-		//Integer claId = clazz.getClaId();
-		Teacher tchrTemp = teacherDao.findBySchNum(tchrSchNum);
-		if (tchrTemp == null) {
-			throw new TeacherNotExistException("工号为" + tchrSchNum + "的老师不存在！");
-		}
-		IsEvaluate isevalTemp = isevaluateDao.findByCursAndClazz(cursId, claId);
-		if (isevalTemp != null) {
-			isevalTemp.setTeacher(tchrTemp);
-			isevalTemp.setEvaDate(new Date());
-			isevaluateDao.updateIsevaluate(isevalTemp);
-		} else {
-			Iterator<Clazz> itt = clazzs.iterator();
-			for(int x=0;x<clazzs.size();x++){
+			// 写入isevaluate表，有则update,无则insert
+			Integer cursId = course.getCursId();
+			//写入claId
+			Integer claId = clazzList.get(0).getClaId();
+			Teacher tchrTemp = teacherDao.findBySchNum(tchrSchNum);
+			if (tchrTemp == null) {
+				throw new TeacherNotExistException("工号为" + tchrSchNum + "的老师不存在！");
+			}
+			IsEvaluate isevalTemp = isevaluateDao.findByCursAndClazz(cursId, claId);
+			if (isevalTemp != null) {
+				isevalTemp.setTeacher(tchrTemp);
+				isevalTemp.setEvaDate(new Date());
+				isevaluateDao.updateIsevaluate(isevalTemp);
+			} else {
 				isevalTemp = new IsEvaluate();
 				isevalTemp.setCourse(course);
-				isevalTemp.setClazz(itt.next());
+				isevalTemp.setClazz(clazzList.get(0));
 				isevalTemp.setTeacher(tchrTemp);
 				isevalTemp.setEvaDate(new Date());
 				isevaluateDao.addIsevaluate(isevalTemp);
 			}
 		}
-
-		return true;
-	}
-
+		else{
+			// 然后计算并写入
+			List<ContributeTarget> cts = contributeTargetDao.selectByTarget(tts
+					.get(0).getTchTargetId());
+			int n = cts.size();
+			if (n == 0) {
+				throw new CursRulesNotExistException("评分规则不完整，请检查课程信息！");
+			}
+			Double[] a2 = new Double[n];
+			Double[] b2 = new Double[n];
+			Double[] targetTarValue = new Double[n];
+			for (int x = 0; x < n; x++) {
+				a2[x] = 0.0;
+				b2[x] = 0.0;
+				targetTarValue[x] = 0.0;
+			}
+			List<ContributeTarget> ct = new LinkedList<ContributeTarget>();
+			for (int j = 0; j < tts.size(); j++) {
+				ct = contributeTargetDao
+						.selectByTarget(tts.get(j).getTchTargetId());
+				for (int x = 0; x < ct.size(); x++) {
+					Double ai = ct.get(x).getConTarValue() * b1s.get(j);
+					targetTarValue[x] += ct.get(x).getConTarValue();
+					a2[x] += ai;
+				}
+			}
+			for (int x = 0; x < n; x++) {
+				AverClazzCoursePoint accp = new AverClazzCoursePoint();
+				if (targetTarValue[x] == 0) {
+					b2[x] = 0.0;
+				} else {
+					b2[x] = a2[x] / targetTarValue[x];
+				}
+				accp.setTargetTarValue(targetTarValue[x]);
+				accp.setA2(a2[x]);
+				accp.setB2(b2[x]);
+				accp.setGrade(gradeName);
+				accp.setCourse(course);
+				accp.setIndPoint(cts.get(x).getIndicatorPoint());
+				clazzCoursePointDao.add(accp);
+			}
+		}
+	
+	return true;
 }
+}
+
+

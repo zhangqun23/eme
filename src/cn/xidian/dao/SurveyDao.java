@@ -9,6 +9,8 @@ import cn.xidian.entity.Survey;
 import cn.xidian.entity.SurveyQuestion;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
+import cn.xidian.entity.SurveySelectorDouble;
+import cn.xidian.entity.SurveySelectorRelate;
 import cn.xidian.entity.Teacher;
 import cn.xidian.entity.TextAnswer;
 
@@ -76,4 +78,15 @@ public interface SurveyDao {
 
 	boolean updateSurveyDate(Integer surveyId, Date endTime);
 
+	boolean addSelectorDouble(SurveySelectorDouble surveySelectorDouble);
+
+	boolean saveSurveySelectorRelate(SurveySelectorRelate surveySelectorRelate);
+
+	boolean updateSelectorRelateNum(Integer selectorId, Integer selectorDoubleId);
+
+	SurveySelector selectSurveySelector(Integer surveyId, Integer questionId, Integer selectorNum);
+
+	SurveySelectorDouble selectSurveySelectorDouble(Integer surveyId, Integer questionId, Integer selectorNum);
+
+	List<SurveySelectorDouble> selectSurveySelectorDoubles(Integer surveyId, Integer questionId);
 }

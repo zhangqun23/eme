@@ -54,9 +54,12 @@
 									<p class="top-distance para-indent align_right">
 										<select class="top-distance" id="respondent"
 											name="survey.respondent">
-											<option value="1" <s:if test="survey.respondent==1">selected</s:if>>学生</option>
-											<option value="2" <s:if test="survey.respondent==2">selected</s:if>>老师</option>
-						 					<option value="3" <s:if test="survey.respondent==3">selected</s:if>>全部</option>
+											<option value="1"
+												<s:if test="survey.respondent==1">selected</s:if>>学生</option>
+											<option value="2"
+												<s:if test="survey.respondent==2">selected</s:if>>老师</option>
+											<option value="3"
+												<s:if test="survey.respondent==3">selected</s:if>>全部</option>
 										</select><br>
 									</p>
 									<p class="top-distance para-indent align_right">
@@ -189,6 +192,87 @@
 														</div>
 													</section>
 												</s:if>
+												<s:if test="#sq.type==4">
+													<div class="ques"
+														id="ques<s:property value="%{#status.count}" />">
+
+														<div onmouseover='showDel(this)'
+															onmouseout='hideDel(this)'>
+
+															<span id="Q<s:property value="%{#status.count}" />">Q<s:property
+																	value="%{#status.count}" />:
+															</span><input type='text'
+																id="quesname<s:property value="%{#status.count}" />"
+																value="<s:property
+												value="#sq.content" />"
+																class='input-long question-style' placeholder='问卷题目'>
+															<img id="
+				<s:property value="%{#status.count}" />"
+																class='small_img' src='img/delquest.gif' alt='删除'
+																onclick='delQuestion(this)'>
+														</div>
+
+														<div id="sel<s:property value="%{#status.count}" />"
+															class='selector<s:property value="%{#status.count}" /> selector-style'>
+															<table
+																class="table table-bordered table-condensed wjTable"
+																id="table<s:property value="%{#status.count}" />">
+																<tr>
+																	<td>请设计</td>
+																	<s:generator val="#sq.selectors" separator="_" id="s" />
+																	<s:iterator status="st" value="#request.s"
+																		id="selector">
+																		<td><input type='text'
+																			id='bl<s:property value="%{#st.count}" />'
+																			class='STC<s:property value="%{#status.count}" />'
+																			value="<s:property
+																				value="selector" />" />
+																		</td>
+																	</s:iterator>
+																</tr>
+																<s:generator val="#sq.rowSelectors" separator="_" id="t" />
+																<s:iterator status="tt" value="#request.t"
+																	id="rowSelector">
+																	<tr>
+																		<td><input type='text'
+																			value='<s:property value="rowSelector" />'
+																			class='STR<s:property value="%{#status.count}" />'
+																			id='bh<s:property value="%{#tt.count}" />' /></td>
+																		<s:generator val="#sq.selectors" separator="_" id="s" />
+																		<s:iterator status="st" value="#request.s"
+																			id="selector">
+																			<td><input type="radio"
+																				name='bh<s:property value="%{#tt.count}" />' /></td>
+																		</s:iterator>
+																</s:iterator>
+																</tr>
+															</table>
+															列：<img id='<s:property value="%{#status.count}" />'
+																name='4' class='img_small' src='img/addsel.png' alt='添加'
+																onclick='addTableCol(this)'><img
+																class='image<s:property value="%{#status.count}" /> img_small'
+																name='image<s:property value="%{#status.count}" />'
+																id='<s:property value="%{#status.count}" />'
+																src='img/delsel.gif' alt='删除'
+																onclick='delTableCol(this)'>&nbsp;&nbsp;&nbsp;&nbsp;行：<img
+																id='<s:property value="%{#status.count}" />' name='4'
+																class='img_small' src='img/addsel.png' alt='添加'
+																onclick='addTableRow(this)'><img
+																class='image<s:property value="%{#status.count}" /> img_small'
+																name='image<s:property value="%{#status.count}" />'
+																id='<s:property value="%{#status.count}" />'
+																src='img/delsel.gif' alt='删除'
+																onclick='delTableRow(this)'>
+														</div>
+														<div>
+															<input type='hidden'
+																id="AST<s:property value="%{#status.count}" />"><input
+																type='hidden'
+																id="QT<s:property value="%{#status.count}" />" value="4">
+														</div>
+
+													</div>
+												</s:if>
 											</div>
 										</section>
 									</s:iterator>
@@ -197,26 +281,27 @@
 									<input type="hidden" name="survey.surveyId"
 										value="<s:property
 										value="survey.surveyId" />">
-									<span>问卷有效时间：</span>
-									<input
-										type="text" name="survey.startTime" id="startTime"
-										style="width: 110px" value="<s:property
+									<span>问卷有效时间：</span> <input type="text" name="survey.startTime"
+										id="startTime" style="width: 110px"
+										value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.startTime})}"/>"
 										onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true'})) ">至<input
 										type="text" name="survey.endTime" id="endTime"
-										style="width: 110px"  value="<s:property
+										style="width: 110px"
+										value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.endTime})}"/>"
 										onFocus="WdatePicker(WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:'true'})) ">
-									
+
 									<%--  <input type="date" name="survey.startTime"
 										id="startTime" value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.startTime})}"/>" />至
 									<input type="date" name="survey.endTime" id="endTime" value="<s:property
 														value="%{getText('{0,date,yyyy-MM-dd}',{survey.endTime})}"/>"/>  --%>
 								</div>
-								<div class="right_align"><input
-										type="submit" class="btn" name="submit" id="submit"
-										value="保    存" onclick="linksel()" style="margin-left: 30px"></div>
+								<div class="right_align">
+									<input type="submit" class="btn" name="submit" id="submit"
+										value="保    存" onclick="linksel()" style="margin-left: 30px">
+								</div>
 							</form>
 						</div>
 						<hr>
@@ -227,6 +312,8 @@
 									type="button" name="addQues" id="2" value="多  选"
 									class="btn select_style" onclick="addQuestion(this)"><input
 									type="button" name="addQues" id="3" value="文字题"
+									class="btn select_style" onclick="addQuestion(this)"> <input
+									type="button" name="addQues" id="4" value="矩阵选择题"
 									class="btn select_style" onclick="addQuestion(this)">
 							</div>
 						</div>

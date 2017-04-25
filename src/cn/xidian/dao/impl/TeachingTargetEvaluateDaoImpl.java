@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
 import cn.xidian.dao.TeachingTargetEvaluateDao;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.TeachingTargetEvaluate;
 
 @Component("teachingTargetEvaluateDaoImpl")
@@ -34,6 +35,11 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 	}
 
 	@Override
+	public boolean addTchingTargetEvaValue(AverTeachingTargetEvaluate targetEva) {
+		currentSession().save(targetEva);
+		return true;
+	}
+	@Override
 	public boolean updateTchingTargetEvaValue(TeachingTargetEvaluate targetEva) {
 		String sql = "update TeachingTargetEvaluate tt set tt.tchtargetMidEvaValue=?, tt.tchtargetFinEvaValue=?, tt.tchtargetWorkEvaValue=?,"
 				+ "tt.tchtargetExpEvaValue=?, tt.tchtargetClassEvaValue=?,tt.a1=?, tt.b1=? "
@@ -51,11 +57,30 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 				.executeUpdate();
 		return true;
 	}
+	
+	@Override
+	public boolean updateTchingTargetEvaValue(AverTeachingTargetEvaluate targetEva) {
+		String sql = "update AverTeachingTargetEvaluate tt set tt.tchtargetMidEvaValue=?, tt.tchtargetFinEvaValue=?, tt.tchtargetWorkEvaValue=?,"
+				+ "tt.tchtargetExpEvaValue=?, tt.tchtargetClassEvaValue=?,tt.a1=?, tt.b1=? "
+				+ "where tt.grade=? and tt.teachingTarget.tchTargetId=?";
+		Query query = currentSession().createQuery(sql);
+		query.setDouble(0, targetEva.getTchtargetMidEvaValue())
+				.setDouble(1, targetEva.getTchtargetFinEvaValue())
+				.setDouble(2, targetEva.getTchtargetWorkEvaValue())
+				.setDouble(3, targetEva.getTchtargetExpEvaValue())
+				.setDouble(4, targetEva.getTchtargetClassEvaValue())
+				.setDouble(5, targetEva.getA1())
+				.setDouble(6, targetEva.getB1())
+				.setString(7, targetEva.getGrade())
+				.setInteger(8, targetEva.getTeachingTarget().getTchTargetId())
+				.executeUpdate();
+		return true;
+	}
 
 	@Override
 	public TeachingTargetEvaluate selectByClazzIdAndTargetId(Integer clazzId,
 			Integer targetId) {
-		String hql = "from TeachingTargetEvaluate tt where tt.clazz.claId=? and tt.teachingTarget.tchTargetId=? order by tchTarEvaId asc";
+		String hql = "from TeachingTargetEvaluate tt where tt.clazz.claId = (?) and tt.teachingTarget.tchTargetId=? order by tchTarEvaId asc";
 		Query query = currentSession().createQuery(hql);
 		query.setInteger(0, clazzId).setInteger(1, targetId);
 		TeachingTargetEvaluate tte = (TeachingTargetEvaluate) query
@@ -76,6 +101,20 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 		ttelist.addAll(query.list());
 		return ttelist;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AverTeachingTargetEvaluate> selectByCursNameAndGradeName(
+			String cursName,String grade) {
+		List<AverTeachingTargetEvaluate> attelist = new LinkedList<AverTeachingTargetEvaluate>();
+		// 测试id为空时不报错，和直接传数组不太一样
+		String sql = "from AverTeachingTargetEvaluate att where att.teachingTarget.tchTargetId in "
+				+ "(select t.tchTargetId from TeachingTarget t where t.course.cursName=? and t.course.isDelete=1) and att.grade=?";
+		Query query = currentSession().createQuery(sql);
+		query.setString(0, cursName).setString(1, grade);
+		attelist.addAll(query.list());
+		return attelist;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -90,6 +129,31 @@ public class TeachingTargetEvaluateDaoImpl implements TeachingTargetEvaluateDao 
 				.setString(1, claName);
 		ttelist.addAll(query.list());
 		return ttelist;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AverTeachingTargetEvaluate> selectByGradeAndClazz(String cursName,
+			 String gradeName) {
+		List<AverTeachingTargetEvaluate> ttelist = new LinkedList<AverTeachingTargetEvaluate>();
+		String sql = "from AverTeachingTargetEvaluate tt where tt.teachingTarget.tchTargetId in "
+				+ "(select t.tchTargetId from TeachingTarget t where t.course.cursName=? "
+				+ "and t.course.isDelete=1) and tt.grade = ?";
+		Query query = currentSession().createQuery(sql);
+		query.setString(0, cursName)
+				.setString(1, gradeName);
+		ttelist.addAll(query.list());
+		return ttelist;
+	}
+	
+	@Override
+	public AverTeachingTargetEvaluate selectByGradeAndTargetId(String gradeName, Integer targetId) {
+		String hql = "from AverTeachingTargetEvaluate tt where tt.grade = (?) and tt.teachingTarget.tchTargetId=? order by tchTarEvaId asc";
+		Query query = currentSession().createQuery(hql);
+		query.setString(0, gradeName).setInteger(1, targetId);
+		AverTeachingTargetEvaluate tte = (AverTeachingTargetEvaluate) query
+				.uniqueResult();
+		return tte;
 	}
 
 }

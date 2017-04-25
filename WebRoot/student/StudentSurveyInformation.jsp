@@ -80,6 +80,9 @@
 											<input type="hidden"
 												id="selQuesId<s:property value="%{#status.count}" />"
 												value="<s:property value="#sq.questionId" />">
+											<input type="hidden"
+												id="quesType<s:property value="%{#status.count}" />"
+												value="<s:property value="#sq.type" />">
 											<!-- 获取选中的选项的selectorNum -->
 										</s:if>
 										<s:if test="#sq.type==3">
@@ -93,6 +96,47 @@
 											<input type="hidden"
 												id="textQuesId<s:property value="%{#status.count}" />"
 												value="<s:property value="#sq.questionId" />">
+											<input type="hidden"
+												id="quesType<s:property value="%{#status.count}" />"
+												value="<s:property value="#sq.type" />">
+										</s:if>
+										<s:if test="#sq.type==4">
+											<li class="li_style selector-style">
+												<div>
+													<table class="table table-bordered table-condensed wjTable"
+														id="table<s:property value="%{#status.count}" />">
+														<tr>
+															<td class="tdOne">选项</td>
+															<s:generator val="#sq.selectors" separator="_" id="s" />
+															<s:iterator status="st" value="#request.s" id="selector">
+																<td><s:property value="selector" /></td>
+															</s:iterator>
+														</tr>
+														<s:generator val="#sq.rowSelectors" separator="_" id="t" />
+														<s:iterator status="tt" value="#request.t"
+															id="rowSelector">
+															<tr>
+																<td><s:property value="rowSelector" /></td>
+																<s:generator val="#sq.selectors" separator="_" id="s" />
+																<s:iterator status="st" value="#request.s" id="selector">
+																	<td><input type="radio" class="radio"
+																		id="<s:property value="%{#tt.count}" />_<s:property value="%{#st.count}" />"
+																		name="<s:property value="%{#status.count}" />_<s:property value="%{#tt.count}" />" /></td>
+																</s:iterator>
+														</s:iterator>
+														</tr>
+													</table>
+													<input type="hidden" class="selected"
+														id="seled<s:property value="%{#status.count}" />"
+														value="<s:property value="#sq.questionId" />"> <input
+														type="hidden"
+														id="selQuesId<s:property value="%{#status.count}" />"
+														value="<s:property value="#sq.questionId" />"> <input
+														type="hidden"
+														id="quesType<s:property value="%{#status.count}" />"
+														value="<s:property value="#sq.type" />">
+												</div>
+											</li>
 										</s:if>
 									</ul>
 								</s:iterator>
@@ -151,9 +195,16 @@
 			var radios = document.getElementsByClassName("radio");
 			for (var i = 0; i < radios.length; i++) {
 				if (radios[i].checked) {
+					if (radios[i].name.indexOf('_') > -1) {
+						var name = radios[i].name.split('_');
+						console.log(name);
+						document.getElementById("seled" + name[0] + "").value += "#"
+								+ radios[i].id;
+					} else {
+						document.getElementById("seled" + radios[i].name + "").value += "#"
+								+ radios[i].id;
+					}
 
-					document.getElementById("seled" + radios[i].name + "").value += "#"
-							+ radios[i].id;
 				}
 			}
 			//获取选中的多选
@@ -198,6 +249,18 @@
 					var num = selected[k].id.substr(5, selected[k].id.length);
 					alert("第" + num + "题未做！请将问卷填写完整！");
 					return false;
+				}
+				var j = k + 1;
+				var tab = document.getElementById("quesType" + j + "").value;
+				if (tab == "4") {
+					var tableRows = document.getElementById("table" + j + "").rows;
+					var arr = selected[k].value.split("#");
+					if (arr.length < tableRows.length) {
+						var num = selected[k].id.substr(5,
+								selected[k].id.length);
+						alert("第" + num + "题未做！请将问卷填写完整！");
+						return false;
+					}
 				}
 
 			}
