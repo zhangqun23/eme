@@ -310,6 +310,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
 
 			List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
+			
 			claCursB2s = courseTargetDetailService.getB2(ccPoints);
 			course = courseService.findByName(cursName);
 		} catch (CourseNotExistException e) {

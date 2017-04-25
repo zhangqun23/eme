@@ -18,6 +18,11 @@
 			</li>
 			<li><img src="img/png-link.png" /><a href="Teacher_Management_5_excute">课程达成度评价</a>
 			</li>
+			<li><img src="img/png-link.png" /><a href="Word_selectCourseContent">敏敏试验</a>
+			</li>
+			</li>
+			<li><img src="img/png-link.png" /><a href="Word_selectCourseContent0">慧敏君试验</a>
+			</li>
 			<li><img src="img/png-link.png" /><a href="FileDown_downFile?fileName=学生成绩模版.rar&saveFileName=学生成绩模版.rar">帮助</a>
 			</li>
 		</ul>

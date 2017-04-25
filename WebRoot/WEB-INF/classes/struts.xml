@@ -183,6 +183,20 @@
 				<param name="contentType">application/vnd.ms-excel,charset=utf-8</param>
 			</result>
 		</action>
+		<action name="Word_*" class="cn.xidian.web.action.WordAction"
+			method="{1}">
+			<result name="word" type="stream">
+				<param name="inputName">fileInput</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+			</result>
+			
+			<result name="WORD" type="stream">
+				<param name="inputName">fileInput</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+			</result>
+		</action>
 	</package>
 
 </struts>

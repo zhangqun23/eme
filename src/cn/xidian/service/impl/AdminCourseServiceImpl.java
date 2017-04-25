@@ -35,7 +35,7 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 			return null;
 		}
 		
-		Set<Course> retCourses = new LinkedHashSet<Course>();
+		Set<Course> retCourses =new LinkedHashSet<Course>();
 		retCourses.add(courseDao.findByNum(limits.getCursNum()));
 		retCourses.add(courseDao.findByNameAndTerm(limits.getCursName()));
 		retCourses.remove(null);

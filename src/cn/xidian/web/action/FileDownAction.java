@@ -1,6 +1,7 @@
 package cn.xidian.web.action;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
@@ -26,32 +27,37 @@ public class FileDownAction extends ActionSupport implements RequestAware {
 		request.put("Message", "下载成功！");
 		return "success";
 	}
+
+	
+
 	public String downStuFile() throws Exception {
 		String downFileName = new String(saveFileName.getBytes("ISO8859-1"), "utf-8");
 		fileInput = ServletActionContext.getServletContext().getResourceAsStream("upload\\" + downFileName);
 		request.put("Message", "下载成功！");
 		return "success";
 	}
+
 	public Map<String, Object> getRequest() {
 		return request;
 	}
 
 	public String exportfile() throws Exception {
-//		String downFileName = new String(saveFileName.getBytes("ISO8859-1"),
-//		"utf-8");
-		
+		// String downFileName = new String(saveFileName.getBytes("ISO8859-1"),
+		// "utf-8");
+
 		fileInput = ServletActionContext.getServletContext().getResourceAsStream("export//ITEM.doc");
 		request.put("Message", "下载成功！");
 		return "success";
-			}
+	}
+
 	public String ExportFile() throws Exception {
-//		String downFileName = new String(saveFileName.getBytes("ISO8859-1"),
-//		"utf-8");
-		
+		// String downFileName = new String(saveFileName.getBytes("ISO8859-1"),
+		// "utf-8");
+
 		fileInput = ServletActionContext.getServletContext().getResourceAsStream("export//ITEM.doc");
 		request.put("Message", "下载成功！");
 		return "success";
-			}
+	}
 
 	public void setRequest(Map<String, Object> request) {
 		this.request = request;
