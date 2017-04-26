@@ -149,6 +149,7 @@
 													</th>
 												</s:iterator>
 												<th>操作</th>
+												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -159,6 +160,8 @@
 													</s:iterator>
 													<td><a
 														href="javascript:postwith('Teacher_PointValue_Detail_getClaCursTargetDetail',{'clazzName':'<s:property value="#b1s[0]"/>'})">详细</a></td>
+													<td><a
+														href="Word_selectCourseContent?cursName=<s:property value='cursName' />&clazzName=<s:property value="#b1s[0]"/>">导出word</a></td>
 												</tr>
 											</s:iterator>
 										</tbody>
