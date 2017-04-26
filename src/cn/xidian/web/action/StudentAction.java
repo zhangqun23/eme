@@ -42,6 +42,8 @@ import cn.xidian.entity.TeachingTarget;
 import cn.xidian.entity.TeachingTargetEvaluate;
 import cn.xidian.entity.TextAnswer;
 import cn.xidian.entity.User;
+import cn.xidian.exception.CourseNotExistException;
+import cn.xidian.exception.CursRulesNotExistException;
 import cn.xidian.service.CourseService;
 import cn.xidian.service.StudentActivityService;
 import cn.xidian.service.StudentCourseService;
@@ -506,15 +508,19 @@ public class StudentAction extends ActionSupport implements RequestAware {
 
 	//学生查询单门课程达成度
 	public String getStuCaculateTarget() {
-		StudentCourse sCourse = studentService.getSCourse(Integer.parseInt(stuCursId));
-		List<TeachingTarget> targets = 
-				teachingTargetService.selectByCursName(sCourse.getCourse().getCursName());
-		List<TeachingTargetEvaluate> stuEvaluate = 
-				studentService.caculateBySCourse(sCourse);
-		CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
-		claCursB1s = courseTargetDetailService.getB1(targets, stuEvaluate);
-		claCursB2s = studentService.getB2(sCourse,claCursB1s);
-		course = courseService.findByName(sCourse.getCourse().getCursName());
+		try{
+			StudentCourse sCourse = studentService.getSCourse(Integer.parseInt(stuCursId));
+			List<TeachingTarget> targets = 
+					teachingTargetService.selectByCursName(sCourse.getCourse().getCursName());
+			List<TeachingTargetEvaluate> stuEvaluate = 
+					studentService.caculateBySCourse(sCourse);
+			CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
+			claCursB1s = courseTargetDetailService.getB1(targets, stuEvaluate);
+			claCursB2s = studentService.getB2(sCourse,claCursB1s);
+			course = courseService.findByName(sCourse.getCourse().getCursName());
+		}catch (CursRulesNotExistException e) {
+			request.put("Message", e.getMessage());
+		}
 
 		return "studentTarget";
 	}
