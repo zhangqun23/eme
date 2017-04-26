@@ -217,4 +217,13 @@ public class StudentDaoImpl implements StudentDao {
 		return student;
 	}
 
+	@Override
+	public StudentCourse getEvaPer(Integer stuCursId) {
+		String sql = "from StudentCourse sc where sc.stuCursId=?";
+		Query query = currentSession().createQuery(sql);
+		query.setInteger(0, stuCursId);
+		StudentCourse sCourse = (StudentCourse) query.uniqueResult();
+		return sCourse;
+	}
+
 }

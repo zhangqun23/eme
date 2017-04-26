@@ -40,4 +40,6 @@ public interface StudentDao {
 
 	List<StuEvaluateResult> selectStuEvaluateResults(Integer stuId, String schoolYear);
 
+	StudentCourse getEvaPer(Integer stuCursId);
+
 }
