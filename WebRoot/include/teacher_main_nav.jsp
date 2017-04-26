@@ -33,14 +33,14 @@
 					<!-- 	<li><a href="TeacherStudent_Survey_List_selectAllSurveys">问卷调查设计</a></li> -->
 					</ul></li>
 			</s:if>
-			<s:if test="#session.tUser.isManager==1">
+			<%-- <s:if test="#session.tUser.isManager==1"> --%>
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">问卷调查&nbsp;</a>
 					<ul class="dropdown-menu">
 						<li><a href="TeacherStudent_Survey_List_selectAllSurveys">问卷设计</a></li>
 						<li><a href="TeacherStudent_Survey_List2_selectPublishedSurveys">问卷数据分析</a></li>
 					</ul></li>
-			</s:if>
+			<%-- </s:if> --%>
 
 
 			<s:if test="#session.tUser.isCounselor==1">

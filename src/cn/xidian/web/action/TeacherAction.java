@@ -353,7 +353,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			session.put("cursName", cursName);
 			// 获取课程的教学目标
 			targets = teachingTargetService.selectByCursName(cursName);
-			Course course = targets.get(0).getCourse();
+			course = targets.get(0).getCourse();
 			List<TeachingTargetEvaluate> ttValue = courseService.selectByCursNameAndGrade(cursName, grade);
 			List<AverTeachingTargetEvaluate> attValue = courseService.selectByCursNameAndGradeName(cursName, grade);
 			if (attValue.size() == 0 ) {

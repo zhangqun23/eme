@@ -7,7 +7,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name="clazz_course_point")
 public class ClazzCoursePoint {//课程-指标点对应关系

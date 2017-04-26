@@ -11,6 +11,7 @@ import cn.xidian.entity.SurveyQuestion;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
 import cn.xidian.entity.SurveySelectorDouble;
+import cn.xidian.entity.SurveySelectorRelate;
 import cn.xidian.entity.Teacher;
 import cn.xidian.entity.TextAnswer;
 
@@ -56,5 +57,7 @@ public interface SurveyService {
 	boolean updateSurveyDate(Integer surveyId, String strEndTime);
 
 	List<SurveySelectorDouble> selectSurveySelectorDoubles(Integer surveyId, Integer questionId);
+
+	List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorDoubleId);
 
 }

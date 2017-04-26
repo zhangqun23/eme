@@ -64,7 +64,7 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 			return null;
 		}
 		Set<Student> students = new LinkedHashSet<Student>();
-		
+
 		Integer i = 0;
 		StringBuffer sb = new StringBuffer();
 		for (Clazz element : clazzs) {
@@ -78,34 +78,37 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 			}
 		}
 		String clazzRange = sb.toString();
-		String sql = "from Student where 1=1";
-		if (limits.getStuClazz() != null) {
-			sql += " and claId=" + limits.getStuClazz();
-			if (!limits.getStuSchNum().equals("")) {
-				sql += " and stuSchNum  like '%" + limits.getStuSchNum()+"%'";
-				if (!limits.getStuName().equals("")) {
-					sql += " and stuName like '%" + limits.getStuName() +"%'";
+		if (!clazzRange.equals("")) {
+			String sql = "from Student where 1=1";
+			if (limits.getStuClazz() != null) {
+				sql += " and claId=" + limits.getStuClazz();
+				if (!limits.getStuSchNum().equals("")) {
+					sql += " and stuSchNum  like '%" + limits.getStuSchNum() + "%'";
+					if (!limits.getStuName().equals("")) {
+						sql += " and stuName like '%" + limits.getStuName() + "%'";
+					}
+				} else {
+					if (!limits.getStuName().equals("")) {
+						sql += " and stuName like '%" + limits.getStuName() + "%'";
+					}
 				}
 			} else {
-				if (!limits.getStuName().equals("")) {
-					sql += " and stuName like '%" + limits.getStuName() + "%'";
+				sql += " and claId in (" + clazzRange + ")";
+				if (!limits.getStuSchNum().equals("")) {
+					sql += " and stuSchNum like '%" + limits.getStuSchNum() + "%'";
+					if (!limits.getStuName().equals("")) {
+						sql += " and stuName like '%" + limits.getStuName() + "%'";
+					}
+				} else {
+					if (!limits.getStuName().equals("")) {
+						sql += " and stuName like '%" + limits.getStuName() + "%'";
+					}
 				}
 			}
-		} else {
-			sql += " and claId in (" + clazzRange + ")";
-			if (!limits.getStuSchNum().equals("")) {
-				sql += " and stuSchNum like '%" + limits.getStuSchNum()+"%'";
-				if (!limits.getStuName().equals("")) {
-					sql += " and stuName like '%" + limits.getStuName() + "%'";
-				}
-			} else {
-				if (!limits.getStuName().equals("")) {
-					sql += " and stuName like '%" + limits.getStuName() + "%'";
-				}
-			}
+			Query query = currentSession().createQuery(sql);
+			students.addAll(query.list());
 		}
-		Query query = currentSession().createQuery(sql);
-		students.addAll(query.list());
+
 		return students;
 	}
 
@@ -118,7 +121,6 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 		Clazz clazz = (Clazz) query.uniqueResult();
 		return clazz;
 	}
-
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -144,7 +146,6 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 		return stuEvaluateResults;
 	}
 
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<StudentCourse> findStuGradesByPage(Integer stuId, String schoolYear, Integer begin, Integer limit) {
@@ -157,7 +158,6 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 		return studentCourses;
 	}
 
-
 	@Override
 	public boolean addStuEvaScore(StuEvaluateResult stuEvaluateResult) {
 		// TODO Auto-generated method stub
@@ -169,11 +169,11 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 	@Override
 	public List<StuEvaluateResult> selectSummaryStuEvas(Integer claId, String schoolYear) {
 		// TODO Auto-generated method stub
-		String sql="from StuEvaluateResult where claId=? and schoolYear=?";
-		Query query =currentSession().createQuery(sql);
+		String sql = "from StuEvaluateResult where claId=? and schoolYear=?";
+		Query query = currentSession().createQuery(sql);
 		query.setInteger(0, claId);
 		query.setString(1, schoolYear);
-		List<StuEvaluateResult> stuEvaluateResults=query.list();
+		List<StuEvaluateResult> stuEvaluateResults = query.list();
 		return stuEvaluateResults;
 	}
 
@@ -190,14 +190,15 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<StuEvaluateResult> findStuEvaByPageCid(Integer itemEvaTypeId,Integer claId, String schoolYear, Integer begin, Integer limit) {
+	public List<StuEvaluateResult> findStuEvaByPageCid(Integer itemEvaTypeId, Integer claId, String schoolYear,
+			Integer begin, Integer limit) {
 		// TODO Auto-generated method stub
-		String sql="from StuEvaluateResult where claId=? and schoolYear=? and itemEvaTypeId=?";
-		Query query=currentSession().createQuery(sql).setFirstResult(begin).setMaxResults(limit);
+		String sql = "from StuEvaluateResult where claId=? and schoolYear=? and itemEvaTypeId=?";
+		Query query = currentSession().createQuery(sql).setFirstResult(begin).setMaxResults(limit);
 		query.setInteger(0, claId);
 		query.setString(1, schoolYear);
 		query.setInteger(2, itemEvaTypeId);
-		List<StuEvaluateResult> stuEvaluateResults=query.list();
+		List<StuEvaluateResult> stuEvaluateResults = query.list();
 		return stuEvaluateResults;
 	}
 
@@ -205,14 +206,14 @@ public class TeacherStudentDaoImpl implements TeacherStudentDao {
 	@Override
 	public List<StuEvaluateResult> findStuEvas(Integer itemEvaTypeId, Integer claId, String schoolYear) {
 		// TODO Auto-generated method stub
-		String sql="from StuEvaluateResult where claId=? and schoolYear=? and itemEvaTypeId=?";
-		Query query=currentSession().createQuery(sql);
+		String sql = "from StuEvaluateResult where claId=? and schoolYear=? and itemEvaTypeId=?";
+		Query query = currentSession().createQuery(sql);
 		query.setInteger(0, claId);
 		query.setString(1, schoolYear);
 		query.setInteger(2, itemEvaTypeId);
-		List<StuEvaluateResult> stuEvaluateResults=query.list();
+		List<StuEvaluateResult> stuEvaluateResults = query.list();
 		return stuEvaluateResults;
-		
+
 	}
 
 }
