@@ -393,7 +393,7 @@ public class WordHelper<T> {
 				// 处理段落
 				List<XWPFParagraph> paragraphList = doc.getParagraphs();
 				processParagraphs(paragraphList, param, doc);
-
+ 
 				// 处理表格
 				Iterator<XWPFTable> it = doc.getTablesIterator();
 				while (it.hasNext()) {

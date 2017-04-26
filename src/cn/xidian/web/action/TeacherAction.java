@@ -353,13 +353,9 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			session.put("cursName", cursName);
 			// 获取课程的教学目标
 			targets = teachingTargetService.selectByCursName(cursName);
-			Course course = targets.get(0).getCourse();
+			course = targets.get(0).getCourse();
 			List<TeachingTargetEvaluate> ttValue = courseService.selectByCursNameAndGrade(cursName, grade);
 			List<AverTeachingTargetEvaluate> attValue = courseService.selectByCursNameAndGradeName(cursName, grade);
-			if (attValue.size() == 0 ) {
-				request.put("Message", "对不起，没有找到相关信息！");
-				return "tchrManagement5";
-			}
 			Set<String> clazz = new LinkedHashSet<String>();
 			List<String> clazzs = new LinkedList<String>();
 
@@ -382,12 +378,14 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				}
 				b1.add(B1);// 将B1数据加入b1
 			}
-			List<String> B1 = new LinkedList<String>();
-			B1.add(grade+"级");
-			for(int i = 0; i < attValue.size(); i++){
-				B1.add(df.format(attValue.get(i).getB1()));
+			if (attValue.size() != 0 ) {
+				List<String> B1 = new LinkedList<String>();
+				B1.add(grade+"级");
+				for(int i = 0; i < attValue.size(); i++){
+					B1.add(df.format(attValue.get(i).getB1()));
+				}
+				b1.add(B1);
 			}
-			b1.add(B1);
 			// 以上获得第一张表的数据
 			// 以下是第二张表
 			List<ClazzCoursePoint> cursPoints = clazzCoursePointService.selectBycursNameAndTerm(cursName);
@@ -411,13 +409,15 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				}
 				b2.add(B2);// 将B1数据加入b1
 			}
-			List<String> B2 = new LinkedList<String>();
-			B2.add(grade+"级");
-				for (int k = 0; k < acursPoints.size(); k++) {
-						B2.add(df.format(acursPoints.get(k).getB2()));
-				}
-			
-			b2.add(B2);
+			if(acursPoints.size() != 0){
+				List<String> B2 = new LinkedList<String>();
+				B2.add(grade+"级");
+					for (int k = 0; k < acursPoints.size(); k++) {
+							B2.add(df.format(acursPoints.get(k).getB2()));
+					}
+				
+				b2.add(B2);
+			}
 		} catch (CourseNotExistException e) {
 			request.put("Message", e.getMessage());
 		}

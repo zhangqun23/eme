@@ -1,0 +1,7 @@
+/applicationContext.xml
+/cn/
+/constants/
+/db.properties
+/hibernate.cfg.xml
+/log4j.properties
+/struts.xml

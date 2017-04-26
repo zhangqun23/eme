@@ -100,8 +100,8 @@
 											</s:iterator>
 										</tbody>
 									</table>
-									<!-- <a href="Student_Award_Info_createword">导出表格</a>
-									<a href="FileDown_exportfile?fileName=导出文档">下载</a> -->
+									 <a href="Student_Award_Info_createword">导出表格</a>
+									<a href="FileDown_exportfile?fileName=导出文档">下载</a>
 								</div>
 							</div>
 						</div>
