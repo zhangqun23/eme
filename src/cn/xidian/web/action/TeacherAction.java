@@ -356,6 +356,10 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			course = targets.get(0).getCourse();
 			List<TeachingTargetEvaluate> ttValue = courseService.selectByCursNameAndGrade(cursName, grade);
 			List<AverTeachingTargetEvaluate> attValue = courseService.selectByCursNameAndGradeName(cursName, grade);
+			if (attValue.size() == 0 ) {
+				request.put("Message", "对不起，没有找到相关信息！");
+				return "tchrManagement5";
+			}
 			Set<String> clazz = new LinkedHashSet<String>();
 			List<String> clazzs = new LinkedList<String>();
 

@@ -131,6 +131,7 @@
 				<param name="location">Student_Survey_List1_selectSurveys?message=${message}</param>
 				<param name="encode">true</param>
 			</result>
+			<result name="studentTarget">/student/StudentPointValueDetail.jsp</result>
 			<!-- <result name="surveyDone" type="redirect"> Student_Survey_List1_selectSurveys?ss=${amount} 
 				</result> -->
 		</action>
