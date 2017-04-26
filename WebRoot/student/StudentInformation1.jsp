@@ -2,8 +2,7 @@
 <%@ taglib uri="/struts-tags" prefix="s"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
 
@@ -31,57 +30,55 @@
 					<div class="row">
 						<div class="span9 div-content-white-bgr">
 							<!-- 学生基本信息 -->
-								<div class="div-inf-bar">
-									<label>基本信息</label>
-								</div>
-								<div class="div-inf-tbl">
+							<div class="div-inf-bar">
+								<label>基本信息</label>
+							</div>
+							<div class="div-inf-tbl">
 								<table class="table table-bordered">
 									<tbody>
 										<tr>
 											<td>学号</td>
-											<td><s:property value="s.stuSchNum"/></td>
+											<td><s:property value="s.stuSchNum" /></td>
 											<td>姓名</td>
-											<td><s:property value="s.stuName"/></td>
+											<td><s:property value="s.stuName" /></td>
 											<td class="img-stu" rowspan=4><img
-												src="stuImg/<s:property value="s.stuSchNum"/>.jpg" />
-											</td>
+												src="stuImg/<s:property value="s.stuSchNum"/>.jpg" /></td>
 										</tr>
 										<tr>
 											<td>性别</td>
-											<td><s:if test="%{s.stuGender==true}">男</s:if> 
-										<s:else>女</s:else></td>
+											<td><s:if test="%{s.stuGender==true}">男</s:if> <s:else>女</s:else></td>
 											<td>生日</td>
-											<td><s:property value="s.stuBirthday"/></td>
+											<td><s:property value="s.stuBirthday" /></td>
 										</tr>
 										<tr>
 											<td>籍贯</td>
-											<td><s:property value="s.stuNativePlace"/></td>
+											<td><s:property value="s.stuNativePlace" /></td>
 											<td>民族</td>
-											<td><s:property value="s.stuNation"/></td>
+											<td><s:property value="s.stuNation" /></td>
 										</tr>
 										<tr>
 											<td>院系</td>
-											<td><s:property value="s.dept.deptName"/></td>
+											<td><s:property value="s.dept.deptName" /></td>
 											<td>班级</td>
-											<td><s:property value="clazz"/></td>
+											<td><s:property value="clazz" /></td>
 										</tr>
 										<tr>
 											<td>入学日期</td>
-											<td><s:property value="s.stuAttendDate"/></td>
+											<td><s:property value="s.stuAttendDate" /></td>
 											<td>学制</td>
-											<td colspan=2><s:property value="s.stuSchLength"/></td>
+											<td colspan=2><s:property value="s.stuSchLength" /></td>
 										</tr>
 										<tr>
 											<td>手机</td>
-											<td><s:property value="s.stuPhone"/></td>
+											<td><s:property value="s.stuPhone" /></td>
 											<td>宿舍电话</td>
-											<td colspan=2><s:property value="s.stuDomiPhone"/></td>
+											<td colspan=2><s:property value="s.stuDomiPhone" /></td>
 										</tr>
 										<tr>
 											<td>邮箱</td>
-											<td><s:property value="s.stuMail"/></td>
+											<td><s:property value="s.stuMail" /></td>
 											<td>通信地址</td>
-											<td colspan=2><s:property value="s.stuCommAddr"/></td>
+											<td colspan=2><s:property value="s.stuCommAddr" /></td>
 										</tr>
 									</tbody>
 								</table>
@@ -96,13 +93,13 @@
 									<div class="span5 offset1 div-self-intr">
 										<img src="img/vesion-Chinese.jpg">
 										<div class="div-self-content">
-											<s:property value="s.selfIntroduce"/>
+											<s:property value="s.selfIntroduce" />
 										</div>
 									</div>
 									<div class="span5 div-self-intr">
 										<img src="img/vesion-English.jpg">
 										<div class="div-self-content">
-											<s:property value="s.selfEngIntroduce"/>
+											<s:property value="s.selfEngIntroduce" />
 										</div>
 									</div>
 								</div>
@@ -110,6 +107,36 @@
 							<!-- 自我介绍完 -->
 						</div>
 					</div>
+					<!-- 模态框，用于添加参与活动信息 -->
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel" aria-hidden="true"
+						style="display: none">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">个人信息补充</h5>
+								</div>
+								<div class="modal-body">
+									<form action="Student_Information_1_updateStuMail"
+										method="post" class="form-horizontal form-add"
+										enctype="multipart/form-data"
+										onsubmit="javascript:return isEmpty(1)">
+										<div class="control-group">
+											<label class="control-label">请输入你的邮箱：</label>
+											<div class="controls">
+												<input type="email" name="s.stuMail" required>
+											</div>
+										</div>
+										<div class="div-btn">
+											<input type="submit" value="提交" class="btn">
+										</div>
+									</form>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- 模态框，用于添加参与活动信息完 -->
 				</div>
 			</div>
 		</div>
@@ -118,9 +145,21 @@
 	<script type="text/javascript" src="js/jquery1.12.1.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 	<script>
-	$(function(){
-		$(".container").css("min-height",$(document).height()-90-88-41+"px");//container的最小高度为“浏览器当前窗口文档的高度-header高度-footer高度”
-	});
-</script>
+		$(function() {
+			$(".container").css("min-height",
+					$(document).height() - 90 - 88 - 41 + "px");//container的最小高度为“浏览器当前窗口文档的高度-header高度-footer高度”
+
+			$.getJSON("Json_selectStudentInfo", {}, function(data) {
+				if (data.s.stuMail == "" || data.s.stuMail == null) {
+					$('#myModal').modal({
+						backdrop : 'static',
+						keyboard : false
+					});
+					$('#myModal').modal('show');
+				}
+			});
+
+		});
+	</script>
 </body>
 </html>

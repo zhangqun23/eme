@@ -32,7 +32,7 @@
 						<!-- 教师基本信息 -->
 						<div class="div-tchr-basic-inf">
 							<div class="div-inf-bar">
-								<label>基本资料</label>
+								<label>提示：对不起，您没有权限进行此操作！</label>
 							</div>
 						</div>
 					</div>

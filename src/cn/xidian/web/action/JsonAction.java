@@ -406,6 +406,12 @@ public class JsonAction extends ActionSupport implements RequestAware {
 		return "list";
 	}
 
+	public String selectStudentInfo() {
+		String schNum = tUser.getSchNum();
+		s = studentService.selectInfBySchNum(schNum);
+		return "list";
+	}
+
 	public List<ItemEvaluateScore> getItemEvaluateScores() {
 		return itemEvaluateScores;
 	}

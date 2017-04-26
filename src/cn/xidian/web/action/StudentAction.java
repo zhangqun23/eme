@@ -485,6 +485,22 @@ public class StudentAction extends ActionSupport implements RequestAware {
 		return "surveyDone";
 	}
 
+	public String updateStuMail() {
+		String mail=s.getStuMail();
+		String schNum = tUser.getSchNum();
+		s = studentService.selectInfBySchNum(schNum);
+		s.setStuMail(mail);
+		boolean isSuccess = studentService.updateInfBySchNum(s);
+		if (isSuccess) {
+			request.put("Message", "提交成功！");
+			message = "提交成功！！";
+		} else {
+			request.put("Message", "提交失败！");
+			message = "提交失败！！";
+		}
+		return "student";
+	}
+	
 	public Student getS() {
 		return s;
 	}
