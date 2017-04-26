@@ -3,6 +3,7 @@ package cn.xidian.web.action;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -12,8 +13,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.struts2.interceptor.RequestAware;
-import org.apache.struts2.json.annotations.JSON;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +43,7 @@ import cn.xidian.service.SurveyService;
 import cn.xidian.service.TeacherService;
 import cn.xidian.service.TeacherStudentService;
 import cn.xidian.web.bean.EvaluateResult;
+import cn.xidian.web.bean.TableData;
 
 @SuppressWarnings("serial")
 @Component(value = "JsonAction")
@@ -100,6 +100,8 @@ public class JsonAction extends ActionSupport implements RequestAware {
 	private String strEndTime;
 	private Survey survey;
 	private List<SurveySelectorDouble> ssd;
+	private List<TableData> tds;
+	private List<String> yaxis;
 	Map<String, Object> session = ActionContext.getContext().getSession();
 	User tUser = (User) session.get("tUser");
 
@@ -376,17 +378,26 @@ public class JsonAction extends ActionSupport implements RequestAware {
 
 	// 获取问卷表格的数据统计表
 	public String selectSurveyTableResult() {
-		ssd = surveyService.selectSurveySelectorDoubles(surveyId, questionId);
-		for (int i = 0; i < ssd.size(); i++) {
+		surveySelectors = surveyService.selectSurveySelectors(surveyId, questionId);
+		yaxis = new ArrayList<String>();
+		tds = new ArrayList<TableData>();
+		for (int i = 0; i < surveySelectors.size(); i++) {
 			List<SurveySelectorRelate> ssr = surveyService
-					.selectSurveySelectorRelates(ssd.get(i).getSelectorDoubleId());
-			Object o = new Object();
-			int[] selectorArr = new int[ssr.size()];
+					.selectSurveySelectorRelates(surveySelectors.get(i).getSelectorId());
+			TableData td = new TableData();
+			td.setName(surveySelectors.get(i).getContent());
+			Integer[] selectorArr = new Integer[ssr.size()];
 			for (int j = 0; j < ssr.size(); j++) {
 				selectorArr[j] = ssr.get(j).getSumNum();
+				String ss = ssr.get(j).getSurveySelectorDouble().getContent();
+				if (i == 0) {
+					yaxis.add(ssr.get(j).getSurveySelectorDouble().getContent());
+				}
 			}
+			td.setData(selectorArr);
+			tds.add(td);
 		}
-		System.out.println("zasd" + ssd.size());
+		System.out.println(yaxis);
 		return "list";
 	}
 
@@ -711,6 +722,22 @@ public class JsonAction extends ActionSupport implements RequestAware {
 
 	public void setSsd(List<SurveySelectorDouble> ssd) {
 		this.ssd = ssd;
+	}
+
+	public List<TableData> getTds() {
+		return tds;
+	}
+
+	public void setTds(List<TableData> tds) {
+		this.tds = tds;
+	}
+
+	public List<String> getYaxis() {
+		return yaxis;
+	}
+
+	public void setYaxis(List<String> yaxis) {
+		this.yaxis = yaxis;
 	}
 
 }

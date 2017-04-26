@@ -13,16 +13,27 @@
 			<interceptor name="authority"
 				class="cn.xidian.interceptor.LoginInterceptor">
 			</interceptor>
+			<interceptor name="method"
+				class="cn.xidian.interceptor.MethodInterceptor">
+			</interceptor>
 			<!-- 拦截器栈 -->
 			<interceptor-stack name="securityStack">
 				<!-- <interceptor-ref name="defaultStack" /> -->
 				<interceptor-ref name="authority" />
+				<interceptor-ref name="method">
+					<!-- 这里使用了反射的方法，实际上调用的是拦截器类的setName方法 -->
+					<param name="name">覆盖了默认值</param>
+					<!-- 有多个方法需要（不）被拦截器拦截，则多个方法名之间用逗号分隔即可。 -->
+					<param name="excludeMethods"></param>
+					<param name="includeMethods">updateCursBasicInf,modifyTargetByCursId,modifySpcConByCursId,modifyTchModeByCursId,modifyBookByCursId,modifyNoteByCursId,modifyTargetValueByCursId,uploadFile,calculateClazzCursTarget,modifyPointByCursId,selectTargetAndPointById,addTchrSurveyDone</param>
+				</interceptor-ref>
 				<interceptor-ref name="defaultStack"></interceptor-ref>
 			</interceptor-stack>
 		</interceptors>
 		<global-results>
 			<!-- 当返回"tsLogin"时，转入/login.jsp页面 -->
 			<result name="tsLogin">/login_frame.jsp</result>
+			<result name="ts">/userErrorLimit.jsp</result>
 		</global-results>
 		<!-- 登录 -->
 		<action name="loginAction" class="loginAction" method="loginValidate">

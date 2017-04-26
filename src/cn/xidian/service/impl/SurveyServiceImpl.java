@@ -334,9 +334,9 @@ public class SurveyServiceImpl implements SurveyService {
 	}
 
 	@Override
-	public List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorDoubleId) {
+	public List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorId) {
 		// TODO Auto-generated method stub
-		List<SurveySelectorRelate> ssr = surveyDao.selectSurveySelectorRelates(selectorDoubleId);
+		List<SurveySelectorRelate> ssr = surveyDao.selectSurveySelectorRelates(selectorId);
 		return ssr;
 	}
 }

@@ -164,22 +164,33 @@ function showTableChart(obj, num) {
 		surveyId : surveyId,
 		questionId : obj.name
 	}, function(data) {
-
 		if (num == 4) {
-			var arr = [];
-			$.each(data.surveySelectors, function(i, value) {
-				var selector = [];
-				selector[0] = ""
-						+ String.fromCharCode(64 + parseInt(value.selectorNum))
-						+ "";
-				selector[1] = value.sumNum;
-				arr[i] = selector;
+			var da = [];
+			var selector = [];
+			console.log(data.yaxis);
+			console.log("选项" + selector);
+			$.each(data.tds, function(i, value) {
+				da.push(value);
 			});
-			pieChartForm("#jqChart" + obj.name + "", "", " ", arr);
+			console.log(da);
+			barChartForm("#jqChart" + obj.name + "", "", "", data.yaxis, "",
+					"个", da);
 			$("#svgChart" + obj.name + "").val(
 					$("#jqChart" + obj.name + "").highcharts().getSVG());
 		}
 	});
 	$("#img" + obj.name + "").css("display", "none");
 	$("#image" + obj.name + "").css("display", "inline");
+}
+function barChartForm(elementId, title, subTitle, hx_Axis, hy_title, unit, data) {
+	var bar = new BarChart({
+		elementId : elementId,
+		title : title,
+		subTitle : subTitle,
+		hx_Axis : hx_Axis,
+		hy_title : hy_title,
+		unit : unit,
+		data : data
+	});
+	bar.init();
 }

@@ -426,11 +426,11 @@ public class SurveyDaoImpl implements SurveyDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorDoubleId) {
+	public List<SurveySelectorRelate> selectSurveySelectorRelates(Integer selectorId) {
 		// TODO Auto-generated method stub
-		String sql = "from SurveySelectorRelate where selectorDoubleId=? order by selectorId";
+		String sql = "from SurveySelectorRelate where selectorId=? order by selectorDoubleId";
 		Query query = currentSession().createQuery(sql);
-		query.setInteger(0, selectorDoubleId);
+		query.setInteger(0, selectorId);
 		List<SurveySelectorRelate> ssr = query.list();
 		return ssr;
 	}
