@@ -34,7 +34,7 @@ public class WordAction extends ActionSupport implements RequestAware, SessionAw
 	private InputStream fileInput;
 	private String fileName;
 	private String saveFileName;
-	//课程教学目标达成度评价表（导出word）
+	// 课程教学目标达成度评价表（导出word）
 	private String cursName;
 	private String clazzName;
 
@@ -44,7 +44,6 @@ public class WordAction extends ActionSupport implements RequestAware, SessionAw
 	public void setExportWordService(ExportWordService exportWordService) {
 		this.exportWordService = exportWordService;
 	}
-	
 
 	public String selectCourseContent() throws UnsupportedEncodingException {
 		Integer cId = (Integer) session.get("cursId");
@@ -53,15 +52,13 @@ public class WordAction extends ActionSupport implements RequestAware, SessionAw
 				.getRealPath(constants.ReportFormConstants.EXPORTWORD110_PATH);// 模板路径
 
 		Map<String, String> map = new HashMap<String, String>();
-		
-		//cursName = session.get("cursName").toString();
-		cursName="机械制造基础";
-		clazzName="1304011";
-		
-		map = exportWordService.selectCourseContent(39, path, modelPath,cursName,clazzName);
+
+		// cursName = session.get("cursName").toString();
+		cursName = new String(cursName.getBytes("ISO8859-1"), "utf-8");
+		map = exportWordService.selectCourseContent(39, path, modelPath, cursName, clazzName);
 		String fileName0 = map.get("fileName");
-		//fileName= new String(fileName0.getBytes("ISO8859-1"), "utf-8");
-		fileName= new String(fileName0.getBytes("GB2312"), "ISO8859-1");// 避免文件名中文不显示
+		// fileName= new String(fileName0.getBytes("ISO8859-1"), "utf-8");
+		fileName = new String(fileName0.getBytes("GB2312"), "ISO8859-1");// 避免文件名中文不显示
 		String path0 = map.get("path0");
 		try {
 			fileInput = new FileInputStream(path0);
@@ -77,6 +74,7 @@ public class WordAction extends ActionSupport implements RequestAware, SessionAw
 		// return "words";
 		// }
 	}
+
 	public String selectCourseContent0() throws UnsupportedEncodingException {
 		Integer cId = (Integer) session.get("cursId");
 		String path = ServletActionContext.getServletContext().getRealPath(constants.ReportFormConstants.SAVE_PATH);// 上传服务器的路径
@@ -84,15 +82,15 @@ public class WordAction extends ActionSupport implements RequestAware, SessionAw
 				.getRealPath(constants.ReportFormConstants.EXPORTWORD110_PATH);// 模板路径
 
 		Map<String, String> map = new HashMap<String, String>();
-		
-		//cursName = session.get("cursName").toString();
-		cursName="机械制造基础";
-		clazzName="1304011";
-		
-		map = exportWordService.selectCourseContent0(39, path, modelPath,cursName,clazzName);
+
+		// cursName = session.get("cursName").toString();
+		cursName = "机械制造基础";
+		clazzName = "1304011";
+
+		map = exportWordService.selectCourseContent0(39, path, modelPath, cursName, clazzName);
 		String fileName0 = map.get("fileName");
-		//fileName= new String(fileName0.getBytes("ISO8859-1"), "utf-8");
-		fileName= new String(fileName0.getBytes("GB2312"), "ISO8859-1");// 避免文件名中文不显示
+		// fileName= new String(fileName0.getBytes("ISO8859-1"), "utf-8");
+		fileName = new String(fileName0.getBytes("GB2312"), "ISO8859-1");// 避免文件名中文不显示
 		String path0 = map.get("path0");
 		try {
 			fileInput = new FileInputStream(path0);
@@ -152,4 +150,19 @@ public class WordAction extends ActionSupport implements RequestAware, SessionAw
 		this.session = session;
 	}
 
+	public String getCursName() {
+		return cursName;
+	}
+
+	public void setCursName(String cursName) {
+		this.cursName = cursName;
+	}
+
+	public String getClazzName() {
+		return clazzName;
+	}
+
+	public void setClazzName(String clazzName) {
+		this.clazzName = clazzName;
+	}
 }
