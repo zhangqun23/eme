@@ -108,6 +108,7 @@
 											<th>学分</th>
 											<th>成绩</th>
 											<th>开课学院</th>
+											<th>操作</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -119,6 +120,10 @@
 												<td><s:property value="#p.course.cursCredit" /></td>
 												<td><s:property value="#p.EvaValue" /></td>
 												<td><s:property value="#p.course.dept.deptName" /></td>
+												<td>
+													<a href="javascript:postwith('Student_PointValue_Detail_getStuCaculateTarget',
+													{'stuCursId':'<s:property value="#p.stuCursId"/>'})">详细</a>
+												</td>
 											</tr>
 										</s:iterator>
 									</tbody>
@@ -138,6 +143,28 @@
 			$(".container").css("min-height",
 					$(document).height() - 90 - 88 - 41 + "px");//container的最小高度为“浏览器当前窗口文档的高度-header高度-footer高度”
 		});
+		function getStuCaculateTarget(){
+			$.post("StudentPointValueDetail.jsp",{p:$("#p")},
+					console.log(p))
+		}
+		
+		function postwith(to, p) {//让超链接a以post方式提交，避免中文乱码
+			var myForm = document.createElement("form");
+			myForm.method = "post";
+			myForm.action = to;
+
+			for ( var k in p) {
+				var input = document.createElement("input");
+				input.setAttribute("name", k);
+				input.setAttribute("value", p[k]);
+				myForm.appendChild(input);
+			}
+
+			document.body.appendChild(myForm);
+			myForm.submit();
+			document.body.removeChild(myForm);
+		}
+		
 	</script>
 </body>
 </html>
