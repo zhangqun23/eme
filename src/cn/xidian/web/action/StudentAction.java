@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -23,6 +22,7 @@ import org.apache.struts2.interceptor.RequestAware;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cn.xidian.entity.Course;
 import cn.xidian.entity.GradeClazzSurvey;
 import cn.xidian.entity.ItemEvaluatePoint;
 import cn.xidian.entity.ItemEvaluateScore;
@@ -38,14 +38,22 @@ import cn.xidian.entity.SurveyQuestion;
 import cn.xidian.entity.SurveyReplyer;
 import cn.xidian.entity.SurveySelector;
 import cn.xidian.entity.Teacher;
+import cn.xidian.entity.TeachingTarget;
+import cn.xidian.entity.TeachingTargetEvaluate;
 import cn.xidian.entity.TextAnswer;
 import cn.xidian.entity.User;
+import cn.xidian.exception.CourseNotExistException;
+import cn.xidian.exception.CursRulesNotExistException;
+import cn.xidian.service.CourseService;
 import cn.xidian.service.StudentActivityService;
 import cn.xidian.service.StudentCourseService;
 import cn.xidian.service.StudentItemService;
 import cn.xidian.service.StudentService;
 import cn.xidian.service.SurveyService;
-import cn.xidian.service.TeacherService;
+import cn.xidian.service.TeachingTargetService;
+import cn.xidian.web.bean.B1;
+import cn.xidian.web.bean.B2;
+import cn.xidian.web.service.CourseTargetDetailService;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -58,6 +66,7 @@ public class StudentAction extends ActionSupport implements RequestAware {
 	private Map<String, Object> request;
 	private String clazz;
 	private String password;
+	private Course course;
 	// 学生目标
 	private String shortGoal;
 	private String midGoal;
@@ -107,7 +116,12 @@ public class StudentAction extends ActionSupport implements RequestAware {
 	private Integer role;
 	private String message;
 	private PageBean<GradeClazzSurvey> gcsPageBean;
-
+	
+	// 获得学生一门课程的达成度b1、b2的详细列表
+	String stuCursId;
+	private List<B1> claCursB1s = new LinkedList<B1>();
+	private List<B2> claCursB2s = new LinkedList<B2>();
+		
 	Map<String, Object> session = ActionContext.getContext().getSession();
 	User tUser = (User) session.get("tUser");
 
@@ -139,20 +153,27 @@ public class StudentAction extends ActionSupport implements RequestAware {
 		this.studentItemService = studentItemService;
 	}
 
-	TeacherService teacherService;
-
-	@Resource(name = "teacherServiceImpl")
-	public void setTeacherService(TeacherService teacherService) {
-		this.teacherService = teacherService;
-	}
-
 	private StudentCourseService studentCourseService;
 
 	@Resource(name = "studentCourseServiceImpl")
 	public void setStudentCourseService(StudentCourseService studentCourseService) {
 		this.studentCourseService = studentCourseService;
 	}
+	
+	TeachingTargetService teachingTargetService;
 
+	@Resource(name = "teachingTargetServiceImpl")
+	public void setTeachingTargetService(TeachingTargetService teachingTargetService){
+		this.teachingTargetService = teachingTargetService;
+	}
+	
+	CourseService courseService;
+	
+	@Resource(name = "courseServiceImpl")
+	public void setCourseService(CourseService courseService){
+		this.courseService = courseService;
+	}
+	
 	public String selectBasicByNum() {
 		String schNum = tUser.getSchNum();
 		s = studentService.selectInfBySchNum(schNum);
@@ -485,6 +506,25 @@ public class StudentAction extends ActionSupport implements RequestAware {
 		return "surveyDone";
 	}
 
+	//学生查询单门课程达成度
+	public String getStuCaculateTarget() {
+		try{
+			StudentCourse sCourse = studentService.getSCourse(Integer.parseInt(stuCursId));
+			List<TeachingTarget> targets = 
+					teachingTargetService.selectByCursName(sCourse.getCourse().getCursName());
+			List<TeachingTargetEvaluate> stuEvaluate = 
+					studentService.caculateBySCourse(sCourse);
+			CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
+			claCursB1s = courseTargetDetailService.getB1(targets, stuEvaluate);
+			claCursB2s = studentService.getB2(sCourse,claCursB1s);
+			course = courseService.findByName(sCourse.getCourse().getCursName());
+		}catch (CursRulesNotExistException e) {
+			request.put("Message", e.getMessage());
+		}
+
+		return "studentTarget";
+	}
+	
 	public Student getS() {
 		return s;
 	}
@@ -815,6 +855,38 @@ public class StudentAction extends ActionSupport implements RequestAware {
 
 	public void setGcsPageBean(PageBean<GradeClazzSurvey> gcsPageBean) {
 		this.gcsPageBean = gcsPageBean;
+	}
+
+	public List<B1> getClaCursB1s() {
+		return claCursB1s;
+	}
+
+	public void setClaCursB1s(List<B1> claCursB1s) {
+		this.claCursB1s = claCursB1s;
+	}
+
+	public List<B2> getClaCursB2s() {
+		return claCursB2s;
+	}
+
+	public void setClaCursB2s(List<B2> claCursB2s) {
+		this.claCursB2s = claCursB2s;
+	}
+	
+	public String getStuCursId() {
+		return stuCursId;
+	}
+
+	public void setStuCursId(String stuCursId) {
+		this.stuCursId = stuCursId;
+	}
+	
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
 }
