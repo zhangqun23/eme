@@ -13,6 +13,7 @@ import cn.xidian.dao.TeachingTargetDao;
 import cn.xidian.entity.Course;
 import cn.xidian.entity.TeachingTarget;
 import cn.xidian.exception.CourseNotExistException;
+import cn.xidian.exception.TTargetNotExistException;
 import cn.xidian.service.TeachingTargetService;
 
 @Component
@@ -67,7 +68,11 @@ public class TeachingTargetServiceImpl implements TeachingTargetService {
 		if (courseTemp == null) {
 			throw new CourseNotExistException("课程不存在");
 		}
-		return teachingTargetDao.selectByCursId(courseTemp.getCursId());
+		List<TeachingTarget> tt = teachingTargetDao.selectByCursId(courseTemp.getCursId());
+		if (tt.size() == 0) {
+			throw new TTargetNotExistException("教学目标未设置");
+		}
+		return tt;
 	}
 	
 	@Override
