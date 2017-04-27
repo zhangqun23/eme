@@ -41,6 +41,7 @@ import cn.xidian.exception.ClazzNotExistException;
 import cn.xidian.exception.CourseNotExistException;
 import cn.xidian.exception.CursRulesNotExistException;
 import cn.xidian.exception.StudentCourseNotExistsException;
+import cn.xidian.exception.TTargetNotExistException;
 import cn.xidian.exception.TchingTargetNotExistException;
 import cn.xidian.service.ClazzService;
 import cn.xidian.service.ClazzCoursePointService;
@@ -418,14 +419,17 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				
 				b2.add(B2);
 			}
-		} catch (CourseNotExistException e) {
-			request.put("Message", e.getMessage());
-		}
+		
 		allClazz = clazzService.findAllCla();
 		User t = (User) session.get("tUser");
 		tchrCourses = teacherCourseService.selectByNumAndTerm(t.getSchNum());
 		if (b1.size() == 0 || b2.size() == 0) {
 			request.put("Message", "对不起，没有找到相关信息！");
+		}
+		} catch (CourseNotExistException e) {
+			request.put("Message", e.getMessage());
+		} catch (TTargetNotExistException e){
+			request.put("Message", e.getMessage());
 		}
 		return "teacher";
 	}
