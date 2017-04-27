@@ -390,7 +390,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			// 以上获得第一张表的数据
 			// 以下是第二张表
 			List<ClazzCoursePoint> cursPoints = clazzCoursePointService.selectBycursNameAndTerm(cursName);
-			List<AverClazzCoursePoint> acursPoints = clazzCoursePointService.selectBycursNameAndGrade(cursName);
+			List<AverClazzCoursePoint> acursPoints = clazzCoursePointService.selectByCursAndGrade(cursName, grade);
 			List<CoursePoint> point = coursePointService.selectByCursId(course.getCursId());
 			// 获得该门课程对应指标点编号的集合
 			for (int i = 0; i < point.size(); i++) {
