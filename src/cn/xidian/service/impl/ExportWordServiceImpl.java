@@ -17,6 +17,8 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import cn.xidian.entity.AverClazzCoursePoint;
+import cn.xidian.entity.AverTeachingTargetEvaluate;
 import cn.xidian.entity.ClazzCoursePoint;
 import cn.xidian.entity.CourseTeachingMode;
 import cn.xidian.entity.TeachingTarget;
@@ -81,7 +83,7 @@ public class ExportWordServiceImpl implements ExportWordService {
 		
 		Map<String, String> map=new HashMap<String, String>();
 		if (listSourse1 != null || listSourse2 != null) {
-			String fileName = "课程教学目标达成度评价表.docx";
+			String fileName = "课程教学达成度评价表.docx";
 			String path0 = FileHelper.transPath(fileName, path);// 解析后的上传路径
 			
 			//listMap.put("0", listSource);//用于导出课程内容实施进度
@@ -180,20 +182,38 @@ public class ExportWordServiceImpl implements ExportWordService {
 
 	public List<WordCourseTarget> selectCourseContent1(String cursName,String clazzName){
 		WordCourseTargetService wordCourseTargetService=new WordCourseTargetService();
-		List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
-		List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
-				clazzName);
-		List<WordCourseTarget> listSourse1 = wordCourseTargetService.getB1(targets, targetValues);
-		return listSourse1;
+		if(clazzName.length()>6){
+			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
+			List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
+					clazzName);
+			List<WordCourseTarget> listSourse1 = wordCourseTargetService.getB1(targets, targetValues);
+			return listSourse1;
+		}else{
+			clazzName = clazzName.substring(0, 4);			
+			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
+			List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService.selectByGradeAndClazz(cursName,
+					clazzName);
+			List<WordCourseTarget> listSourse1 =wordCourseTargetService.getAB1(targets, atargetValues);
+			return listSourse1;	
+		}
+		
 	}
-
-	
 	
 	public List<WordCourseEvaluate> selectCourseContent0(String cursName,String clazzName){
 		WordCourseTargetService wordCourseTargetService=new WordCourseTargetService();	
-		List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
-		List<WordCourseEvaluate> listSourse=wordCourseTargetService.getB2(ccPoints);
-		return listSourse;
+		if(clazzName.length()>6){
+			List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
+			List<WordCourseEvaluate> listSourse=wordCourseTargetService.getB2(ccPoints);
+			return listSourse;
+		}else {
+			clazzName = clazzName.substring(0, 4);			
+			List<AverClazzCoursePoint> accPoints = clazzCoursePointService.selectByCursAndGrade(cursName, clazzName);
+			List<WordCourseEvaluate> listSourse=wordCourseTargetService.getAB2(accPoints);
+			//course = courseService.findByName(cursName);
+			return listSourse;
+			
+		}
+		
 	}
 	//课程对毕业要求达成度评价表(表二)
 	@SuppressWarnings({ "rawtypes", "unchecked" })
