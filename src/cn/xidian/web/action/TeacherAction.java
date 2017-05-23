@@ -311,21 +311,21 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			teacherService.caculateClazzTarget(calculateType, gradeName, cursName, clazzName, tchrSchNum);
 			CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
 			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
-			if(calculateType.equals("0")){
+			if (calculateType.equals("0")) {
 				List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
 						clazzName);
 				claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
-				
+
 				List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
 				claCursB2s = courseTargetDetailService.getB2(ccPoints);
 				course = courseService.findByName(cursName);
-			}
-			else{
-				List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService.selectByGradeAndClazz(cursName,
-						gradeName);
+			} else {
+				List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService
+						.selectByGradeAndClazz(cursName, gradeName);
 				claCursB1s = courseTargetDetailService.getAB1(targets, atargetValues);
-				
-				List<AverClazzCoursePoint> accPoints = clazzCoursePointService.selectByCursAndGrade(cursName, gradeName);
+
+				List<AverClazzCoursePoint> accPoints = clazzCoursePointService.selectByCursAndGrade(cursName,
+						gradeName);
 				claCursB2s = courseTargetDetailService.getAB2(accPoints);
 				course = courseService.findByName(cursName);
 			}
@@ -379,10 +379,10 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				}
 				b1.add(B1);// 将B1数据加入b1
 			}
-			if (attValue.size() != 0 ) {
+			if (attValue.size() != 0) {
 				List<String> B1 = new LinkedList<String>();
-				B1.add(grade+"级");
-				for(int i = 0; i < attValue.size(); i++){
+				B1.add(grade + "级");
+				for (int i = 0; i < attValue.size(); i++) {
 					B1.add(df.format(attValue.get(i).getB1()));
 				}
 				b1.add(B1);
@@ -410,27 +410,27 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				}
 				b2.add(B2);// 将B1数据加入b1
 			}
-			if(acursPoints.size() != 0){
+			if (acursPoints.size() != 0) {
 				List<String> B2 = new LinkedList<String>();
-				B2.add(grade+"级");
-					for (int k = 0; k < acursPoints.size(); k++) {
-							B2.add(df.format(acursPoints.get(k).getB2()));
-					}
-				
+				B2.add(grade + "级");
+				for (int k = 0; k < acursPoints.size(); k++) {
+					B2.add(df.format(acursPoints.get(k).getB2()));
+				}
+
 				b2.add(B2);
 			}
-		
+		} catch (CourseNotExistException e) {
+			request.put("Message", e.getMessage());
+		} catch (TTargetNotExistException e) {
+			request.put("Message", e.getMessage());
+		}
 		allClazz = clazzService.findAllCla();
 		User t = (User) session.get("tUser");
 		tchrCourses = teacherCourseService.selectByNumAndTerm(t.getSchNum());
 		if (b1.size() == 0 || b2.size() == 0) {
 			request.put("Message", "对不起，没有找到相关信息！");
 		}
-		} catch (CourseNotExistException e) {
-			request.put("Message", e.getMessage());
-		} catch (TTargetNotExistException e){
-			request.put("Message", e.getMessage());
-		}
+
 		return "teacher";
 	}
 
@@ -438,15 +438,15 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public String getClaCursTargetDetail() {
 
 		CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
-		if(clazzName.length()>6){
+		if (clazzName.length() > 6) {
 			// 获取b1
 			cursName = session.get("cursName").toString();
-		
+
 			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
 			List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
 					clazzName);
 			claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
-		
+
 			List<ClazzCoursePoint> ccPoints = clazzCoursePointService.selectByCursAndClazz(cursName, clazzName);
 			claCursB2s = courseTargetDetailService.getB2(ccPoints);
 			course = courseService.findByName(cursName);
@@ -454,14 +454,13 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				request.put("Message", "对不起，没有找到相关信息！");
 				return "tchrManagement5";
 			}
-		}
-		else{
+		} else {
 			clazzName = clazzName.substring(0, 4);
 			cursName = session.get("cursName").toString();
-			
+
 			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
-			List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService.selectByGradeAndClazz(cursName,
-					clazzName);
+			List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService
+					.selectByGradeAndClazz(cursName, clazzName);
 			claCursB1s = courseTargetDetailService.getAB1(targets, atargetValues);
 			List<AverClazzCoursePoint> accPoints = clazzCoursePointService.selectByCursAndGrade(cursName, clazzName);
 			claCursB2s = courseTargetDetailService.getAB2(accPoints);
@@ -471,7 +470,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				return "tchrManagement5";
 			}
 		}
-		
+
 		return "teacher";
 	}
 
@@ -967,8 +966,5 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 	public void setGradeName(String gradeName) {
 		this.gradeName = gradeName;
 	}
-	
-	
-
 
 }

@@ -34,7 +34,7 @@ function addQuestion(obj) {
 				+ quesNum
 				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
 				+ quesNum
-				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ></div><div id='sel"
+				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ><input type='button' id='1'  class='btn' style='margin-left:5px' value='单选' onclick='insertQues(this)'/><input type='button' id='2'  class='btn' style='margin-left:2px' value='多选' onclick='insertQues(this)'/></div><div id='sel"
 				+ quesNum
 				+ "'><div onmouseover='showDel(this)' onmouseout='hideDel(this)' class='selector"
 				+ quesNum
@@ -85,7 +85,7 @@ function addQuestion(obj) {
 				+ quesNum
 				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
 				+ quesNum
-				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ></div><div id='sel"
+				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ><input type='button' id='3'  class='btn' style='margin-left:5px' value='文字题' onclick='insertQues(this)'/></div><div id='sel"
 				+ quesNum
 				+ "'></div><div class='selector"
 				+ quesNum
@@ -108,11 +108,11 @@ function addQuestion(obj) {
 				+ quesNum
 				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
 				+ quesNum
-				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ></div><div id='sel"
+				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ><input type='button' id='4'  class='btn' style='margin-left:5px' value='表格题' onclick='insertQues(this)'/></div><div id='sel"
 				+ quesNum
 				+ "'></div><div class='selector"
 				+ quesNum
-				+ " selector-style'><table class='table table-bordered wjTable' id='table"
+				+ " selector-style' onmouseover='showDel(this)' onmouseout='hideDel(this)'><table class='table table-bordered wjTable' id='table"
 				+ quesNum
 				+ "'><tr><td style='width:100px'>请设计</td><td><input type='text' placeholder='选项' id='bl1' class='STC"
 				+ quesNum
@@ -122,23 +122,23 @@ function addQuestion(obj) {
 				+ quesNum
 				+ "' id='bh1'/></td><td><input type='radio' name='bh1'/></td><td><input type='radio' name='bh1'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项' class='STR"
 				+ quesNum
-				+ "' id='bh2'/></td><td><input type='radio' name='bh2'/></td><td><input type='radio' name='bh2'/></td></tr></table>列：<img id='"
+				+ "' id='bh2'/></td><td><input type='radio' name='bh2'/></td><td><input type='radio' name='bh2'/></td></tr></table>列：<image id='"
 				+ quesNum
 				+ "' name='"
 				+ obj.id
-				+ "' class='img_small'  src='img/addsel.png'  alt='添加' onclick='addTableCol(this)' ><img class='image"
+				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addTableCol(this)' ><image class='image"
 				+ quesNum
-				+ " img_small' name='image"
+				+ " small_img' name='image"
 				+ quesNum
 				+ "' id='"
 				+ quesNum
-				+ "' src='img/delsel.gif' alt='删除' onclick='delTableCol(this)'>&nbsp;&nbsp;&nbsp;&nbsp;行：<img id='"
+				+ "' src='img/delsel.gif' alt='删除' onclick='delTableCol(this)'>&nbsp;&nbsp;&nbsp;&nbsp;行：<image id='"
 				+ quesNum
 				+ "' name='"
 				+ obj.id
-				+ "' class='img_small'  src='img/addsel.png'  alt='添加' onclick='addTableRow(this)' ><img class='image"
+				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addTableRow(this)' ><image class='image"
 				+ quesNum
-				+ " img_small' name='image"
+				+ " small_img' name='image"
 				+ quesNum
 				+ "' id='"
 				+ quesNum
@@ -222,7 +222,11 @@ function delQuestion(obj) {
 		$("#ques" + k + "").find("#QT" + k + "").attr("id", "QT" + j + "");// <input
 		// type='text'>
 		// 修改文本框的id,该id的作用是将问题的类型放入到该文本框
+
+		$("#ques" + k + "").find(".STC" + k + "").attr("class", "STC" + j + "");
+		$("#ques" + k + "").find(".STR" + k + "").attr("class", "STR" + j + "");
 		$("#ques" + k + "").attr("id", "ques" + j + "");// <div>问题的ID，再删除问题时，修改问题编号的基本div
+		// 注：必须在最后一行
 	}
 }
 
@@ -390,5 +394,198 @@ function delTableCol(obj) {
 	} else {
 		alert("至少保留两个选项！");
 	}
+
+}
+
+// 插入问题
+function insertQues(obj) {
+	var order = $(obj).parent().parent().attr("id").substring(4);
+	var ques = document.getElementsByClassName("ques").length; // 已有多少个问题
+	if (ques > parseInt(order)) {
+		for (var j = ques; j > parseInt(order); j--) {
+			var k = j;
+			var q = j + 1;
+			$("#ques" + k + "").find("#Q" + k + "").html("Q" + q + "");
+			$("#ques" + k + "").find("#Q" + k + "").attr("id", "Q" + q + "");// <span>修改问题的编号和编号标签的id(id的设置用于获取问题的编号)
+			$("#ques" + k + "").find(":radio").attr("name", "S" + q + "");// <radio>修改radio的name属性，以便实现单选
+			$("#ques" + k + "").find("#quesname" + k + "").attr("id",
+					"quesname" + q + "");// <input
+			// type='text'>修改问题题目的标签id，该id暂无用处
+			$("#ques" + k + "").find("#sel" + k + "")
+					.attr("id", "sel" + q + "");// <div>该div包含了所有的选项，修改该div的id,该id的作用是在添加单个选项时找到添加的位置
+			$("#ques" + k + "").find(".selector" + k + "").attr("class",
+					"selector" + q + " selector-style");// <div>单个选项的div，修改该div的class，该class暂无用处
+			$("#ques" + k + "").find(".ST" + k + "").attr("class",
+					"ST" + q + " left_distance");// <input
+			// type='text'>修改选项的文本的类，该类的作用时在最终组合选项内容时使用
+			$("#ques" + k + "").find("img").attr("id", "" + q + "");// <img>修改图片的id,id的作用是，在点击添加图片时可以获得该题是第几道题
+			$("#ques" + k + "").find(".image" + k + "").attr("name",
+					"image" + q + "");// <img>修改name属性，name的作用是当查找有有多少个选项的查找条件
+			$("#ques" + k + "").find(".image" + k + "").attr("class",
+					"image" + q + " small_img");// <img>修改name属性，name的作用是当查找有有多少个选项
+			$("#ques" + k + "").find("#AST" + k + "")
+					.attr("id", "AST" + q + "");// <input
+			// type='text'>
+			// 修改文本框的id,该id的作用是将组合好的选项内容放入到该文本框
+			$("#ques" + k + "").find("#QT" + k + "").attr("id", "QT" + q + "");// <input
+			// type='text'>
+			// 修改文本框的id,该id的作用是将问题的类型放入到该文本框
+
+			$("#ques" + k + "").find(".STC" + k + "").attr("class",
+					"STC" + q + "");
+			$("#ques" + k + "").find(".STR" + k + "").attr("class",
+					"STR" + q + "");
+			$("#ques" + k + "").attr("id", "ques" + q + "");// 注：必须在最后一行
+			// <div>问题的ID，再删除问题时，修改问题编号的基本div
+		}
+	}
+
+	var qType = null;
+	if (obj.id == 1) {
+		qType = "radio";
+	} else if (obj.id == 2) {
+		qType = "checkbox";
+	} else if (obj.id == 3) {
+		qType = "textarea";
+	} else if (obj.id == 4) {
+		qType = "matrix";
+	}
+
+	var quesNum = parseInt(order) + 1; // 当前问题的序号
+	if (obj.id == 1 || obj.id == 2) {
+		// 创建问题和前两个选项
+		var div1 = document.createElement("div");
+		div1.setAttribute("class", "control-group");
+		div1.innerHTML += "<div class='ques' id='ques"
+				+ quesNum
+				+ "'><div onmouseover='showDel(this)' onmouseout='hideDel(this)'><span id='Q"
+				+ quesNum
+				+ "'>Q"
+				+ quesNum
+				+ ":</span><input type='text' id='quesname"
+				+ quesNum
+				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
+				+ quesNum
+				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ><input type='button' id='1' class='btn' style='margin-left:5px' value='单选' onclick='insertQues(this)'/><input type='button' id='2' class='btn' style='margin-left:2px' value='多选' onclick='insertQues(this)'/></div><div id='sel"
+				+ quesNum
+				+ "'><div onmouseover='showDel(this)' onmouseout='hideDel(this)' class='selector"
+				+ quesNum
+				+ " selector-style'><input type='"
+				+ qType
+				+ "'  name='S"
+				+ quesNum
+				+ "'><input type='text'  placeholder='选项'  class='ST"
+				+ quesNum
+				+ " left_distance'><image id='"
+				+ quesNum
+				+ "' name='"
+				+ obj.id
+				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addSelector(this)' ><image class='image"
+				+ quesNum
+				+ " small_img' name='image"
+				+ quesNum
+				+ "'  src='img/delsel.gif'  alt='删除' onclick='delSelector(this)' ></div><div onmouseover='showDel(this)' onmouseout='hideDel(this)' class='selector"
+				+ quesNum
+				+ " selector-style'><input type='"
+				+ qType
+				+ "'  name='S"
+				+ quesNum
+				+ "'><input type='text'  placeholder='选项'   class='ST"
+				+ quesNum
+				+ " left_distance'><image id='"
+				+ quesNum
+				+ "' name='"
+				+ obj.id
+				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addSelector(this)' ><image class='image"
+				+ quesNum
+				+ " small_img' name='image"
+				+ quesNum
+				+ "'  src='img/delsel.gif' alt='删除' onclick='delSelector(this)'></div></div><div><input type='hidden' id='AST"
+				+ quesNum + "'><input type='hidden' id='QT" + quesNum
+				+ "'></div></div>";
+	}
+	if (obj.id == 3) {
+		var div1 = document.createElement("div");
+		div1.setAttribute("class", "control-group");
+		div1.innerHTML += "<div class='ques' id='ques"
+				+ quesNum
+				+ "'><div onmouseover='showDel(this)' onmouseout='hideDel(this)'><span id='Q"
+				+ quesNum
+				+ "'>Q"
+				+ quesNum
+				+ ":</span><input type='text' id='quesname"
+				+ quesNum
+				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
+				+ quesNum
+				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ><input type='button' id='3'  class='btn' style='margin-left:5px' value='文字题' onclick='insertQues(this)'/></div><div id='sel"
+				+ quesNum
+				+ "'></div><div class='selector"
+				+ quesNum
+				+ " selector-style'><textarea  placeholder='请填写内容'  class='ST"
+				+ quesNum
+				+ " left_distance' style='width:72%;height:100px' readonly></textarea><input type='hidden' id='AST"
+				+ quesNum + "'><input type='hidden' id='QT" + quesNum
+				+ "'></div></div>";
+	}
+	if (obj.id == 4) {
+		var div1 = document.createElement("div");
+		div1.setAttribute("class", "control-group");
+		div1.innerHTML += "<div class='ques' id='ques"
+				+ quesNum
+				+ "'><div onmouseover='showDel(this)' onmouseout='hideDel(this)'><span id='Q"
+				+ quesNum
+				+ "'>Q"
+				+ quesNum
+				+ ":</span><input type='text' id='quesname"
+				+ quesNum
+				+ "' class='input-long question-style' placeholder='问卷题目'><image id='"
+				+ quesNum
+				+ "' class='small_img'  src='img/delquest.gif'  alt='删除' onclick='delQuestion(this)' ><input type='button' id='4'  class='btn' style='margin-left:5px' value='表格题' onclick='insertQues(this)'/></div><div id='sel"
+				+ quesNum
+				+ "'></div><div class='selector"
+				+ quesNum
+				+ " selector-style' onmouseover='showDel(this)' onmouseout='hideDel(this)'><table class='table table-bordered wjTable' id='table"
+				+ quesNum
+				+ "'><tr><td style='width:100px'>请设计</td><td><input type='text' placeholder='选项' id='bl1' class='STC"
+				+ quesNum
+				+ "'/></td><td><input type='text' placeholder='选项' class='STC"
+				+ quesNum
+				+ "' id='bl2'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项' class='STR"
+				+ quesNum
+				+ "' id='bh1'/></td><td><input type='radio' name='bh1'/></td><td><input type='radio' name='bh1'/></td></tr><tr><td style='width:100px'><input type='text' placeholder='行项' class='STR"
+				+ quesNum
+				+ "' id='bh2'/></td><td><input type='radio' name='bh2'/></td><td><input type='radio' name='bh2'/></td></tr></table>列：<image id='"
+				+ quesNum
+				+ "' name='"
+				+ obj.id
+				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addTableCol(this)' ><image class='image"
+				+ quesNum
+				+ " small_img' name='image"
+				+ quesNum
+				+ "' id='"
+				+ quesNum
+				+ "' src='img/delsel.gif' alt='删除' onclick='delTableCol(this)'>&nbsp;&nbsp;&nbsp;&nbsp;行：<image id='"
+				+ quesNum
+				+ "' name='"
+				+ obj.id
+				+ "' class='small_img'  src='img/addsel.png'  alt='添加' onclick='addTableRow(this)' ><image class='image"
+				+ quesNum
+				+ " small_img' name='image"
+				+ quesNum
+				+ "' id='"
+				+ quesNum
+				+ "' src='img/delsel.gif' alt='删除' onclick='delTableRow(this)'><input type='hidden' id='AST"
+				+ quesNum + "'><input type='hidden' id='QT" + quesNum
+				+ "'></div></div>";
+	}
+
+	var section = document.createElement("section");
+	section.appendChild(div1);
+
+	var d = $(obj).parent().parent().parent().parent();
+	$(section).insertAfter(d);
+
+	// 创建问题和前两个选项结束
+	document.getElementById("QT" + quesNum + "").value = obj.id;// 1代表单选，2代表多选，3代表文本问题4表示表格
 
 }

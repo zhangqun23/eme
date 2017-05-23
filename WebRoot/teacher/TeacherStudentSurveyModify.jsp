@@ -90,7 +90,11 @@
 															<img id="
 				<s:property value="%{#status.count}" />"
 																class='small_img' src='img/delquest.gif' alt='删除'
-																onclick='delQuestion(this)'>
+																onclick='delQuestion(this)'><input type='button'
+																id='1' class='btn' style='margin-left: 5px' value='单选'
+																onclick='insertQues(this)' /><input type='button'
+																id='2' class='btn' style='margin-left: 2px' value='多选'
+																onclick='insertQues(this)' />
 														</div>
 														<div id="sel<s:property value="%{#status.count}" />">
 
@@ -163,9 +167,7 @@
 																id="ques<s:property value="%{#status.count}" />">
 																<div onmouseover='showDel(this)'
 																	onmouseout='hideDel(this)'>
-																	<span id='Q"
-				+ quesNum
-				+ "'>Q<s:property
+																	<span id='Q<s:property value="%{#status.count}" />'>Q<s:property
 																			value="%{#status.count}" />:
 																	</span><input type='text'
 																		id="quesname<s:property value="%{#status.count}" />"
@@ -174,7 +176,9 @@
 																		class='input-long question-style' placeholder='问卷题目'>
 																	<img id="<s:property value="%{#status.count}" />"
 																		class='small_img' src='img/delquest.gif' alt='删除'
-																		onclick='delQuestion(this)'>
+																		onclick='delQuestion(this)'><input type='button'
+																		id='3' class='btn' style='margin-left: 5px'
+																		value='文字题' onclick='insertQues(this)' />
 																</div>
 																<div id="sel<s:property value="%{#status.count}" />"></div>
 																<div
@@ -209,7 +213,9 @@
 															<img id="
 				<s:property value="%{#status.count}" />"
 																class='small_img' src='img/delquest.gif' alt='删除'
-																onclick='delQuestion(this)'>
+																onclick='delQuestion(this)'><input type='button'
+																id='4' class='btn' style='margin-left: 5px' value='表格题'
+																onclick='insertQues(this)' />
 														</div>
 
 														<div id="sel<s:property value="%{#status.count}" />"

@@ -25,7 +25,7 @@
 					<param name="name">覆盖了默认值</param>
 					<!-- 有多个方法需要（不）被拦截器拦截，则多个方法名之间用逗号分隔即可。 -->
 					<param name="excludeMethods"></param>
-					<param name="includeMethods">updateCursBasicInf,modifyTargetByCursId,modifySpcConByCursId,modifyTchModeByCursId,modifyBookByCursId,modifyNoteByCursId,modifyTargetValueByCursId,uploadFile,calculateClazzCursTarget,modifyPointByCursId,selectTargetAndPointById,addTchrSurveyDone,createSurvey</param>
+					<param name="includeMethods">updateCursBasicInf,modifyTargetByCursId,modifySpcConByCursId,modifyTchModeByCursId,modifyBookByCursId,modifyNoteByCursId,modifyTargetValueByCursId,uploadFile,calculateClazzCursTarget,modifyPointByCursId,selectTargetAndPointById,addTchrSurveyDone,createSurvey,modifyPassword</param>
 				</interceptor-ref>
 				<interceptor-ref name="defaultStack"></interceptor-ref>
 			</interceptor-stack>
