@@ -312,6 +312,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 			CourseTargetDetailService courseTargetDetailService = new CourseTargetDetailService();
 			List<TeachingTarget> targets = teachingTargetService.selectByCursName(cursName);
 			if (calculateType.equals("0")) {
+				//0是班级评估
 				List<TeachingTargetEvaluate> targetValues = teachingTargetEvaluateService.selectByCursAndClazz(cursName,
 						clazzName);
 				claCursB1s = courseTargetDetailService.getB1(targets, targetValues);
@@ -320,6 +321,7 @@ public class TeacherAction extends ActionSupport implements RequestAware {
 				claCursB2s = courseTargetDetailService.getB2(ccPoints);
 				course = courseService.findByName(cursName);
 			} else {
+				//1是年级评估
 				List<AverTeachingTargetEvaluate> atargetValues = teachingTargetEvaluateService
 						.selectByGradeAndClazz(cursName, gradeName);
 				claCursB1s = courseTargetDetailService.getAB1(targets, atargetValues);
