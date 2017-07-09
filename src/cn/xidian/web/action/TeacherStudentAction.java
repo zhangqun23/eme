@@ -410,7 +410,14 @@ public class TeacherStudentAction extends ActionSupport implements RequestAware 
 		survey.setSumNum(0);
 		boolean success = surveyService.createSurvey(survey);
 		if (success) {// 添加问卷问题
-			boolean isSuccess = surveyService.addQuestion(qs, survey);
+			boolean isSuccess = false;
+			try {
+				isSuccess = surveyService.addQuestion(qs, survey);
+			} catch (Exception e) {
+				surveyService.deleteSurvey(survey.getSurveyId());
+			}
+
+			System.out.println(isSuccess);
 			if (isSuccess && success) {
 				request.put("Message", "问卷修改成功！！");
 				message = "问卷修改成功！";

@@ -219,6 +219,7 @@
 														</div>
 
 														<div id="sel<s:property value="%{#status.count}" />"
+															onmouseover='showDel(this)' onmouseout='hideDel(this)'
 															class='selector<s:property value="%{#status.count}" /> selector-style'>
 															<table
 																class="table table-bordered table-condensed wjTable"
