@@ -173,6 +173,21 @@ public class CourseAction extends ActionSupport implements RequestAware,
 	}
 	//评分规则，目标与毕业要求指标点对应关系
 	public String selectPerRuleByCursId(){
+		
+		Integer id = (Integer) session.get("cursId");
+		if (id != null) {
+			course = courseService.findById(id);
+			rules = adminCompsitionRulesService.selectCompRulesByCursId(id);
+			targets = teachingTargetService.selectByCursId(id);
+			indicatorPoints = coursePointService.selectPointByCursId(id);
+			contributeTargets = adminCourseContributeTargetValueService.selectByCursId(id);
+			return "course";
+		} else {
+				return "false";
+			}
+	}
+	public String selectPerRuleByCursId1(){
+		session.put("cursId", cursId);
 		Integer id = (Integer) session.get("cursId");
 		if (id != null) {
 			course = courseService.findById(id);
