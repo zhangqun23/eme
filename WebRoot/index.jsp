@@ -68,8 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  				<td><a href="Major___selectMajorInf">2015级前入口</a></td>
 	  			</tr>
 	  			<tr class="next-table">
-	  				<td><a href="http://127.0.0.1:8080/eme2016/Major___selectMajorInf">2016级后入口</a></td>
-	  				<td><a href="http://localhost:8080/eme2016/Major___selectMajorInf">2016级入口</a></td>
+	  				<td><a href="http://ela.xidian.edu.cn/eme2016/Major___selectMajorInf">2016级后入口</a></td>
 	  			</tr>
 	  		</table>
 		</div>

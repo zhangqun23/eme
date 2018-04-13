@@ -121,7 +121,7 @@
 			var startSchoolYear = $("#startSchoolYear").val();
 			var endSchoolYear = $("#endSchoolYear").val();
 			var schoolYear = startSchoolYear + "-" + endSchoolYear;
-			alert(schoolYear);
+			//alert(schoolYear);
 			$("#stuCourseGradeList tbody").html("");
 			$.getJSON("Json_selectStuCourseGrades", {
 				schoolYear : schoolYear,

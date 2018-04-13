@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -354,7 +354,7 @@ public class StudentAction extends ActionSupport implements RequestAware {
 		item.setItemState("待审核");
 		item.setNote("无");
 		item.setItemScore("0");
-		Date date = new Date();
+		Date date = new Date(System.currentTimeMillis());
 		item.setItemSubmitDate(date);
 		String schNum = tUser.getSchNum();
 		s = studentService.selectInfBySchNum(schNum);
@@ -372,7 +372,7 @@ public class StudentAction extends ActionSupport implements RequestAware {
 		String realPath = ServletActionContext.getServletContext().getRealPath("/upload");// 实际路径
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 		String schNum = tUser.getSchNum();
-		String fileNewName = schNum + '_' + format.format(new Date());// 给文件新的存储名字
+		String fileNewName = schNum + '_' + format.format(new Date(System.currentTimeMillis()));// 给文件新的存储名字
 		File savedir = new File(realPath);
 		if (!savedir.getParentFile().exists())
 			savedir.getParentFile().mkdirs();
@@ -481,7 +481,7 @@ public class StudentAction extends ActionSupport implements RequestAware {
 			if (tUser != null) {
 				survey = surveyService.selectSurveyById(surveyId);
 				SurveyReplyer surveyReplyer = new SurveyReplyer();
-				Date replyTime = new Date();// 做問卷的时间
+				Date replyTime = new Date(System.currentTimeMillis());// 做問卷的时间
 				surveyReplyer.setStudent(student);
 				surveyReplyer.setSurvey(survey);
 				surveyReplyer.setReplyTime(replyTime);

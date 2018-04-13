@@ -53,7 +53,7 @@
 											<a
 													href="TeacherCourse_Modify_9_selectTarByCursId?cursId=<s:property value="#c.cursId"/>">课程目标评价</a>&nbsp;&nbsp;
 												<a
-													href="TeacherCourse_Modify_5_selectAllPoints?cursId=<s:property value="#c.cursId"/>">毕业要求评价</a>&nbsp;&nbsp;
+													href="Course_Detail_9_selectPerRuleByCursId1?cursId=<s:property value="#c.cursId"/>">毕业要求评价</a>&nbsp;&nbsp;
 											</div>
 										</div>
 									</s:iterator>

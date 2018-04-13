@@ -29,6 +29,12 @@
 		var $termSelect = $(".year");
 		var d = new Date();
 		var year = d.getFullYear();//获取当前年份
+		var $Option = $("<option value='" + (year - 7) + "'>" + (year - 7)
+				+ "</option>");
+		var $Option0 = $("<option value='" + (year - 6) + "'>" + (year - 6)
+				+ "</option>");
+		var $Option1 = $("<option value='" + (year - 5) + "'>" + (year - 5)
+				+ "</option>");
 		var $Option2 = $("<option value='" + (year - 4) + "'>" + (year - 4)
 				+ "</option>");
 		var $Option3 = $("<option value='" + (year - 3) + "'>" + (year - 3)
@@ -47,7 +53,7 @@
 				+ "</option>");
 		var $Option10 = $("<option value='" + (year + 4) + "'>" + (year + 4)
 				+ "</option>");
-		$termSelect.append($Option2).append($Option3).append($Option4).append(
+		$termSelect.append($Option).append($Option0).append($Option1).append($Option2).append($Option3).append($Option4).append(
 				$Option5).append($Option6).append($Option7).append($Option8)
 				.append($Option9).append($Option10);
 
